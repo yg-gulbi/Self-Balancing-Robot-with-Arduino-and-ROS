@@ -8,7 +8,7 @@ The public hardware story in this repository is intentionally based only on conf
 
 - Arduino firmware
 - URDF and CAD/mesh files
-- the recovered wiring sketch
+- the recovered wiring block diagram
 - curated photos from the physical robot
 
 ![Internal hardware photo](../media/hardware/robot_open_front.jpg)
@@ -26,7 +26,7 @@ The public hardware story in this repository is intentionally based only on conf
 ## Hardware Docs Map
 
 - [hardware_bom.md](hardware_bom.md): confirmed components and roles
-- [hardware_power_and_io.md](hardware_power_and_io.md): power and signal flow from the hand-drawn system sketch
+- [hardware_power_and_io.md](hardware_power_and_io.md): power and signal flow centered on the recovered block diagram
 - [hardware_layout.md](hardware_layout.md): physical placement and interpretation of the internal layout
 - [hardware_gallery.md](hardware_gallery.md): image-based hardware walkthrough
 
