@@ -1,0 +1,48 @@
+# 장애물 거리 및 레이 트레이싱 범위 설정
+# obstacle_range: 로봇이 감지할 수 있는 장애물의 최대 거리 (m)
+#                 이 거리 내에 있는 장애물만 인식합니다.
+obstacle_range: 3.0
+
+# raytrace_range: 레이 트레이싱을 통해 장애물 위치를 파악할 최대 거리 (m)
+#                 주로 장애물 제거 및 지도의 업데이트에 사용됩니다.
+raytrace_range: 3.5
+
+# 로봇의 발자국 (footprint) 정의
+# footprint: 로봇의 바닥면을 나타내는 다각형 좌표 (m 단위)
+#            로봇의 모양에 따라 충돌 감지 영역을 정의합니다.
+#            이 예시에서는 직사각형 형태로 설정되어 있습니다.
+footprint: [[-0.1, -0.25], [-0.1, 0.25], [0.1, 0.25], [0.1, -0.25]]
+
+# 로봇의 반경 (옵션)
+# robot_radius: 로봇의 반경을 설정하여 원형의 충돌 감지 영역을 정의합니다.
+#               footprint와 동시에 사용할 수 없습니다.
+# robot_radius: 0.105
+
+# 인플레이션(Inflation) 설정
+# inflation_radius: 장애물 주변에 안전 구역을 추가하여 충돌을 피하기 위한 거리 (m)
+#                   이 범위 내에서는 장애물로부터의 거리에 따라 비용이 증가합니다.
+inflation_radius: 2.0
+
+# cost_scaling_factor: 장애물로부터 거리에 따른 비용 증가율을 조정하는 계수
+#                      값이 클수록 장애물 가까이에 있을 때 비용이 더 빠르게 증가합니다.
+cost_scaling_factor: 3.0
+
+# 맵 타입 설정
+# map_type: 사용하고자 하는 비용 맵의 타입을 지정 (예: costmap, voxel)
+map_type: costmap
+
+# 센서 데이터 소스 설정
+# observation_sources: 비용 맵을 업데이트하는 데 사용할 센서 목록
+#                      여기서는 "scan" 센서만 사용합니다.
+observation_sources: scan
+
+# scan 센서 설정
+# scan: 
+#   - sensor_frame: 센서가 장착된 프레임 이름 (예: base_scan)
+#   - data_type: 센서 데이터 유형 (예: LaserScan)
+#   - topic: 데이터를 수신할 ROS 토픽 이름
+#   - marking: 장애물을 맵에 표시할지 여부 (true: 표시)
+#   - clearing: 장애물을 맵에서 지울 수 있는지 여부 (true: 지우기 가능)
+scan: 
+  {sensor_frame: base_scan, data_type: LaserScan, topic: scan, marking: true, clearing: true}
+

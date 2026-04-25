@@ -1,0 +1,78 @@
+DWAPlannerROS:
+
+  # 로봇 속도 설정
+  # max_vel_x: 로봇의 전진 시 최대 선속도 (m/s)
+  # min_vel_x: 로봇의 후진 시 최대 선속도 (m/s, 음수 값)
+  max_vel_x: 0.2
+  min_vel_x: -0.2
+
+  # y축 속도 설정 (홀로노믹 로봇의 경우 사용, 비홀로노믹 로봇은 0으로 설정)
+  max_vel_y: 0.0
+  min_vel_y: 0.0
+
+  # 로봇이 직선으로 이동할 때의 속도 범위
+  # max_vel_trans: 직선 이동 시 최대 속도 (m/s)
+  # min_vel_trans: 직선 이동 시 최소 속도 (m/s)
+  max_vel_trans:  0.2
+  min_vel_trans: -0.2
+
+  # 회전 속도 설정
+  # max_vel_theta: 로봇의 최대 회전 속도 (rad/s)
+  # min_vel_theta: 로봇의 최소 회전 속도 (rad/s)
+  max_vel_theta: 4.5
+  min_vel_theta: 1.37
+
+  # 가속도 제한 설정
+  # acc_lim_x: 선속도의 최대 가속도 (m/s^2)
+  # acc_lim_y: y축 방향 가속도 (홀로노믹 로봇이 아닌 경우 0으로 설정)
+  # acc_lim_theta: 회전 속도의 최대 가속도 (rad/s^2)
+  acc_lim_x: 1.0
+  acc_lim_y: 0.0
+  acc_lim_theta: 3.2 
+
+  # 목표 지점에서의 허용 오차 설정
+  # xy_goal_tolerance: 목표 지점에서 x, y 위치의 허용 오차 (m)
+  # yaw_goal_tolerance: 목표 지점에서의 방향(회전 각도) 허용 오차 (rad)
+  # latch_xy_goal_tolerance: 목표 지점에 도달한 후 해당 지점에서 허용 오차를 유지할지 여부 (true/false)
+  xy_goal_tolerance: 0.1
+  yaw_goal_tolerance: 0.2
+  latch_xy_goal_tolerance: false
+
+  # 전방 시뮬레이션 설정
+  # sim_time: 경로를 예측할 시뮬레이션 시간 (초)
+  # vx_samples: 시뮬레이션 시 사용할 x축 선속도 샘플 개수
+  # vy_samples: 시뮬레이션 시 사용할 y축 선속도 샘플 개수 (비홀로노믹 로봇의 경우 0)
+  # vth_samples: 시뮬레이션 시 사용할 회전 속도 샘플 개수
+  # controller_frequency: 제어 주파수 (Hz)
+  sim_time: 1.5
+  vx_samples: 20
+  vy_samples: 0
+  vth_samples: 40
+  controller_frequency: 10.0
+
+  # 경로 점수 매기기 설정 (Trajectory Scoring)
+  # path_distance_bias: 경로에서 멀어질수록 점수 감소 (값이 클수록 경로를 따르려 함)
+  # goal_distance_bias: 목표 지점에 가까워질수록 점수 증가 (값이 클수록 목표로 직진)
+  # occdist_scale: 장애물과의 거리 점수에 영향을 주는 계수 (값이 작을수록 장애물 회피에 민감)
+  # forward_point_distance: 로봇의 전방에서 경로 점수를 계산할 지점 (m)
+  # stop_time_buffer: 로봇이 멈추기 위해 필요한 시간 (초)
+  # scaling_speed: 속도 스케일링을 적용할 기준 속도 (m/s)
+  # max_scaling_factor: 속도 스케일링의 최대 계수
+  path_distance_bias: 32.0
+  goal_distance_bias: 20.0
+  occdist_scale: 0.02
+  forward_point_distance: 0.325
+  stop_time_buffer: 0.8
+  scaling_speed: 1.0
+  max_scaling_factor: 0.2
+
+  # 진동 방지 설정
+  # oscillation_reset_dist: 경로에서 일정 거리만큼 이동하면 진동 상태를 초기화 (m)
+  oscillation_reset_dist: 0.00
+
+  # 디버깅 옵션
+  # publish_traj_pc: 예상 경로를 포인트 클라우드로 퍼블리시 (true/false)
+  # publish_cost_grid_pc: 비용 맵을 포인트 클라우드로 퍼블리시 (true/false)
+  publish_traj_pc: true
+  publish_cost_grid_pc: true
+

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+
+  <include file="$(find robot_gazebo)/launch/balence_robot_lidar_pid_tunning.launch"/>
+  
+  
+<node pkg="rqt_reconfigure" type="rqt_reconfigure" name="rqt_reconfigure" output="screen"/>
+  
+</launch>

@@ -1,0 +1,44 @@
+TrajectoryPlannerROS:
+
+  # 로봇 속도 설정
+  # max_vel_x: 로봇의 최대 선속도 (m/s)
+  # min_vel_x: 로봇의 최소 선속도 (m/s)
+  max_vel_x: 0.3
+  min_vel_x: 0.1
+
+  # 회전 속도 설정
+  # max_vel_theta: 로봇의 최대 회전 속도 (rad/s)
+  # min_vel_theta: 로봇의 최소 회전 속도 (rad/s)
+  # min_in_place_vel_theta: 제자리에서 회전할 때의 최소 회전 속도 (rad/s)
+  max_vel_theta:  1.5
+  min_vel_theta: -1.5
+  min_in_place_vel_theta: 1
+
+  # 가속도 제한 설정
+  # acc_lim_x: 선속도의 최대 가속도 (m/s^2)
+  # acc_lim_y: y축 방향 가속도 (홀로노믹 로봇이 아닌 경우 0으로 설정)
+  # acc_lim_theta: 회전 속도의 최대 가속도 (rad/s^2)
+  acc_lim_x: 1.5
+  acc_lim_y: 0.0
+  acc_lim_theta: 1.5
+
+  # 목표 지점에서의 허용 오차 설정
+  # xy_goal_tolerance: 목표 지점에서의 x, y 위치 허용 오차 (m)
+  # yaw_goal_tolerance: 목표 지점에서의 방향(회전 각도) 허용 오차 (rad)
+  xy_goal_tolerance: 0.10
+  yaw_goal_tolerance: 0.1
+
+  # 로봇이 차륜형(differential drive)인지 설정
+  # holonomic_robot: false로 설정하면 비홀로노믹(차륜형) 로봇으로 설정
+  holonomic_robot: false
+
+  # 전방 시뮬레이션 설정
+  # sim_time: 로봇의 경로를 예측하는 시뮬레이션 시간 (초)
+  # vx_samples: 시뮬레이션에서 사용할 선속도 샘플 개수
+  # vtheta_samples: 시뮬레이션에서 사용할 회전 속도 샘플 개수
+  # sim_granularity: 시뮬레이션에서의 간격 (m)
+  sim_time: 0.5
+  vx_samples: 18
+  vtheta_samples: 20
+  sim_granularity: 0.05
+

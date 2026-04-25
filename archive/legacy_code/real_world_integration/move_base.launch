@@ -1,0 +1,41 @@
+<launch>
+  <!-- Arguments -->
+  <!-- cmd_vel_topic: 기본적으로 "/cmd_vel" 토픽을 사용하며, 다른 토픽 이름으로 변경 가능 -->
+  <arg name="cmd_vel_topic" default="/cmd_vel" />
+  
+  <!-- odom_topic: 기본적으로 "odom" 토픽을 사용하며, 다른 토픽 이름으로 변경 가능 -->
+  <arg name="odom_topic" default="odom" />
+  
+  <!-- move_forward_only: true로 설정하면 로봇이 전진만 할 수 있도록 제한 (기본값: false) -->
+  <arg name="move_forward_only" default="false"/>
+
+  <!-- move_base 노드 설정 -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <!-- Local Planner로 DWA(Dynamic Window Approach) 사용 설정 -->
+    <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+    
+    <!-- global_costmap, local_costmap 설정을 costmap_common_params.yaml 파일에서 불러옴 -->
+    <rosparam file="$(find navigation)/param/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find navigation)/param/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    
+    <!-- local_costmap 및 global_costmap에 대한 추가 설정 파일 로드 -->
+    <rosparam file="$(find navigation)/param/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find navigation)/param/global_costmap_params.yaml" command="load" />
+    
+    <!-- move_base 노드에 대한 일반 설정 파일 로드 -->
+    <rosparam file="$(find navigation)/param/move_base_params.yaml" command="load" />
+    
+    <!-- DWA 로컬 플래너의 설정 파일 로드 -->
+    <rosparam file="$(find navigation)/param/dwa_local_planner_params.yaml" command="load" />
+    
+    <!-- cmd_vel 토픽을 사용자가 정의한 토픽으로 리맵 (기본값: "/cmd_vel") -->
+    <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+    
+    <!-- odom 토픽을 사용자가 정의한 토픽으로 리맵 (기본값: "odom") -->
+    <remap from="odom" to="$(arg odom_topic)"/>
+    
+    <!-- move_forward_only가 true일 경우, DWA 플래너에서 후진 속도를 0으로 설정 -->
+    <param name="DWAPlannerROS/min_vel_x" value="0.0" if="$(arg move_forward_only)" />
+  </node>
+</launch>
+

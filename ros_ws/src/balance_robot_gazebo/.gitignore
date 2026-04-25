@@ -1,0 +1,26 @@
+# ROS 빌드/캐시 파일
+build/
+devel/
+install/
+
+# 로그 파일
+*.log
+
+# 큰 데이터 파일 무시
+# *.ply
+
+# Python 캐시
+*.pyc
+__pycache__/
+
+# 에디터 관련
+*.swp
+*.swo
+*.bak
+*.tmp
+.vscode/
+.idea/
+
+# macOS 관련
+.DS_Store
+

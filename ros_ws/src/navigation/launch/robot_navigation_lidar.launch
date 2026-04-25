@@ -1,0 +1,38 @@
+<launch>
+  <!-- Arguments -->
+  <!-- map_file: 로봇이 사용할 맵 파일 경로를 설정 (기본값: navigation 패키지의 a1_map.yaml) -->
+  <arg name="map_file" default="$(find navigation)/maps/a1_map.yaml"/>
+  
+  <!-- open_rviz: true로 설정 시, RViz를 자동으로 실행 (기본값: true) -->
+  <arg name="open_rviz" default="true"/>
+  
+  <!-- move_forward_only: true로 설정하면 move_base 노드에서 전진만 가능하도록 설정 (기본값: false) -->
+  <arg name="move_forward_only" default="false"/>
+
+  <!-- balence_robot 노드 실행 -->
+  <!-- 로봇 초기 설정 및 연결을 위한 robot_remote.launch 파일 포함 -->
+  <include file="$(find robot_bringup)/launch/robot_remote_lidar.launch">
+  </include>
+
+  <!-- Map server 설정 -->
+  <!-- 맵 서버를 실행하여 지정된 맵 파일을 로드 (맵 파일은 map_file 인자로 전달됨) -->
+  <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
+
+  <!-- AMCL (Adaptive Monte Carlo Localization) 설정 -->
+  <!-- AMCL을 사용하여 로봇의 위치를 추정 (amcl.launch 파일 포함) -->
+  <include file="$(find navigation)/launch/amcl.launch"/>
+
+  <!-- move_base 노드 설정 -->
+  <!-- 이동 경로를 계획하기 위해 move_base.launch 파일 포함 -->
+  <include file="$(find navigation)/launch/move_base.launch">
+    <!-- move_forward_only 인자를 move_base 노드로 전달 -->
+    <arg name="move_forward_only" value="$(arg move_forward_only)"/>
+  </include>
+
+  <!-- RViz 실행 (open_rviz 인자가 true일 때만 실행) -->
+  <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find navigation)/rviz/navigation.rviz"/>
+  </group>
+</launch>
+

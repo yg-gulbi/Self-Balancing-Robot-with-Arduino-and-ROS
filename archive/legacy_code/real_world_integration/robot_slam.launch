@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<launch>
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find robot_description)/urdf/balence_robot_urdf_depth.xacro"/> 
+    <include file="$(find orbbec_camera)/launch/gemini_330_series.launch"/>
+
+  <!-- rtabmap.launch를 실행하는 node -->
+  <include file="$(find rtabmap_ros)/launch/rtabmap.launch">
+    <arg name="depth_topic" value="/camera/depth/image_raw"/>
+    <arg name="rgb_topic" value="/camera/color/image_raw"/>
+    <arg name="depth_camera_info_topic" default="/camera/depth/camera_info" />
+    <arg name="camera_info_topic" value="/camera/color/camera_info"/>
+    <arg name="subscribe_odom_info" type="bool" value="true"/>
+    <arg name="approx_rgbd_sync" value="true" />
+    <arg name="visual_odometry" value="false" />
+    <arg name="queue_size" value="30" />
+    <arg name="rtabmap_args" value="--delete_db_on_start"/>
+    <arg name="odom_topic" value="/odom" />
+    <arg name="frame_id" value="camera_link" />
+    <arg name="rgbd_sync" value="true" />
+    <arg name="imu_topic"  default="/imu"/>          <!-- only used with VIO approaches -->
+    <param name="subscribe_scan" value="true" />
+  </include>
+
+    <node name="imu_tf" pkg="robot_rviz" type="imu_tf.py"/>
+    <node name="odom_tf" pkg="robot_rviz" type="odom_tf.py"/>
+    
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+    
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  
+   
+</launch>

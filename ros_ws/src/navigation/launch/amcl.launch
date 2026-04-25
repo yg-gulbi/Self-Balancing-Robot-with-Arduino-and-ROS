@@ -1,0 +1,107 @@
+<launch>
+  <!-- Arguments -->
+  <!-- scan_topic: 레이저 스캔 데이터가 게시되는 토픽 이름 (기본값: "scan") -->
+  <arg name="scan_topic" default="scan"/>
+  
+  <!-- 초기 위치 설정 (X, Y 좌표 및 회전 각도) -->
+  <arg name="initial_pose_x" default="0.0"/>
+  <arg name="initial_pose_y" default="0.0"/>
+  <arg name="initial_pose_a" default="0.0"/>
+
+  <!-- AMCL (Adaptive Monte Carlo Localization) 노드 설정 -->
+  <node pkg="amcl" type="amcl" name="amcl">
+    
+    <!-- 입자 필터 설정 -->
+    <!-- min_particles: 최소 입자 수 (필터 성능과 속도 조절) -->
+    <param name="min_particles" value="500"/>
+    <!-- max_particles: 최대 입자 수 (정확도와 속도 간의 균형) -->
+    <param name="max_particles" value="3000"/>
+    <!-- kld_err: KLD 샘플링 오차 허용치 (작을수록 정확도 증가, 속도 감소) -->
+    <param name="kld_err" value="0.02"/>
+    
+    <!-- 업데이트 조건 설정 -->
+    <!-- update_min_d: 오도메트리 기반 최소 이동 거리 (미터 단위) -->
+    <param name="update_min_d" value="0.20"/>
+    <!-- update_min_a: 오도메트리 기반 최소 회전 각도 (라디안 단위) -->
+    <param name="update_min_a" value="0.20"/>
+    
+    <!-- 필터 재샘플링 간격 (높을수록 성능 향상 가능) -->
+    <param name="resample_interval" value="1"/>
+    <!-- transform_tolerance: TF 변환 허용 오차 (초 단위) -->
+    <param name="transform_tolerance" value="0.5"/>
+    
+    <!-- 입자 필터의 회복 속도 설정 (적응형 모드) -->
+    <param name="recovery_alpha_slow" value="0.00"/>
+    <param name="recovery_alpha_fast" value="0.00"/>
+    
+    <!-- 초기 로봇 위치 (X, Y 좌표 및 회전 각도) 설정 -->
+    <param name="initial_pose_x" value="$(arg initial_pose_x)"/>
+    <param name="initial_pose_y" value="$(arg initial_pose_y)"/>
+    <param name="initial_pose_a" value="$(arg initial_pose_a)"/>
+    
+    <!-- GUI 업데이트 속도 (초당 업데이트 수) -->
+    <param name="gui_publish_rate" value="50.0"/>
+    
+    <!-- 레이저 스캔 데이터 리맵 (scan 토픽을 사용자 정의 토픽으로 변경) -->
+    <remap from="scan" to="$(arg scan_topic)"/>
+    
+    <!-- 레이저 모델 설정 -->
+    <!-- laser_max_range: 레이저 스캔의 최대 거리 (미터 단위) -->
+    <param name="laser_max_range" value="3.5"/>
+    <!-- laser_max_beams: 사용될 최대 레이저 빔 수 -->
+    <param name="laser_max_beams" value="180"/>
+    <!-- 레이저 모델의 다양한 확률 매개변수 설정 -->
+    <param name="laser_z_hit" value="0.5"/>
+    <param name="laser_z_short" value="0.05"/>
+    <param name="laser_z_max" value="0.05"/>
+    <param name="laser_z_rand" value="0.5"/>
+    <!-- laser_sigma_hit: 레이저 히트 모델의 표준 편차 -->
+    <param name="laser_sigma_hit" value="0.2"/>
+    <!-- laser_lambda_short: 짧은 거리 모델의 람다 값 -->
+    <param name="laser_lambda_short" value="0.1"/>
+    <!-- laser_likelihood_max_dist: 레이저 모델의 최대 거리 (미터 단위) -->
+    <param name="laser_likelihood_max_dist" value="2.0"/>
+    <!-- 레이저 모델 타입 설정 (beam, likelihood_field 등) -->
+    <param name="laser_model_type" value="likelihood_field"/>
+    
+    <!-- 오도메트리 모델 설정 -->
+    <!-- odom_model_type: 오도메트리 모델 타입 (diff, omni 등) -->
+    <param name="odom_model_type" value="diff"/>
+    <!-- 오도메트리 모델 잡음 매개변수 (알파 값) -->
+    <!--
+      odom_alpha1: 회전 시 발생하는 회전 잡음
+      - 로봇이 회전할 때, 실제 회전 각도와 명령된 회전 각도 사이의 차이
+      - 값이 클수록 회전할 때 더 많은 잡음이 추가됩니다.
+    -->
+    <param name="odom_alpha1" value="0.1"/>
+    
+    <!--
+      odom_alpha2: 회전 시 발생하는 직선 이동 잡음
+      - 회전 중에 약간의 직선 이동이 발생할 수 있음
+      - 값이 클수록 회전 중 예상치 못한 직선 이동이 증가합니다.
+    -->
+    <param name="odom_alpha2" value="0.1"/>
+    
+    <!--
+      odom_alpha3: 직선 이동 시 발생하는 직선 잡음
+      - 직진할 때, 실제 이동 거리와 명령된 이동 거리 사이의 차이
+      - 값이 클수록 직진할 때 더 많은 잡음이 추가됩니다.
+    -->
+    <param name="odom_alpha3" value="0.1"/>
+    
+    <!--
+      odom_alpha4: 직선 이동 시 발생하는 회전 잡음
+      - 직진 중에 약간의 회전(진로 이탈)이 발생할 수 있음
+      - 값이 클수록 직진 중 예상치 못한 회전이 증가합니다.
+    -->
+    <param name="odom_alpha4" value="0.1"/>
+    
+    <!-- 프레임 설정 -->
+    <!-- odom_frame_id: 오도메트리 프레임 이름 -->
+    <param name="odom_frame_id" value="odom"/>
+    <!-- base_frame_id: 로봇의 기본 프레임 이름 -->
+    <param name="base_frame_id" value="base_footprint"/>
+    
+  </node>
+</launch>
+

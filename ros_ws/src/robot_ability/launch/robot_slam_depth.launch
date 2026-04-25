@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<launch>
+  <include file="$(find robot_gazebo)/launch/balence_robot_house_depth.launch">
+  </include> 
+  <!-- state publishers -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  
+  <!-- rtab_map -->
+    <include file="$(find rtabmap_launch)/launch/rtabmap.launch">
+        <arg name="args" value="-d --Mem/UseOdomGravity true --Optimizer/GravitySigma 0.3" />
+        <arg name="odom_topic" value="/odom" />
+        <arg name="depth_topic" value="/d435/depth/image_raw" />
+        <arg name="rgb_topic" value="/d435/color/image_raw" />
+        <arg name="camera_info_topic" value="/d435/color/camera_info" />
+        <arg name="frame_id" value="camera_link" />
+        <arg name="rgbd_sync" value="true" />       
+        <arg name="approx_rgbd_sync" value="true" />
+        <arg name="visual_odometry" value="false" />
+        <arg name="queue_size" value="30" />
+        <arg name="rtabmap_args" value="--delete_db_on_start"/>
+    </include>  
+  
+</launch>

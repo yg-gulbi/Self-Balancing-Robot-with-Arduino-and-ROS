@@ -1,0 +1,36 @@
+local_costmap:
+
+  # 전역 프레임 설정
+  # global_frame: 로봇의 위치를 추적할 전역 좌표계 (e.g., 'odom', 'map')
+  global_frame: odom
+
+  # 로봇의 기본 프레임 설정
+  # robot_base_frame: 로봇의 기준 프레임 (e.g., 'base_link', 'base_footprint')
+  robot_base_frame: base_footprint
+
+  # 갱신 및 퍼블리시 주기 설정
+  # update_frequency: 로컬 비용 맵을 갱신하는 주기 (Hz)
+  # publish_frequency: 로컬 비용 맵을 퍼블리시하는 주기 (Hz)
+  update_frequency: 10.0
+  publish_frequency: 10.0
+
+  # 변환 허용 시간
+  # transform_tolerance: 좌표 변환을 기다리는 최대 시간 (초)
+  transform_tolerance: 0.5  
+
+  # 맵 설정
+  # static_map: 고정된 정적 맵을 사용할지 여부 (로컬 맵의 경우 보통 false)
+  static_map: false
+
+  # 롤링 윈도우 설정
+  # rolling_window: 로봇이 이동할 때 비용 맵이 함께 이동하는 롤링 윈도우 사용 여부 (true/false)
+  rolling_window: true
+
+  # 로컬 비용 맵의 크기 및 해상도 설정
+  # width: 로컬 비용 맵의 너비 (m)
+  # height: 로컬 비용 맵의 높이 (m)
+  # resolution: 비용 맵의 해상도 (셀 크기, m/셀)
+  width: 3
+  height: 3
+  resolution: 0.05
+
