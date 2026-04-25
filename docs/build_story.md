@@ -20,7 +20,9 @@ It is intentionally evidence-first. Images show the process; text explains what 
 
 The project started from a guide-robot idea: a compact two-wheeled platform that could move through a space, balance itself, and eventually connect to navigation or perception workflows.
 
-![CATIA concept overview](../media/process/catia_concept_overview.jpg)
+<p align="center">
+  <img src="../media/process/catia_concept_overview.jpg" alt="CATIA concept overview" width="700">
+</p>
 
 The important early decision was to treat the robot as two related systems:
 
@@ -48,11 +50,15 @@ This stage answered practical questions:
 
 The wiring work connected the physical control path and the higher-level compute path. The recovered block diagram shows the intended relationship among the receiver, Arduino Mega, IMU, ODrive, motors, battery, converters, onboard PC, camera, mini Arduino, and relay module.
 
-![Recovered wiring block diagram](../media/process/source_wiring_block_diagram.jpg)
+<p align="center">
+  <img src="../media/process/source_wiring_block_diagram.jpg" alt="Recovered wiring block diagram" width="700">
+</p>
 
 The public diagram below is the cleaned documentation version of that recovered source material.
 
-![Clean power and IO overview](../media/diagrams/hardware_power_io_overview.svg)
+<p align="center">
+  <img src="../media/diagrams/hardware_power_io_overview.svg" alt="Clean power and IO overview" width="700">
+</p>
 
 Key architecture choices:
 
@@ -66,7 +72,9 @@ Key architecture choices:
 
 The project did not jump straight into full-body balancing. The wheel, power, motor controller, and electronics were tested in an open bench setup first.
 
-![Wheel bench test](../media/process/wheel_bench_test.jpg)
+<p align="center">
+  <img src="../media/process/wheel_bench_test.jpg" alt="Wheel bench test" width="700">
+</p>
 
 This stage was used to reduce uncertainty around:
 
@@ -97,7 +105,9 @@ The key idea was simple but hard in practice: read the robot's body angle and wh
 
 Once the robot could be assembled as a full body, the next step was physical practice with a tether. This made it possible to adjust parameters without treating every fall as a destructive test.
 
-![Tethered driving practice](../media/process/tethered_driving_practice.jpg)
+<p align="center">
+  <img src="../media/process/tethered_driving_practice.jpg" alt="Tethered driving practice" width="700">
+</p>
 
 This stage tested the real interaction among:
 
@@ -114,7 +124,9 @@ The final public demos come after this kind of staged tuning, not from a single 
 
 ROS and Gazebo were used to explore simulation-side balancing, SLAM, and navigation workflows without risking the physical robot at every iteration.
 
-![Simulation navigation views](../media/process/simulation_navigation_views.jpg)
+<p align="center">
+  <img src="../media/process/simulation_navigation_views.jpg" alt="Simulation navigation views" width="700">
+</p>
 
 The most important software architecture choice was separating navigation commands from final balance commands:
 

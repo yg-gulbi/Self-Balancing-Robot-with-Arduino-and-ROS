@@ -6,7 +6,9 @@ Arduino, BNO055, and ODrive were used for the physical balancing robot. ROS and 
 
 This repository is organized as a hiring-facing portfolio. It separates verified outcomes, reusable code, hardware evidence, and legacy experiments instead of presenting every old workspace as if it were a final deliverable.
 
-![Physical hallway balancing demo](media/hero/physical_balance_hallway.gif)
+<p align="center">
+  <img src="media/hero/physical_balance_hallway.gif" alt="Physical hallway balancing demo" width="720">
+</p>
 
 ## What Was Actually Completed
 
@@ -43,7 +45,9 @@ Curated public assets:
 
 The physical robot is backed by real hardware evidence, not code alone.
 
-![Internal hardware photo](media/hardware/robot_open_front.jpg)
+<p align="center">
+  <img src="media/hardware/robot_open_front.jpg" alt="Internal hardware photo" width="540">
+</p>
 
 - [Hardware overview](docs/hardware.md)
 - [Hardware BOM](docs/hardware_bom.md)
@@ -55,9 +59,11 @@ The physical robot is backed by real hardware evidence, not code alone.
 
 Recovered project-process material has been summarized into public-safe documentation instead of copying raw presentation decks, office documents, chat exports, or large original videos into the repository.
 
-| CATIA assembly | Wheel bench test | Tethered driving practice |
-| --- | --- | --- |
-| ![CATIA assembly evidence](media/process/catia_internal_assembly_views.jpg) | ![Wheel bench test](media/process/wheel_bench_test.jpg) | ![Tethered driving practice](media/process/tethered_driving_practice.jpg) |
+<p align="center">
+  <img src="media/process/catia_internal_assembly_views.jpg" alt="CATIA assembly evidence" width="31%">
+  <img src="media/process/wheel_bench_test.jpg" alt="Wheel bench test" width="31%">
+  <img src="media/process/tethered_driving_practice.jpg" alt="Tethered driving practice" width="31%">
+</p>
 
 - [Build story](docs/build_story.md): end-to-end narrative from concept, CAD, wiring, bench testing, embedded control, tethered practice, and ROS simulation to verified results
 - [Development process](docs/development_process.md): build timeline, component bring-up, trial-and-error lessons, and final public claims
