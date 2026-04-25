@@ -36,7 +36,7 @@ def run_single_loop(pid_params):
     rospy.loginfo(f"Running loop with PID {pid_params}")
 
     # PID 업데이트
-    client = Client("/pid_controll", timeout=5)
+    client = Client("/pid_control", timeout=5)
     client.update_configuration(pid_params)
 
     # Gazebo 서비스

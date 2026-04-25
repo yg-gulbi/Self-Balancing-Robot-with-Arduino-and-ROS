@@ -2,7 +2,7 @@
 
 This folder contains the canonical physical robot controller for the portfolio repository.
 
-- Main file: [`Chimp4.ino`](Chimp4.ino)
+- Main file: [`physical_balance_controller.ino`](physical_balance_controller.ino)
 - Purpose: real-world balancing and RC driving on Arduino using BNO055 and ODrive
 
 Why this file is the main controller:

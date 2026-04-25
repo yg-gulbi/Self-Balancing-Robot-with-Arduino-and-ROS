@@ -16,7 +16,7 @@
     <!-- ROS 시뮬레이션 시간 사용 -->
     <arg name="use_sim_time" value="true"/>
     <!-- GUI 표시 여부 -->
-    <!--<arg name="gui" value="true"/>-->
+    <arg name="gui" value="true"/>
     <!-- GUI 없이 실행 여부 (헤드리스 모드) -->
     <arg name="headless" value="true"/>
     <!-- 디버그 모드 활성화 여부 -->
@@ -24,23 +24,32 @@
   </include>
   
   <!-- 로봇 URDF/Xacro 정의 -->
-  <!-- xacro 명령어를 사용해 balence_robot_urdf.xacro 파일을 읽고 robot_description 파라미터에 저장 -->
+  <!-- xacro 명령어를 사용해 balance_robot_urdf.xacro 파일을 읽고 robot_description 파라미터에 저장 -->
   <param name="robot_description" 
-         command="$(find xacro)/xacro --inorder $(find robot_description)/urdf/balence_robot_urdf.xacro"/> 
+         command="$(find xacro)/xacro --inorder $(find robot_description)/urdf/balance_robot_urdf.xacro"/> 
 
   <!-- Gazebo에 로봇 스폰 -->
   <!-- spawn_model 노드를 사용하여 URDF 모델을 지정한 위치(x, y, z)에 생성 -->
   <node pkg="gazebo_ros" 
         type="spawn_model" 
         name="spawn_urdf" 
-        args="-urdf -model balence_robot -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description"/>  
+        args="-urdf -model balance_robot -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description"/>  
 
   <!-- 로봇 제어 노드 실행 -->
-  <!-- robot_controll 패키지의 pid_controll_before_vel_lidar.py를 실행하여 Lidar 기반 PID 제어 수행 -->
+  <!-- robot_controll 패키지의 pid_control_before_vel_lidar.py를 실행하여 Lidar 기반 PID 제어 수행 -->
+  <!-- PID 노드 자동 재실행 추가: respawn="true" -->
   <node pkg="robot_controll" 
-        type="pid_controll_before_vel_lidar_pid_tunning.py" 
-        name="pid_controll" 
-        output="screen"/>
+        type="pid_control_before_vel_lidar_pid_auto_tuning.py"
+        name="pid_control" 
+        output="screen"
+        respawn="true"
+        />  <!--  추가된 부분  -->
+        
+ <!-- <node pkg="robot_controll" 
+        type="pid_control_before_vel_lidar_pid_tuning.py" 
+        name="pid_control" 
+        output="screen"
+        respawn="true"/> -->        
 
 </launch>
 

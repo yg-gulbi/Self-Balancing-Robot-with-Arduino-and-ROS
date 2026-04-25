@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-
-  <include file="$(find robot_gazebo)/launch/balence_robot_house_lidar.launch"/>
-  
-
-  
-</launch>

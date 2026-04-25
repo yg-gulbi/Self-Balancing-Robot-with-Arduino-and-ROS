@@ -29,9 +29,9 @@ flowchart LR
 
 Representative code:
 
-- [`Chimp4.ino`](../firmware/physical_balance_controller/Chimp4.ino)
-- [`chimp_32.ino`](../archive/legacy_firmware/chimp_32.ino)
-- [`sketch_jan20a.ino`](../archive/legacy_firmware/sketch_jan20a.ino)
+- [`physical_balance_controller.ino`](../firmware/physical_balance_controller/physical_balance_controller.ino)
+- [`legacy_balance_controller.ino`](../archive/legacy_firmware/legacy_balance_controller.ino)
+- [`experimental_balance_controller_imu_ros.ino`](../archive/legacy_firmware/experimental_balance_controller_imu_ros.ino)
 
 Behavior:
 

@@ -4,10 +4,10 @@
 
 | Component | Role | Evidence |
 | --- | --- | --- |
-| Arduino Mega 2560 | Main low-level controller for the physical balancing robot | `Chimp4.ino` header comments and Arduino firmware archive |
-| BNO055 IMU | Body angle and gyro feedback for balancing | `Chimp4.ino`, `sketch_jan20a.ino` |
-| ODrive 3.6 | Current-based motor control | `Chimp4.ino`, `chimp_32.ino` |
-| RC receiver | Manual drive and engage input via PWM | `Chimp4.ino`, `sketch_jan20a.ino` |
+| Arduino Mega 2560 | Main low-level controller for the physical balancing robot | `physical_balance_controller.ino` header comments and Arduino firmware archive |
+| BNO055 IMU | Body angle and gyro feedback for balancing | `physical_balance_controller.ino`, `experimental_balance_controller_imu_ros.ino` |
+| ODrive 3.6 | Current-based motor control | `physical_balance_controller.ino`, `legacy_balance_controller.ino` |
+| RC receiver | Manual drive and engage input via PWM | `physical_balance_controller.ino`, `experimental_balance_controller_imu_ros.ino` |
 | Battery pack | Main power source | visible in internal photo, hand-drawn wiring sketch |
 | DC-DC conversion chain | Power conversion for onboard electronics | hand-drawn wiring sketch |
 | Onboard compute unit | Higher-level onboard computing visible in the chassis | internal photo, wiring sketch `PC` block |

@@ -80,7 +80,7 @@ This is also where the project began moving from simple motor movement toward th
 
 ## 5. Build The Embedded Balance Controller
 
-The main physical controller became [`Chimp4.ino`](../firmware/physical_balance_controller/Chimp4.ino). It kept the critical loop on Arduino instead of depending on ROS for real-time balance control.
+The main physical controller became [`physical_balance_controller.ino`](../firmware/physical_balance_controller/physical_balance_controller.ino). It kept the critical loop on Arduino instead of depending on ROS for real-time balance control.
 
 The controller combined:
 

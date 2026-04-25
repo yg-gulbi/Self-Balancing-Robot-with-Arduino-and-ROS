@@ -12,11 +12,11 @@ This repository is organized as a hiring-facing portfolio. It separates verified
 
 | Area | Status | Scope | Main evidence |
 | --- | --- | --- | --- |
-| Physical self-balancing + RC driving | Done | Real robot balancing and manual driving on Arduino | [Chimp4.ino](firmware/physical_balance_controller/Chimp4.ino), [physical_balance_hallway.gif](media/hero/physical_balance_hallway.gif) |
+| Physical self-balancing + RC driving | Done | Real robot balancing and manual driving on Arduino | [physical_balance_controller.ino](firmware/physical_balance_controller/physical_balance_controller.ino), [physical_balance_hallway.gif](media/hero/physical_balance_hallway.gif) |
 | ROS/Gazebo balance simulation | Done | Simulated two-wheeled balancing robot with custom control nodes | [ros_ws/src/robot_controll](ros_ws/src/robot_controll), [ros_ws/src/balance_robot_gazebo](ros_ws/src/balance_robot_gazebo) |
 | SLAM in simulation | Done | SLAM-related simulation workflow and launch composition | [ros_ws/src/robot_ability](ros_ws/src/robot_ability), [docs/software_architecture.md](docs/software_architecture.md) |
 | Navigation in simulation | Done | `move_base -> /before_vel -> balance controller -> /cmd_vel` pipeline | [ros_ws/src/navigation](ros_ws/src/navigation), [docs/software_architecture.md](docs/software_architecture.md) |
-| RC-to-ROS bridge testing | Done | Arduino bridge that published command inputs into ROS | [rc_to_ros_cmd_vel.ino](firmware/bridges_and_testers/rc_to_ros_cmd_vel.ino) |
+| RC-to-ROS bridge testing | Done | Arduino bridge that published command inputs into ROS | [rc_to_ros_cmd_vel_bridge.ino](firmware/bridges_and_testers/rc_to_ros_cmd_vel_bridge.ino) |
 | ODrive / IMU / RC / motor subsystem tests | Done | Subsystem-focused bring-up and tuning work | [docs/experiments.md](docs/experiments.md), [docs/development_process.md](docs/development_process.md), [robot_open_front.jpg](media/hardware/robot_open_front.jpg), [hardware_power_io_overview.svg](media/diagrams/hardware_power_io_overview.svg) |
 | Real-world ROS SLAM/navigation integration | Partial | Launch and integration experiments exist, but end-to-end autonomous physical navigation is not claimed | [archive/legacy_code/real_world_integration](archive/legacy_code/real_world_integration), [docs/results_and_limitations.md](docs/results_and_limitations.md) |
 

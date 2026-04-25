@@ -1,11 +1,11 @@
                     <!--로봇 param 정의-->
-  <param name = "robot_description" command = "cat $(find robot_description)/urdf/balence_robot2.urdf"/>
+  <param name = "robot_description" command = "cat $(find robot_description)/urdf/balance_robot.urdf"/>
   <node name ="urdf_spawner"  
 	      pkg ="gazebo_ros" 
 	      type ="spawn_model"
 	      args="
 	      -urdf
-	      -file $(find robot_description)/urdf/balence_robot2.urdf -model balence_robot
+	      -file $(find robot_description)/urdf/balance_robot.urdf -model balance_robot
 	      -x $(arg x_pos)  
 	      -y $(arg y_pos)  
 	      -z $(arg z_pos) 

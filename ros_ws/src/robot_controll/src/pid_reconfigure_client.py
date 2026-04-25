@@ -6,7 +6,7 @@ import rospy
 rospy.init_node("pid_client")
 
 # PID 서버 노드 이름
-client = Client("/pid_controll")  
+client = Client("/pid_control")  
 
 # PID 값 바꾸기
 params = {

@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 
-<robot name="balence_robot" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="balance_robot" xmlns:xacro="http://ros.org/wiki/xacro">
 
   <xacro:include filename="$(find robot_description)/urdf/color_properties.xacro"/>
-  <xacro:include filename="$(find robot_description)/urdf/balence_robot_gazebo_depth.xacro"/>
+  <xacro:include filename="$(find robot_description)/urdf/balance_robot_gazebo_depth.xacro"/>
   <xacro:include filename="$(find realsense_ros_gazebo)/xacro/tracker.xacro"/>
   <xacro:include filename="$(find realsense_ros_gazebo)/xacro/depthcam.xacro"/>
   <link name="base_footprint"/>

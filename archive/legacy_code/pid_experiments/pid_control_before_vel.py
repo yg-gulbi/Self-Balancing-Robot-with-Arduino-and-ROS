@@ -11,15 +11,15 @@ import time
 
 class PIDController:
     def __init__(self):
-        rospy.init_node('pid_controller', anonymous=True)
+        rospy.init_node('pid_controler', anonymous=True)
 
         # PID 파라미터
         self.Kp_angle = 55        
         self.Kd_angle = -0.45     
-        self.Kp_speed = 1.8         
-        self.Kp_steering = 0.6    
-        self.Kd_steering = 0.01    
-        self.max_output = 150
+        self.Kp_speed = 1.4         
+        self.Kp_steering = 0.5    
+        self.Kd_steering = 0.06   
+        self.max_output = 500
         
         # PID 관련 변수
         self.setpoint_angle = 0.0   
@@ -40,13 +40,13 @@ class PIDController:
         # 주제 구독 및 발행
         self.imu_subscriber = rospy.Subscriber('/imu', Imu, self.imu_callback)
         self.cmd_vel_publisher = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
-        self.before_vel_subscriber = rospy.Subscriber('/cmd_vel_vel', Twist, self.before_vel_callback)
+        self.before_vel_subscriber = rospy.Subscriber('/before_vel', Twist, self.before_vel_callback)
 
         # 피치값과 각속도를 퍼블리시하기 위한 퍼블리셔 추가
         self.pitch_publisher = rospy.Publisher('/pitch', Float32, queue_size=10)  # 피치값 퍼블리셔
         self.angular_velocity_publisher = rospy.Publisher('/angular_velocity', Float32, queue_size=10)  # 각속도 퍼블리셔
 
-        self.rate = rospy.Rate(20)  # 주기 20Hz
+        self.rate = rospy.Rate(100)  # 주기 20Hz
         
         self.current_steering = 0.0
 
@@ -61,7 +61,7 @@ class PIDController:
             cmd.linear.x = 0.0
             cmd.angular.z = 0.0
             self.cmd_vel_publisher.publish(cmd)
-            rospy.loginfo("Pitch angle exceeded 40 degrees. Stopping the robot.")
+            rospy.loginfo("pitch angle exceeded 40 degrees. stopping the robot.")
             return
             
         # 각도 오차 계산
@@ -79,15 +79,15 @@ class PIDController:
         output_speed = self.Kp_speed * speed_error
 
         # STEERING 오차 계산
-        steering_error = self.setpoint_steering 
-        steering_derivative = current_gyro_z  # 자이로 각속도를 사용
+        steering_error = self.setpoint_steering
+        steering_derivative = current_gyro_z      # 자이로 각속도를 사용
 
         # PID 제어 계산 (STEERING)
         output_steering = (self.Kp_steering * steering_error +
                            self.Kd_steering * steering_derivative)
-
-        output_linear = max(min(output_speed + output_angle, self.max_output), -self.max_output)
-        output_z = max(min(-output_steering, self.max_output), -self.max_output)
+        
+        output_linear = max(min(output_speed + output_angle, self.max_output) , -self.max_output)
+        output_z = max(min(-output_steering , self.max_output) , -self.max_output)
 
         # Twist 메시지 발행
         cmd = Twist()

@@ -11,7 +11,7 @@ import time
 
 class PIDController:
     def __init__(self):
-        rospy.init_node('pid_controller', anonymous=True)
+        rospy.init_node('pid_controler', anonymous=True)
 
         # PID 파라미터
         self.Kp_angle = 6.0       #   3.5 # 5    #  

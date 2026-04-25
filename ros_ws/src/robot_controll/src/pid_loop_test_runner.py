@@ -9,7 +9,7 @@ def reset_and_move_forward(pid_params, loop_idx):
     rospy.loginfo(f"Loop {loop_idx+1}/100: starting with PID {pid_params}")
 
     # PID 파라미터 변경
-    client = Client("/pid_controll", timeout=5)  # PID 노드 이름 확인
+    client = Client("/pid_control", timeout=5)  # PID 노드 이름 확인
     client.update_configuration(pid_params)
 
     # 서비스 프록시 생성

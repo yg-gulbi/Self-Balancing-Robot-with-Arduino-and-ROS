@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find robot_description)/urdf/balence_robot_urdf_depth.xacro"/> 
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find robot_description)/urdf/balance_robot_urdf_depth.xacro"/> 
     <include file="$(find orbbec_camera)/launch/gemini_330_series.launch"/>
 
   <!-- rtabmap.launch를 실행하는 node -->

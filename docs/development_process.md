@@ -67,8 +67,8 @@ The simulation screenshots show the parallel ROS/Gazebo track: simulated robot p
 | Workstream | What it covered | Public evidence |
 | --- | --- | --- |
 | ODrive / motor | Motor controller setup, hall-sensor feedback, motor synchronization, current control experiments | `firmware/physical_balance_controller`, `archive/legacy_firmware`, hardware photos |
-| Receiver / controller | RC receiver PWM input, manual drive commands, engage/throttle/steering interpretation | `Chimp4.ino`, `rc_to_ros_cmd_vel.ino`, receiver troubleshooting notes |
-| IMU / balancing | BNO055 angle and gyro feedback, balance-loop tuning, safety-constrained parameter testing | `Chimp4.ino`, hallway and obstacle-course demos |
+| Receiver / controller | RC receiver PWM input, manual drive commands, engage/throttle/steering interpretation | `physical_balance_controller.ino`, `rc_to_ros_cmd_vel_bridge.ino`, receiver troubleshooting notes |
+| IMU / balancing | BNO055 angle and gyro feedback, balance-loop tuning, safety-constrained parameter testing | `physical_balance_controller.ino`, hallway and obstacle-course demos |
 | ROS / navigation | Gazebo balancing simulation, `/before_vel` command separation, SLAM/navigation launch files | `ros_ws/src/robot_controll`, `ros_ws/src/navigation`, `ros_ws/src/robot_ability` |
 | Hardware assembly | Chassis packaging, internal electronics bay, battery and DC-DC power chain | `media/hardware`, `media/diagrams/hardware_power_io_overview.svg` |
 | Research and documentation | CAN, depth camera, ORB-SLAM2, RTAB-Map, receiver noise, ROS autorun investigation | `docs/research_and_design_decisions.md` |
@@ -81,7 +81,7 @@ The recovered process material shows that each major part was brought up separat
 | --- | --- | --- | --- |
 | ODrive 3.6 | Drive both wheel motors reliably before balancing | Set up Ubuntu/ODrive tooling, checked input voltage, connected motor phases and hall sensors, tested controller modes, then moved from simple spin tests toward current commands | Used as the current-control motor driver commanded by Arduino firmware |
 | Wheel motors + hall sensors | Read wheel motion well enough for balancing and drive correction | Compared motor speed feedback, filtered abnormal readings, and tuned speed-related feedback so the two wheels could respond together | Used for wheel speed feedback and motor synchronization during physical balance control |
-| BNO055 IMU | Provide body angle and gyro feedback for the balance loop | Verified sensor startup, handled calibration data, stored offsets in EEPROM, and used angle/gyro readings as the core balancing signal | Used as the main physical attitude sensor in `Chimp4.ino` |
+| BNO055 IMU | Provide body angle and gyro feedback for the balance loop | Verified sensor startup, handled calibration data, stored offsets in EEPROM, and used angle/gyro readings as the core balancing signal | Used as the main physical attitude sensor in `physical_balance_controller.ino` |
 | RC receiver | Convert manual remote input into safe steering, throttle, and engage commands | Measured PWM pulse width with interrupts, filtered noisy channel values, added thresholds around neutral, and used engage persistence to avoid accidental motor activation | Used for manual driving while balancing and for RC-to-ROS bridge testing |
 | Arduino Mega 2560 | Keep the low-level balance loop deterministic and independent from ROS | Integrated PWM input, IMU readings, ODrive serial communication, safety checks, and current-command output in one firmware loop | Became the main physical controller for the completed real robot behavior |
 | Power chain | Feed motor power, onboard compute, and low-voltage auxiliaries from one robot package | Recovered wiring notes show a 36V main bus, a 36V to 19V conversion stage, and a 19V to 5V stage for lower-voltage electronics | Documented through the clean power/IO diagram and internal hardware photo |

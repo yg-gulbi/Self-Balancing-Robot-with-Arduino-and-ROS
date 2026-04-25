@@ -9,7 +9,7 @@
   <!-- move_forward_only: true로 설정하면 move_base 노드에서 전진만 가능하도록 설정 (기본값: false) -->
   <arg name="move_forward_only" default="false"/>
 
-  <!-- balence_robot 노드 실행 -->
+  <!-- balance_robot 노드 실행 -->
   <!-- 로봇 초기 설정 및 연결을 위한 robot_remote.launch 파일 포함 -->
   <include file="$(find robot_bringup)/launch/robot_remote_depth.launch">
   </include>

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-  <include file="$(find robot_gazebo)/launch/balence_robot_house_depth.launch">
+  <include file="$(find robot_gazebo)/launch/balance_robot_house_depth.launch">
   </include> 
   <!-- state publishers -->
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>

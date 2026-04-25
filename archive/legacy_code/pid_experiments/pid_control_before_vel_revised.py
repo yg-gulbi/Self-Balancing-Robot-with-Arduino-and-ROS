@@ -11,15 +11,16 @@ import time
 
 class PIDController:
     def __init__(self):
-        rospy.init_node('pid_controller', anonymous=True)
+        rospy.init_node('pid_controler', anonymous=True)
 
         # PID 파라미터
         self.Kp_angle = 55        
-        self.Kd_angle = 0.0     
-        self.Kp_speed = 0.1         
-        self.Kp_steering = 0.0   
-        self.Kd_steering = 0.0  
-        self.max_output = 500
+        self.Kd_angle = -0.45     
+        self.Kp_speed = 1.8         
+        self.Kp_steering = 0.6    
+        self.Kd_steering = 0.01    
+        self.max_output = 150
+        
         
         # PID 관련 변수
         self.setpoint_angle = 0.0   
@@ -29,8 +30,7 @@ class PIDController:
         self.setpoint_speed = 0.0   
         self.prev_error_speed = 0.0
         self.integral_speed = 0.0
-        self.current_speed = 0.0
-        
+
         self.setpoint_steering = 0.0  
         self.prev_error_steering = 0.0
 
@@ -44,26 +44,27 @@ class PIDController:
         self.before_vel_subscriber = rospy.Subscriber('/before_vel', Twist, self.before_vel_callback)
 
         # 피치값과 각속도를 퍼블리시하기 위한 퍼블리셔 추가
-        self.odom_subscriber = rospy.Subscriber('/odom', Odometry, self.odom_callback)
         self.pitch_publisher = rospy.Publisher('/pitch', Float32, queue_size=10)  # 피치값 퍼블리셔
         self.angular_velocity_publisher = rospy.Publisher('/angular_velocity', Float32, queue_size=10)  # 각속도 퍼블리셔
-  
-        self.rate = rospy.Rate(100)  # 주기 20Hz
+
+        self.rate = rospy.Rate(20)  # 주기 20Hz
         
         self.current_steering = 0.0
-
+        self.current_speed = 0.0  # 선속도 초기화
+        
     def imu_callback(self, msg):
         # IMU에서 각도 읽어오기 (pitch)
         current_angle = self.get_pitch(msg)
         current_gyro_x = msg.angular_velocity.x  # IMU에서 피치 각속도 가져오기 (자이로 X축)
         current_gyro_z = msg.angular_velocity.z   # IMU에서 각속도 가져오기 (자이로 z축)
+        current_accel_x = msg.linear_acceleration.x  # IMU에서 선가속도 가져오기 (X축)
 
         if abs(current_angle) > math.radians(40):  
             cmd = Twist()
             cmd.linear.x = 0.0
             cmd.angular.z = 0.0
             self.cmd_vel_publisher.publish(cmd)
-            rospy.loginfo("pitch angle exceeded 40 degrees. stopping the robot.")
+            rospy.loginfo("Pitch angle exceeded 40 degrees. Stopping the robot.")
             return
             
         # 각도 오차 계산
@@ -73,23 +74,30 @@ class PIDController:
         # PID 제어 계산 (각도)
         output_angle = (self.Kp_angle * angle_error +
                         self.Kd_angle * angle_derivative)
-
+        
+        
+        self.acceleration = current_accel_x  # 현재 가속도 값 사용
+        self.current_speed += self.acceleration * (1.0 / 20.0)  # 20Hz로 주기가 설정됨, dt = 1/20초
+       
+        # **현재 속도 출력**
+        rospy.loginfo(f"Current speed: {self.current_speed:.2f} m/s")
+    
         # 선속도 오차 계산
-        speed_error = self.current_speed - self.setpoint_speed 
+        speed_error = self.setpoint_speed - self.current_speed
         
         # PID 제어 계산 (속도)
         output_speed = self.Kp_speed * speed_error
 
         # STEERING 오차 계산
-        steering_error = self.setpoint_steering
-        steering_derivative = current_gyro_z      # 자이로 각속도를 사용
+        steering_error = self.setpoint_steering 
+        steering_derivative = current_gyro_z  # 자이로 각속도를 사용
 
         # PID 제어 계산 (STEERING)
         output_steering = (self.Kp_steering * steering_error +
                            self.Kd_steering * steering_derivative)
-        
-        output_linear = max(min(output_speed + output_angle, self.max_output) , -self.max_output)
-        output_z = max(min(-output_steering , self.max_output) , -self.max_output)
+
+        output_linear = max(min(output_speed + output_angle, self.max_output), -self.max_output)
+        output_z = max(min(-output_steering, self.max_output), -self.max_output)
 
         # Twist 메시지 발행
         cmd = Twist()
@@ -124,11 +132,6 @@ class PIDController:
 
         # 마지막 명령 수신 시간 업데이트
         self.last_cmd_time = time.time()
-
-    def odom_callback(self, msg):
-        # /odom에서 현재 선속도 읽어오기
-        self.current_speed = msg.twist.twist.linear.x
-
 
     def get_pitch(self, imu_msg):
         # IMU 메시지에서 pitch 각도 추출
@@ -165,4 +168,3 @@ class PIDController:
 if __name__ == '__main__':
     controller = PIDController()
     controller.run()
-
