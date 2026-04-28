@@ -12,17 +12,18 @@ The project evolved into three related software tracks:
 
 ```mermaid
 flowchart LR
-    RC[RC Receiver] --> Arduino[Arduino Firmware]
+    TX[FrSky Taranis Q X7] --> RC[FrSky X8R]
+    RC --> Arduino[Arduino Mega 2560 Firmware]
     IMU[BNO055 IMU] --> Arduino
-    Arduino --> ODrive[ODrive Current Control]
-    ODrive --> Motors[Wheel Motors]
+    Arduino --> ODrive[ODrive 3.6 Current Control]
+    ODrive --> Motors[36V BLDC Hub Motors]
 
     Teleop[Teleop or move_base] --> BeforeVel[/before_vel/]
     BeforeVel --> Balance[robot_controll]
     Balance --> CmdVel[/cmd_vel/]
     CmdVel --> Gazebo[Gazebo Robot]
 
-    Camera[Camera / Sensor Stack] --> SLAM[SLAM / TF / Navigation Launches]
+    Camera[Orbbec Gemini 330] --> SLAM[SLAM / TF / Navigation Launches]
 ```
 
 ## Physical Robot Path
@@ -35,9 +36,10 @@ Representative code:
 
 Behavior:
 
-- Arduino reads RC PWM inputs.
+- FrSky Taranis Q X7 sends manual commands to the FrSky X8R receiver.
+- Arduino Mega 2560 reads RC PWM inputs from the FrSky X8R.
 - BNO055 provides body angle and gyro information.
-- ODrive provides motor state and accepts current commands.
+- ODrive 3.6 provides motor state and accepts current commands.
 - The balancing and driving loop runs entirely on Arduino for the physical robot.
 
 ## Simulation Path
@@ -64,3 +66,5 @@ Representative archive files:
 - [`move_base.launch`](../archive/legacy_code/real_world_integration/move_base.launch)
 
 These files show that camera/SLAM/navigation integration work was performed, but this repository does not claim verified end-to-end autonomous navigation on the physical robot.
+
+Some simulation-side depth files in the repository still use historical `d435` topic names or `realsense_ros_gazebo` assets. Those should be read as older simulation or placeholder RGB-D configurations, not as the deployed physical camera choice for the real robot.

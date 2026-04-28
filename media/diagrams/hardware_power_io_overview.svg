@@ -55,22 +55,22 @@
 
   <text class="tag" x="112" y="228">CONTROL / SIGNAL</text>
   <text class="panelTitle" x="112" y="266">Physical control chain</text>
-  <text class="small" x="112" y="294">Arduino combines IMU and RC input, then commands the motor controller.</text>
+  <text class="small" x="112" y="294">Arduino combines BNO055 and FrSky radio input, then commands ODrive 3.6.</text>
 
   <text class="tag" x="870" y="228">POWER DISTRIBUTION</text>
   <text class="panelTitle" x="870" y="266">Battery and conversion chain</text>
   <text class="small" x="870" y="294">36V main power is stepped down for onboard compute and low-voltage auxiliaries.</text>
 
   <rect class="boxControl" x="116" y="350" width="220" height="88" rx="18"/>
-  <text class="label" x="226" y="386" text-anchor="middle">RC Receiver</text>
-  <text class="small" x="226" y="415" text-anchor="middle">PWM input</text>
+  <text class="label" x="226" y="386" text-anchor="middle">FrSky X8R</text>
+  <text class="small" x="226" y="415" text-anchor="middle">paired with Taranis Q X7</text>
 
   <rect class="boxControl" x="116" y="490" width="220" height="88" rx="18"/>
   <text class="label" x="226" y="526" text-anchor="middle">BNO055 IMU</text>
   <text class="small" x="226" y="555" text-anchor="middle">angle + gyro feedback</text>
 
   <rect class="boxControl" x="428" y="420" width="260" height="104" rx="18"/>
-  <text class="label" x="558" y="462" text-anchor="middle">Arduino Mega</text>
+  <text class="label" x="558" y="462" text-anchor="middle">Arduino Mega 2560</text>
   <text class="small" x="558" y="493" text-anchor="middle">balancing + RC logic</text>
 
   <rect class="boxHybrid" x="428" y="612" width="260" height="100" rx="18"/>
@@ -78,8 +78,8 @@
   <text class="small" x="558" y="683" text-anchor="middle">current motor control</text>
 
   <rect class="boxControl" x="116" y="616" width="220" height="96" rx="18"/>
-  <text class="label" x="226" y="655" text-anchor="middle">Wheel Motors</text>
-  <text class="small" x="226" y="686" text-anchor="middle">hall sensor evidence</text>
+  <text class="label" x="226" y="655" text-anchor="middle">36V BLDC Hub Motors</text>
+  <text class="small" x="226" y="686" text-anchor="middle">hall sensor feedback</text>
 
   <rect class="boxNeutral" x="428" y="328" width="260" height="70" rx="18"/>
   <text class="label" x="558" y="372" text-anchor="middle">Aux IO Area</text>
@@ -108,7 +108,7 @@
 
   <rect class="boxPower" x="880" y="746" width="216" height="88" rx="18"/>
   <text class="label" x="988" y="782" text-anchor="middle">Onboard PC</text>
-  <text class="small" x="988" y="811" text-anchor="middle">compute unit</text>
+  <text class="small" x="988" y="811" text-anchor="middle">ROS host + Gemini 330</text>
 
   <rect class="boxPower" x="1176" y="746" width="216" height="88" rx="18"/>
   <text class="label" x="1284" y="782" text-anchor="middle">19V to 5V</text>
@@ -122,10 +122,10 @@
   <path class="power" d="M966 512 L724 512 L724 650 L688 650"/>
 
   <rect class="boxControl" x="642" y="842" width="250" height="50" rx="16"/>
-  <text class="label" x="767" y="875" text-anchor="middle">Mini Arduino</text>
+  <text class="label" x="767" y="875" text-anchor="middle">Aux Arduino</text>
 
   <rect class="boxControl" x="946" y="842" width="250" height="50" rx="16"/>
-  <text class="label" x="1071" y="875" text-anchor="middle">Relay Module</text>
+  <text class="label" x="1071" y="875" text-anchor="middle">5V Relay Module</text>
 
   <path class="powerLink" d="M1284 834 L1284 824 L767 824 L767 842"/>
   <path class="powerLink" d="M1284 824 L1071 824 L1071 842"/>

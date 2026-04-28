@@ -3,11 +3,11 @@
 ## Confirmed Results
 
 - Real physical self-balancing control on Arduino
-- Manual RC driving while balancing
+- Manual FrSky radio driving while balancing
 - ROS/Gazebo balancing robot simulation
 - Simulation-side SLAM and navigation workflows
 - RC-to-ROS command bridge testing
-- ODrive, IMU, RC, and controller bring-up experiments
+- ODrive 3.6, BNO055, FrSky Taranis Q X7 / X8R, Orbbec Gemini 330, and controller bring-up experiments
 
 ## Not Claimed
 

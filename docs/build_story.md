@@ -14,7 +14,7 @@ It is intentionally evidence-first. Images show the process; text explains what 
 
 | Bench testing | Simulation navigation | Final internal hardware |
 | --- | --- | --- |
-| ![Wheel bench test](../media/process/wheel_bench_test.jpg) | ![Simulation navigation views](../media/process/simulation_navigation_views.jpg) | ![Internal hardware photo](../media/hardware/robot_open_front.jpg) |
+| ![Wheel bench test](../media/process/wheel_bench_test.jpg) | ![Simulation navigation views](../media/process/simulation_unreal_navigation_views.jpg) | ![Internal hardware photo](../media/hardware/robot_open_front.jpg) |
 
 ## 1. Define The Robot Goal
 
@@ -26,8 +26,8 @@ The project started from a guide-robot idea: a compact two-wheeled platform that
 
 The important early decision was to treat the robot as two related systems:
 
-- Physical balance robot: Arduino, BNO055, ODrive, RC receiver, wheel motors, and real tuning.
-- ROS simulation/integration stack: Gazebo balancing model, SLAM/navigation launches, and command-pipeline experiments.
+- Physical balance robot: Arduino Mega 2560, BNO055, ODrive 3.6, FrSky Taranis Q X7 + X8R radio control, wheel motors, and real tuning.
+- ROS simulation/integration stack: Gazebo balancing model, Orbbec Gemini 330 integration work, SLAM/navigation launches, and command-pipeline experiments.
 
 That split is why this repository separates completed physical balancing from simulation-side navigation and partial physical ROS integration.
 
@@ -41,14 +41,14 @@ The robot needed enough room for batteries, power conversion, the motor controll
 
 This stage answered practical questions:
 
-- Where does the camera or depth sensor sit?
+- Where does the Orbbec Gemini 330 or depth-sensor head sit?
 - Where can the battery and compute unit fit?
 - How can the front stay open enough for wiring and debugging?
 - How does the two-wheel base support the upper mast?
 
 ## 3. Plan Power And Signal Flow
 
-The wiring work connected the physical control path and the higher-level compute path. The recovered block diagram shows the intended relationship among the receiver, Arduino Mega, IMU, ODrive, motors, battery, converters, onboard PC, camera, mini Arduino, and relay module.
+The wiring work connected the physical control path and the higher-level compute path. The recovered block diagram shows the intended relationship among the FrSky X8R receiver, Arduino Mega 2560, BNO055 IMU, ODrive 3.6, motors, battery, converters, onboard PC, Orbbec Gemini 330, auxiliary Arduino, and relay module.
 
 <p align="center">
   <img src="../media/process/source_wiring_block_diagram.jpg" alt="Recovered wiring block diagram" width="700">
@@ -62,11 +62,11 @@ The public diagram below is the cleaned documentation version of that recovered 
 
 Key architecture choices:
 
-- The Arduino Mega handled real-time balancing and RC input.
+- The Arduino Mega handled real-time balancing and RC input from the FrSky X8R receiver.
 - The BNO055 IMU provided body angle and gyro feedback.
 - The ODrive 3.6 drove the wheel motors using current commands.
 - The battery and converters formed a 36V main bus, a 19V compute rail, and a 5V auxiliary/control rail.
-- The onboard PC and camera/depth sensor belonged to the higher-level perception and ROS integration path.
+- The onboard PC and Orbbec Gemini 330 belonged to the higher-level perception and ROS integration path.
 
 ## 4. Bring Up Motors Before Balancing
 
@@ -125,7 +125,7 @@ The final public demos come after this kind of staged tuning, not from a single 
 ROS and Gazebo were used to explore simulation-side balancing, SLAM, and navigation workflows without risking the physical robot at every iteration.
 
 <p align="center">
-  <img src="../media/process/simulation_navigation_views.jpg" alt="Simulation navigation views" width="700">
+  <img src="../media/process/simulation_unreal_navigation_views.jpg" alt="Simulation navigation views" width="700">
 </p>
 
 The most important software architecture choice was separating navigation commands from final balance commands:

@@ -18,14 +18,27 @@ The public hardware story in this repository is intentionally based only on conf
 - Arduino Mega 2560 for low-level physical control
 - BNO055 IMU for balancing feedback
 - ODrive 3.6 motor controller
-- RC receiver using PWM input on Arduino
-- wheel motors with hall-sensor-related evidence in the wiring sketch
-- a camera or depth-sensor head mounted on the upper structure
+- Orbbec Gemini 330 depth camera mounted on the upper sensor head
+- FrSky X8R receiver providing PWM input to Arduino
+- FrSky 2.4GHz Taranis Q X7 handheld controller paired with the receiver
 - a battery-backed onboard power distribution chain
+
+## Best-Effort Hardware Identification
+
+The remaining parts can be described confidently at the subsystem level even though some exact part numbers were not retained:
+
+- dual hall-sensor BLDC wheel motors with roughly 165 mm wheels, likely hoverboard-type hub motors
+- a 36V battery pack feeding the motor and compute power chain
+- a 36V -> 19V converter for the onboard PC
+- a 19V -> 5V converter for lower-voltage control electronics
+- a 19V onboard mini PC, likely an x86 mini-PC or NUC-class device
+- an auxiliary Arduino Mini/Nano-class board
+- a relay or switching module for auxiliary power/control work
+- a 3D-printed body, mast, and upper sensor-head mount on a metal base plate
 
 ## Hardware Docs Map
 
-- [hardware_bom.md](hardware_bom.md): confirmed components and roles
+- [hardware_bom.md](hardware_bom.md): exact models plus best-effort identifications for the full physical hardware stack
 - [hardware_power_and_io.md](hardware_power_and_io.md): power and signal flow centered on the recovered block diagram
 - [hardware_layout.md](hardware_layout.md): physical placement and interpretation of the internal layout
 - [hardware_gallery.md](hardware_gallery.md): image-based hardware walkthrough
@@ -33,5 +46,5 @@ The public hardware story in this repository is intentionally based only on conf
 ## Notes
 
 - This section is written conservatively for portfolio use.
-- Exact component names are only stated when they are directly supported by code, CAD, or visible evidence.
-- The camera module is described as a `depth camera / sensor head` unless a specific model is confirmed in the public-facing documentation.
+- Exact component names are stated when they are supported by code, launch files, recovered project notes, hardware photos, or direct project confirmation.
+- The detailed split between exact models and best-effort identifications is maintained in [hardware_bom.md](hardware_bom.md).

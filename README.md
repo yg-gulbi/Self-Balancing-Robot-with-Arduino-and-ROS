@@ -2,7 +2,7 @@
 
 End-to-end self-balancing robot project combining Arduino-based real-time control with ROS simulation, SLAM, and navigation.
 
-Arduino, BNO055, and ODrive were used for the physical balancing robot. ROS and Gazebo were used to build a simulation/control stack and to test SLAM and navigation workflows in simulation.
+Arduino Mega 2560, BNO055, ODrive 3.6, an Orbbec Gemini 330 depth camera, and a FrSky radio pair (`Taranis Q X7` transmitter + `X8R` receiver) were used for the physical balancing robot. ROS and Gazebo were used to build a simulation/control stack and to test SLAM and navigation workflows in simulation.
 
 This repository is organized as a hiring-facing portfolio. It separates verified outcomes, reusable code, hardware evidence, and legacy experiments instead of presenting every old workspace as if it were a final deliverable.
 
@@ -26,9 +26,9 @@ This repository is organized as a hiring-facing portfolio. It separates verified
 
 Three layers were explored in this project:
 
-1. Physical robot control: RC receiver -> Arduino -> BNO055 + ODrive -> balancing and driving.
+1. Physical robot control: FrSky Taranis Q X7 -> FrSky X8R -> Arduino Mega 2560 -> BNO055 + ODrive 3.6 -> balancing and driving.
 2. ROS simulation: teleop or `move_base` -> `/before_vel` -> balance controller -> `/cmd_vel` -> Gazebo robot.
-3. Real-world integration experiments: camera/SLAM/navigation launch composition and RC-to-ROS bridging for system-level testing.
+3. Real-world integration experiments: Orbbec Gemini 330 camera/SLAM/navigation launch composition and RC-to-ROS bridging for system-level testing.
 
 More detail is documented in [docs/software_architecture.md](docs/software_architecture.md).
 
@@ -49,8 +49,17 @@ The physical robot is backed by real hardware evidence, not code alone.
   <img src="media/hardware/robot_open_front.jpg" alt="Internal hardware photo" width="540">
 </p>
 
+- Arduino Mega 2560 main controller
+- BNO055 IMU
+- ODrive 3.6 motor controller
+- FrSky 2.4GHz Taranis Q X7 transmitter + FrSky X8R receiver
+- Orbbec Gemini 330 depth camera
+- dual 36V hall-sensor BLDC hub motors
+- 36V battery pack with 36V -> 19V and 19V -> 5V conversion
+- onboard mini PC, auxiliary Arduino, and relay module
+
 - [Hardware overview](docs/hardware.md)
-- [Hardware BOM](docs/hardware_bom.md)
+- [Hardware BOM](docs/hardware_bom.md): exact models plus best-effort identifications for the remaining hardware
 - [Power and IO interpretation](docs/hardware_power_and_io.md)
 - [Hardware layout](docs/hardware_layout.md)
 - [Hardware gallery](docs/hardware_gallery.md)
@@ -67,7 +76,7 @@ Recovered project-process material has been summarized into public-safe document
 
 - [Build story](docs/build_story.md): end-to-end narrative from concept, CAD, wiring, bench testing, embedded control, tethered practice, and ROS simulation to verified results
 - [Development process](docs/development_process.md): build timeline, component bring-up, trial-and-error lessons, and final public claims
-- [Research and design decisions](docs/research_and_design_decisions.md): CAN, ODrive, depth camera, SLAM, receiver-noise, and ROS autorun research boundaries
+- [Research and design decisions](docs/research_and_design_decisions.md): CAN, ODrive, Orbbec Gemini 330, SLAM, FrSky receiver-noise, and ROS autorun research boundaries
 - [Experiment summary](docs/experiments.md): curated implementation and integration evidence
 
 ## Repository Map

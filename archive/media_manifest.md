@@ -27,7 +27,7 @@ These public-safe images were exported from recovered process material and summa
 | circuit planning deck | `media/process/source_wiring_block_diagram.jpg` | source block diagram for public wiring explanation |
 | wheel bench-test video | `media/process/wheel_bench_test.jpg` | wheel and electronics bench-test evidence |
 | final presentation | `media/process/tethered_driving_practice.jpg` | tethered physical driving practice |
-| final presentation | `media/process/simulation_navigation_views.jpg` | ROS/Gazebo simulation and navigation views |
+| final presentation | `media/process/simulation_unreal_navigation_views.jpg` | ROS/Gazebo simulation and navigation views |
 
 ## Selection Notes
 
