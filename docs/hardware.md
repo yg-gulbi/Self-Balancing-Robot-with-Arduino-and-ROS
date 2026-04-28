@@ -11,7 +11,7 @@ The public hardware story in this repository is intentionally based only on conf
 - the recovered wiring block diagram
 - curated photos from the physical robot
 
-![Internal hardware photo](../media/hardware/robot_open_front.jpg)
+![Internal hardware photo](../media/hardware/robot_open_front.png)
 
 ## Confirmed Hardware Summary
 

@@ -2,7 +2,7 @@
 
 ## Primary Internal Photo
 
-![Internal hardware photo](../media/hardware/robot_open_front.jpg)
+![Internal hardware photo](../media/hardware/robot_open_front.png)
 
 ## Visible Zones
 
@@ -54,6 +54,6 @@ The full physical stack associated with this body layout was:
 
 Use these assets together when you need both physical placement and interpreted system relationships:
 
-- [robot_open_front.jpg](../media/hardware/robot_open_front.jpg)
+- [robot_open_front.png](../media/hardware/robot_open_front.png)
 - [hardware_power_io_overview.svg](../media/diagrams/hardware_power_io_overview.svg)
 - [development_process.md](development_process.md)

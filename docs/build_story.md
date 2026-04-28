@@ -14,7 +14,7 @@ It is intentionally evidence-first. Images show the process; text explains what 
 
 | Bench testing | Simulation navigation | Final internal hardware |
 | --- | --- | --- |
-| ![Wheel bench test](../media/process/wheel_bench_test.jpg) | ![Simulation navigation views](../media/process/simulation_unreal_navigation_views.jpg) | ![Internal hardware photo](../media/hardware/robot_open_front.jpg) |
+| ![Wheel bench test](../media/process/wheel_bench_test.jpg) | ![Simulation navigation views](../media/process/simulation_unreal_navigation_views.jpg) | ![Internal hardware photo](../media/hardware/robot_open_front.png) |
 
 ## 1. Define The Robot Goal
 

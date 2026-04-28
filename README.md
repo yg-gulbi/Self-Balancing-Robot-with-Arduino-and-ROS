@@ -19,7 +19,7 @@ This repository is organized as a hiring-facing portfolio. It separates verified
 | SLAM in simulation | Done | SLAM-related simulation workflow and launch composition | [ros_ws/src/robot_ability](ros_ws/src/robot_ability), [docs/software_architecture.md](docs/software_architecture.md) |
 | Navigation in simulation | Done | `move_base -> /before_vel -> balance controller -> /cmd_vel` pipeline | [ros_ws/src/navigation](ros_ws/src/navigation), [docs/software_architecture.md](docs/software_architecture.md) |
 | RC-to-ROS bridge testing | Done | Arduino bridge that published command inputs into ROS | [rc_to_ros_cmd_vel_bridge.ino](firmware/bridges_and_testers/rc_to_ros_cmd_vel_bridge.ino) |
-| ODrive / IMU / RC / motor subsystem tests | Done | Subsystem-focused bring-up and tuning work | [docs/experiments.md](docs/experiments.md), [docs/development_process.md](docs/development_process.md), [robot_open_front.jpg](media/hardware/robot_open_front.jpg), [hardware_power_io_overview.svg](media/diagrams/hardware_power_io_overview.svg) |
+| ODrive / IMU / RC / motor subsystem tests | Done | Subsystem-focused bring-up and tuning work | [docs/experiments.md](docs/experiments.md), [docs/development_process.md](docs/development_process.md), [robot_open_front.png](media/hardware/robot_open_front.png), [hardware_power_io_overview.svg](media/diagrams/hardware_power_io_overview.svg) |
 | Real-world ROS SLAM/navigation integration | Partial | Launch and integration experiments exist, but end-to-end autonomous physical navigation is not claimed | [archive/legacy_code/real_world_integration](archive/legacy_code/real_world_integration), [docs/results_and_limitations.md](docs/results_and_limitations.md) |
 
 ## System Architecture
@@ -46,7 +46,7 @@ Curated public assets:
 The physical robot is backed by real hardware evidence, not code alone.
 
 <p align="center">
-  <img src="media/hardware/robot_open_front.jpg" alt="Internal hardware photo" width="540">
+  <img src="media/hardware/robot_open_front.png" alt="Internal hardware photo" width="540">
 </p>
 
 - Arduino Mega 2560 main controller
@@ -91,7 +91,7 @@ archive/
 ```
 
 - [firmware/physical_balance_controller](firmware/physical_balance_controller/README.md): main physical robot controller
-- [firmware/bridges_and_testers](firmware/bridges_and_testers/README.md): tester and bridge Arduino sketches
+- [firmware/bridges_and_testers](firmware/bridges_and_testers/README.md): tester and bridge Arduino sketches, including hall-sensor, motor-current, ODrive receiver, and receiver PWM tests
 - [ros_ws/src](ros_ws/src): curated ROS packages for simulation and control
 - [archive](archive): legacy firmware, old PID experiments, real-world integration traces, and raw reference materials
 - [media](media/README.md): curated portfolio-safe photos, GIFs, and external media plan

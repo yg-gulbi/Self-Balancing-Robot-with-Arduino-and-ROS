@@ -14,7 +14,7 @@ Caption: Original hand-drawn source that the clean diagram was derived from.
 
 ## Internal Layout
 
-![Robot open front view](../media/hardware/robot_open_front.jpg)
+![Robot open front view](../media/hardware/robot_open_front.png)
 
 Caption: Raw front-open view of the physical robot showing the electronics bay, battery pack, onboard compute enclosure, Orbbec Gemini 330 sensor head, and wheel base.
 

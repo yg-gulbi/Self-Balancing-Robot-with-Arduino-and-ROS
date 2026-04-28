@@ -66,8 +66,8 @@ The simulation screenshots show the parallel ROS/Gazebo track: simulated robot p
 
 | Workstream | What it covered | Public evidence |
 | --- | --- | --- |
-| ODrive / motor | Motor controller setup, hall-sensor feedback, motor synchronization, current control experiments | `firmware/physical_balance_controller`, `archive/legacy_firmware`, hardware photos |
-| FrSky radio path | X8R PWM input, Taranis Q X7 manual commands, and engage/throttle/steering interpretation | `physical_balance_controller.ino`, `rc_to_ros_cmd_vel_bridge.ino`, receiver troubleshooting notes |
+| ODrive / motor | Motor controller setup, hall-sensor feedback, motor synchronization, current control experiments | `firmware/physical_balance_controller`, `firmware/bridges_and_testers/motor_current_test`, `firmware/bridges_and_testers/odrive_receiver_test`, `archive/legacy_firmware`, hardware photos |
+| FrSky radio path | X8R PWM input, Taranis Q X7 manual commands, and engage/throttle/steering interpretation | `physical_balance_controller.ino`, `receiver_pwm_test.ino`, `rc_to_ros_cmd_vel_bridge.ino`, receiver troubleshooting notes |
 | IMU / balancing | BNO055 angle and gyro feedback, balance-loop tuning, safety-constrained parameter testing | `physical_balance_controller.ino`, hallway and obstacle-course demos |
 | ROS / navigation | Gazebo balancing simulation, `/before_vel` command separation, SLAM/navigation launch files | `ros_ws/src/robot_controll`, `ros_ws/src/navigation`, `ros_ws/src/robot_ability` |
 | Hardware assembly | Chassis packaging, internal electronics bay, battery and DC-DC power chain | `media/hardware`, `media/diagrams/hardware_power_io_overview.svg` |
@@ -79,8 +79,8 @@ The recovered process material shows that each major part was brought up separat
 
 | Component | Bring-up goal | Trial-and-error process | Stabilized use in the project |
 | --- | --- | --- | --- |
-| ODrive 3.6 | Drive both wheel motors reliably before balancing | Set up Ubuntu/ODrive tooling, checked input voltage, connected motor phases and hall sensors, tested controller modes, then moved from simple spin tests toward current commands | Used as the current-control motor driver commanded by Arduino firmware |
-| Wheel motors + hall sensors | Read wheel motion well enough for balancing and drive correction | Compared motor speed feedback, filtered abnormal readings, and tuned speed-related feedback so the two wheels could respond together | Used for wheel speed feedback and motor synchronization during physical balance control |
+| ODrive 3.6 | Drive both wheel motors reliably before balancing | Set up Ubuntu/ODrive tooling, checked input voltage, connected motor phases and hall sensors, tested controller modes, then moved from simple spin tests toward current commands; the repository now keeps a focused motor-current test sketch for that bring-up path | Used as the current-control motor driver commanded by Arduino firmware |
+| Wheel motors + hall sensors | Read wheel motion well enough for balancing and drive correction | Compared motor speed feedback, filtered abnormal readings, counted hall-state transitions, and tuned speed-related feedback so the two wheels could respond together | Used for wheel speed feedback and motor synchronization during physical balance control |
 | BNO055 IMU | Provide body angle and gyro feedback for the balance loop | Verified sensor startup, handled calibration data, stored offsets in EEPROM, and used angle/gyro readings as the core balancing signal | Used as the main physical attitude sensor in `physical_balance_controller.ino` |
 | FrSky X8R + Taranis Q X7 | Convert manual remote input into safe steering, throttle, and engage commands | Measured PWM pulse width with interrupts, filtered noisy channel values, added thresholds around neutral, and used engage persistence to avoid accidental motor activation | Used for manual driving while balancing and for RC-to-ROS bridge testing |
 | Arduino Mega 2560 | Keep the low-level balance loop deterministic and independent from ROS | Integrated PWM input, IMU readings, ODrive serial communication, safety checks, and current-command output in one firmware loop | Became the main physical controller for the completed real robot behavior |
