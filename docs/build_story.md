@@ -80,6 +80,8 @@ This is also where the project began moving from simple motor movement toward th
 
 The main physical controller became [`physical_balance_controller.ino`](../firmware/physical_balance_controller/physical_balance_controller.ino). It kept the critical loop on Arduino instead of depending on ROS for real-time balance control.
 
+The readable control breakdown is documented in [`control_algorithm.md`](../firmware/physical_balance_controller/control_algorithm.md).
+
 The controller combined:
 
 - RC PWM input for throttle, steering, and engage behavior.

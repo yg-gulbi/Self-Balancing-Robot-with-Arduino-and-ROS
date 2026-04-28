@@ -39,7 +39,7 @@ The two diagrams below explain the project faster than a long paragraph: one sho
 
 | Area | Status | Scope | Main evidence |
 | --- | --- | --- | --- |
-| Physical self-balancing + RC driving | Done | Real robot balancing and manual driving on Arduino | [physical_balance_controller.ino](firmware/physical_balance_controller/physical_balance_controller.ino), [physical_balance_hallway.gif](media/hero/physical_balance_hallway.gif) |
+| Physical self-balancing + RC driving | Done | Real robot balancing and manual driving on Arduino | [physical_balance_controller.ino](firmware/physical_balance_controller/physical_balance_controller.ino), [control_algorithm.md](firmware/physical_balance_controller/control_algorithm.md), [physical_balance_hallway.gif](media/hero/physical_balance_hallway.gif) |
 | ROS/Gazebo balance simulation | Done | Simulated two-wheeled balancing robot with custom control nodes | [ros_ws/src/robot_controll](ros_ws/src/robot_controll), [ros_ws/src/balance_robot_gazebo](ros_ws/src/balance_robot_gazebo) |
 | SLAM in simulation | Done | SLAM-related simulation workflow and launch composition | [ros_ws/src/robot_ability](ros_ws/src/robot_ability), [docs/software_architecture.md](docs/software_architecture.md) |
 | Navigation in simulation | Done | `move_base -> /before_vel -> balance controller -> /cmd_vel` pipeline | [ros_ws/src/navigation](ros_ws/src/navigation), [docs/software_architecture.md](docs/software_architecture.md) |
@@ -125,7 +125,7 @@ ros_ws/
 archive/
 ```
 
-- [firmware/physical_balance_controller](firmware/physical_balance_controller/README.md): main physical robot controller
+- [firmware/physical_balance_controller](firmware/physical_balance_controller/README.md): main physical robot controller and [control algorithm structure](firmware/physical_balance_controller/control_algorithm.md)
 - [firmware/testers](firmware/testers/README.md): tester and bridge Arduino sketches, including hall-sensor, motor-current, ODrive receiver, and receiver PWM tests
 - [ros_ws/src](ros_ws/src): curated ROS packages for simulation and control
 - [docs/ros_workspaces.md](docs/ros_workspaces.md): detailed explanation of the historical ROS workspaces and their cleaned-repo mapping

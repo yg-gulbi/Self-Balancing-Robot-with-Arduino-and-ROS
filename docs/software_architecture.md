@@ -46,6 +46,7 @@ flowchart LR
 Representative code:
 
 - [`physical_balance_controller.ino`](../firmware/physical_balance_controller/physical_balance_controller.ino)
+- [`control_algorithm.md`](../firmware/physical_balance_controller/control_algorithm.md)
 - [`legacy_balance_controller.ino`](../archive/legacy_firmware/legacy_balance_controller.ino)
 - [`experimental_balance_controller_imu_ros.ino`](../archive/legacy_firmware/experimental_balance_controller_imu_ros.ino)
 
