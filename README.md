@@ -18,7 +18,7 @@ This repository is organized as a hiring-facing portfolio. It separates verified
 | ROS/Gazebo balance simulation | Done | Simulated two-wheeled balancing robot with custom control nodes | [ros_ws/src/robot_controll](ros_ws/src/robot_controll), [ros_ws/src/balance_robot_gazebo](ros_ws/src/balance_robot_gazebo) |
 | SLAM in simulation | Done | SLAM-related simulation workflow and launch composition | [ros_ws/src/robot_ability](ros_ws/src/robot_ability), [docs/software_architecture.md](docs/software_architecture.md) |
 | Navigation in simulation | Done | `move_base -> /before_vel -> balance controller -> /cmd_vel` pipeline | [ros_ws/src/navigation](ros_ws/src/navigation), [docs/software_architecture.md](docs/software_architecture.md) |
-| RC-to-ROS bridge testing | Done | Arduino bridge that published command inputs into ROS | [rc_to_ros_cmd_vel_bridge.ino](firmware/bridges_and_testers/rc_to_ros_cmd_vel_bridge.ino) |
+| RC-to-ROS bridge testing | Done | Arduino bridge that published command inputs into ROS | [rc_to_ros_cmd_vel_bridge.ino](firmware/testers/rc_to_ros_cmd_vel_bridge.ino) |
 | ODrive / IMU / RC / motor subsystem tests | Done | Subsystem-focused bring-up and tuning work | [docs/experiments.md](docs/experiments.md), [docs/development_process.md](docs/development_process.md), [robot_open_front.png](media/hardware/robot_open_front.png), [hardware_power_io_overview.svg](media/diagrams/hardware_power_io_overview.svg) |
 | Real-world ROS SLAM/navigation integration | Partial | Launch and integration experiments exist, but end-to-end autonomous physical navigation is not claimed | [archive/legacy_code/real_world_integration](archive/legacy_code/real_world_integration), [docs/results_and_limitations.md](docs/results_and_limitations.md) |
 
@@ -76,6 +76,7 @@ Recovered project-process material has been summarized into public-safe document
 
 - [Build story](docs/build_story.md): end-to-end narrative from concept, CAD, wiring, bench testing, embedded control, tethered practice, and ROS simulation to verified results
 - [Development process](docs/development_process.md): build timeline, component bring-up, trial-and-error lessons, and final public claims
+- [Project troubleshooting summary](docs/project_troubleshooting_summary.md): review-focused summary of receiver noise, ODrive firmware troubleshooting, balance tuning, ROS integration limits, and remaining verification questions
 - [Research and design decisions](docs/research_and_design_decisions.md): CAN, ODrive, Orbbec Gemini 330, SLAM, FrSky receiver-noise, and ROS autorun research boundaries
 - [Experiment summary](docs/experiments.md): curated implementation and integration evidence
 
@@ -91,7 +92,7 @@ archive/
 ```
 
 - [firmware/physical_balance_controller](firmware/physical_balance_controller/README.md): main physical robot controller
-- [firmware/bridges_and_testers](firmware/bridges_and_testers/README.md): tester and bridge Arduino sketches, including hall-sensor, motor-current, ODrive receiver, and receiver PWM tests
+- [firmware/testers](firmware/testers/README.md): tester and bridge Arduino sketches, including hall-sensor, motor-current, ODrive receiver, and receiver PWM tests
 - [ros_ws/src](ros_ws/src): curated ROS packages for simulation and control
 - [archive](archive): legacy firmware, old PID experiments, real-world integration traces, and raw reference materials
 - [media](media/README.md): curated portfolio-safe photos, GIFs, and external media plan

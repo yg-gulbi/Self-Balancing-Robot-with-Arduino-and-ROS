@@ -4,7 +4,7 @@
 | --- | --- | --- | --- |
 | Physical balancing | Confirmed | [`firmware/physical_balance_controller`](../firmware/physical_balance_controller) | Firmware |
 | RC driving while balancing | Confirmed | [`firmware/physical_balance_controller`](../firmware/physical_balance_controller) | Firmware + future video |
-| RC-to-ROS bridge | Confirmed | [`firmware/bridges_and_testers`](../firmware/bridges_and_testers) | Tester firmware |
+| RC-to-ROS bridge | Confirmed | [`firmware/testers`](../firmware/testers) | Tester firmware |
 | Simulation balancing | Confirmed | [`ros_ws/src/robot_controll`](../ros_ws/src/robot_controll) | ROS code |
 | Simulation navigation | Confirmed | [`ros_ws/src/navigation`](../ros_ws/src/navigation) | ROS code |
 | PID evolution | Recovered | [`archive/legacy_code/pid_experiments`](legacy_code/pid_experiments) | Legacy code |

@@ -66,7 +66,7 @@ The simulation screenshots show the parallel ROS/Gazebo track: simulated robot p
 
 | Workstream | What it covered | Public evidence |
 | --- | --- | --- |
-| ODrive / motor | Motor controller setup, hall-sensor feedback, motor synchronization, current control experiments | `firmware/physical_balance_controller`, `firmware/bridges_and_testers/motor_current_test`, `firmware/bridges_and_testers/odrive_receiver_test`, `archive/legacy_firmware`, hardware photos |
+| ODrive / motor | Motor controller setup, hall-sensor feedback, motor synchronization, current control experiments | `firmware/physical_balance_controller`, `firmware/testers/motor_current_test`, `firmware/testers/odrive_receiver_test`, `archive/legacy_firmware`, hardware photos |
 | FrSky radio path | X8R PWM input, Taranis Q X7 manual commands, and engage/throttle/steering interpretation | `physical_balance_controller.ino`, `receiver_pwm_test.ino`, `rc_to_ros_cmd_vel_bridge.ino`, receiver troubleshooting notes |
 | IMU / balancing | BNO055 angle and gyro feedback, balance-loop tuning, safety-constrained parameter testing | `physical_balance_controller.ino`, hallway and obstacle-course demos |
 | ROS / navigation | Gazebo balancing simulation, `/before_vel` command separation, SLAM/navigation launch files | `ros_ws/src/robot_controll`, `ros_ws/src/navigation`, `ros_ws/src/robot_ability` |
