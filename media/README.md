@@ -15,6 +15,7 @@ This directory stores only public-ready media assets with curated names.
 
 - `process/Wiring Diagram.png`: main public hardware/power/wiring overview
 - `process/signal controll_diagram.png`: main public control-responsibility and autonomy-flow overview
+- `diagrams/physical_balance_control_loop.jpg`: main physical balance-control loop diagram for the Arduino firmware
 
 ## Naming Rules
 

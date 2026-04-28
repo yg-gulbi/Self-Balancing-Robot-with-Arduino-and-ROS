@@ -5,6 +5,10 @@ This document explains the structure of the real robot controller implemented in
 
 The important idea is that the Arduino is not just passing commands through. It is the real-time safety and balance controller. RC input asks for motion, the IMU tells the robot how far it is leaning, ODrive feedback estimates wheel speed, and the final output is a current command to each wheel motor.
 
+<p align="center">
+  <img src="../../media/diagrams/physical_balance_control_loop.jpg" alt="Physical balance control loop" width="900">
+</p>
+
 ## Control Responsibility
 
 | Part | Role in the controller |
