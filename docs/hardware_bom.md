@@ -39,19 +39,18 @@ Some simulation-side URDF and launch files in the repository still reference `Re
 | Component | Best-effort identification | Why this is likely | Evidence |
 | --- | --- | --- | --- |
 | Wheel and motor assembly | Two 36V hall-sensor BLDC hub motors with roughly 165 mm wheels, likely hoverboard-type | The control stack uses hall-sensor feedback, the power diagram shows a 36V motor bus, the wheel radius in firmware is about `0.0825 m`, and the photos match hoverboard-style hub wheels | `physical_balance_controller.ino`, `docs/hardware_power_and_io.md`, `media/process/wheel_bench_test.jpg`, `media/hardware/robot_open_front.png` |
-| Battery pack | 36V battery pack, likely lithium-ion | Both the cleaned power diagram and the hand sketch identify a 36V battery feeding the system | `docs/hardware_power_and_io.md`, `media/hardware/wiring_hand_sketch.jpg`, `media/hardware/robot_open_front.png` |
-| Power conversion chain | 36V -> 19V DC-DC converter and 19V -> 5V DC-DC converter | The recovered wiring diagram explicitly shows a two-stage conversion chain for compute and control electronics | `docs/hardware_power_and_io.md`, `media/process/source_wiring_block_diagram.jpg` |
+| Battery pack | 36V battery pack, likely lithium-ion | The Wiring Diagram and the internal robot photo both support a 36V battery feeding the system | `docs/hardware_power_and_io.md`, `media/process/Wiring Diagram.png`, `media/hardware/robot_open_front.png` |
+| Power conversion chain | 36V -> 19V DC-DC converter and 19V -> 5V DC-DC converter | The Wiring Diagram explicitly shows a two-stage conversion chain for compute and control electronics | `docs/hardware_power_and_io.md`, `media/process/Wiring Diagram.png` |
 | Onboard compute unit | 19V mini PC, likely an x86 mini-PC or NUC-class device | The wiring architecture dedicates a 19V rail to the `PC` block, and the internal photo shows a vented compute enclosure in the chassis | `docs/hardware_power_and_io.md`, `media/hardware/robot_open_front.png` |
-| Auxiliary microcontroller | Arduino Mini/Nano-class board | The wiring diagram labels a `mini Arduino` on the 5V side, but the exact board variant is not readable from the public photos | `docs/hardware_power_and_io.md`, `media/process/source_wiring_block_diagram.jpg` |
-| Relay / switching board | 5V relay module | The 5V auxiliary branch is explicitly drawn toward a relay/power-relay block | `docs/hardware_power_and_io.md`, `media/process/source_wiring_block_diagram.jpg` |
+| Auxiliary microcontroller | Arduino Mini/Nano-class board | The Wiring Diagram labels a `mini Arduino` on the 5V side, but the exact board variant is not readable from the public photos | `docs/hardware_power_and_io.md`, `media/process/Wiring Diagram.png` |
+| Relay / switching board | 5V relay module | The 5V auxiliary branch is explicitly drawn toward a relay/power-relay block | `docs/hardware_power_and_io.md`, `media/process/Wiring Diagram.png` |
 | Breadboard / distribution area | Small breadboard or wiring-distribution area | Both the source wiring diagram and the internal wiring photo show an intermediary wiring area between Arduino, IMU, and ODrive-side electronics | `docs/hardware_power_and_io.md`, `media/hardware/robot_open_front.png` |
-| Chassis structure | 3D-printed body, mast, and upper sensor-head mount on a metal base plate | The process images and recovered CAD assets show a designed body shell, upper mast, and head enclosure rather than a temporary bench-only layout | `media/process/catia_concept_overview.jpg`, `media/process/catia_internal_assembly_views.jpg`, `media/hardware/robot_open_front.png` |
+| Chassis structure | 3D-printed body, mast, and upper sensor-head mount on a metal base plate | The process images and recovered CAD assets show a designed body shell, upper mast, and head enclosure rather than a temporary bench-only layout | `media/process/catia_internal_assembly_views.jpg`, `media/process/catia_body_design.jpg`, `media/hardware/robot_open_front.png` |
 
 ## Visual Component Evidence
 
-- [CATIA concept overview](../media/process/catia_concept_overview.jpg): overall body, wheel base, mast, and sensor-head concept.
 - [CATIA internal assembly views](../media/process/catia_internal_assembly_views.jpg): internal packaging and chassis volume evidence.
-- [Source wiring block diagram](../media/process/source_wiring_block_diagram.jpg): recovered wiring/control architecture source used for the public diagram.
+- [Wiring Diagram](<../media/process/Wiring Diagram.png>): public system-level summary of the robot wiring and control architecture.
 - [Wheel bench test](../media/process/wheel_bench_test.jpg): motor, wheel, power, and controller bench-test evidence before full robot practice.
 - [Tethered driving practice](../media/process/tethered_driving_practice.jpg): safety-supported driving practice during physical tuning.
 

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!--로봇 param 정의-->
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find robot_description)/urdf/balence_robot_urdf_depth.xacro"/>
+    <node name="imu_tf" pkg="robot_rviz" type="imu_tf.py"/>
+    <node name="odom_tf" pkg="robot_rviz" type="odom_tf.py"/>
+
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+    <node name="rviz" pkg="rviz" type="rviz" />
+</launch>

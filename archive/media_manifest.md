@@ -4,7 +4,7 @@ This file maps the raw staging assets to their public portfolio use.
 
 | Raw filename | Type | Interpreted content | Publish decision | Public destination |
 | --- | --- | --- | --- | --- |
-| `KakaoTalk_20260424_163858019.jpg` | photo | hand-drawn power and signal sketch | publish | `media/hardware/wiring_hand_sketch.jpg`, `media/diagrams/hardware_power_io_overview.svg` |
+| `KakaoTalk_20260424_163858019.jpg` | photo | hand-drawn power and signal sketch | archive source + publish summary | `archive/wiring_hand_sketch.jpg`, `media/process/Wiring Diagram.png` |
 | `KakaoTalk_20260424_163858019_01.jpg` | photo | front-open robot photo showing internal electronics | publish raw photo | `media/hardware/robot_open_front.png` |
 | `KakaoTalk_20260424_164011837.jpg` | photo | hallway driving scene with operator present in original frame | publish cropped only | `media/demos/hallway_robot_only.jpg` |
 | `KakaoTalk_20260424_164016018.mp4` | video | short obstacle or arena driving clip | external only | upload later as full MP4 |
@@ -20,11 +20,10 @@ These public-safe images were exported from recovered process material and summa
 
 | Source material | Public image | Use |
 | --- | --- | --- |
-| final presentation | `media/process/catia_concept_overview.jpg` | concept and overall CATIA model |
 | weekly presentation | `media/process/catia_internal_assembly_views.jpg` | internal CATIA assembly views |
 | final presentation | `media/process/catia_head_design.jpg` | sensor-head and upper structure design |
 | final presentation | `media/process/catia_body_design.jpg` | body and internal packaging design |
-| circuit planning deck | `media/process/source_wiring_block_diagram.jpg` | source block diagram for public wiring explanation |
+| circuit planning deck | `media/process/Wiring Diagram.png` | public wiring diagram used across the hardware documentation |
 | wheel bench-test video | `media/process/wheel_bench_test.jpg` | wheel and electronics bench-test evidence |
 | final presentation | `media/process/tethered_driving_practice.jpg` | tethered physical driving practice |
 | final presentation | `media/process/simulation_unreal_navigation_views.jpg` | ROS/Gazebo simulation and navigation views |

@@ -1,16 +1,10 @@
 # Hardware Gallery
 
-## Clean Wiring Diagram
+## Wiring Diagram
 
-![Clean power and IO overview](../media/diagrams/hardware_power_io_overview.svg)
+![Wiring Diagram](<../media/process/Wiring Diagram.png>)
 
-Caption: Conservative redraw of the recovered wiring sketch, keeping the FrSky radio path, Arduino Mega 2560, BNO055, ODrive 3.6, battery, converters, onboard PC, auxiliary Arduino, relay-related blocks, and the Orbbec Gemini 330 relationship readable without inventing pin-level details.
-
-## Recovered Wiring Sketch
-
-![Recovered wiring sketch](../media/hardware/wiring_hand_sketch.jpg)
-
-Caption: Original hand-drawn source that the clean diagram was derived from.
+Caption: Current public system-level wiring summary, keeping the FrSky radio path, Arduino Mega 2560, BNO055, ODrive 3.6, battery, converters, onboard PC, auxiliary Arduino, relay-related blocks, and the Orbbec Gemini 330 relationship readable without inventing pin-level details.
 
 ## Internal Layout
 

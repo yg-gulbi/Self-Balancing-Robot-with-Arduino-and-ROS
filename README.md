@@ -10,6 +10,31 @@ This repository is organized as a hiring-facing portfolio. It separates verified
   <img src="media/hero/physical_balance_hallway.gif" alt="Physical hallway balancing demo" width="720">
 </p>
 
+## System At A Glance
+
+The two diagrams below explain the project faster than a long paragraph: one shows who controls what, and the other shows how the hardware is wired and powered.
+
+<table>
+  <tr>
+    <td width="50%">
+      <img src="media/process/signal%20controll_diagram.png" alt="Signal / Control Diagram" width="100%">
+    </td>
+    <td width="50%">
+      <img src="media/process/Wiring%20Diagram.png" alt="Wiring Diagram" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <strong>Signal / Control Diagram</strong><br>
+      Shows the control split among the receiver, IMU, Arduino Mega, ODrive, PC, and camera, including how autonomy commands and balancing logic were separated.
+    </td>
+    <td valign="top">
+      <strong>Wiring Diagram</strong><br>
+      Shows the physical 36V power chain, PC rail, 5V control rail, motor phases, hall signals, IMU wiring, RC receiver wiring, and relay-side control path.
+    </td>
+  </tr>
+</table>
+
 ## What Was Actually Completed
 
 | Area | Status | Scope | Main evidence |
@@ -19,7 +44,7 @@ This repository is organized as a hiring-facing portfolio. It separates verified
 | SLAM in simulation | Done | SLAM-related simulation workflow and launch composition | [ros_ws/src/robot_ability](ros_ws/src/robot_ability), [docs/software_architecture.md](docs/software_architecture.md) |
 | Navigation in simulation | Done | `move_base -> /before_vel -> balance controller -> /cmd_vel` pipeline | [ros_ws/src/navigation](ros_ws/src/navigation), [docs/software_architecture.md](docs/software_architecture.md) |
 | RC-to-ROS bridge testing | Done | Arduino bridge that published command inputs into ROS | [rc_to_ros_cmd_vel_bridge.ino](firmware/testers/rc_to_ros_cmd_vel_bridge.ino) |
-| ODrive / IMU / RC / motor subsystem tests | Done | Subsystem-focused bring-up and tuning work | [docs/experiments.md](docs/experiments.md), [docs/development_process.md](docs/development_process.md), [robot_open_front.png](media/hardware/robot_open_front.png), [hardware_power_io_overview.svg](media/diagrams/hardware_power_io_overview.svg) |
+| ODrive / IMU / RC / motor subsystem tests | Done | Subsystem-focused bring-up and tuning work | [docs/experiments.md](docs/experiments.md), [docs/development_process.md](docs/development_process.md), [robot_open_front.png](media/hardware/robot_open_front.png), [Wiring Diagram.png](<media/process/Wiring Diagram.png>) |
 | Real-world ROS SLAM/navigation integration | Partial | Launch and integration experiments exist, but end-to-end autonomous physical navigation is not claimed | [archive/legacy_code/real_world_integration](archive/legacy_code/real_world_integration), [docs/results_and_limitations.md](docs/results_and_limitations.md) |
 
 ## System Architecture
@@ -30,7 +55,16 @@ Three layers were explored in this project:
 2. ROS simulation: teleop or `move_base` -> `/before_vel` -> balance controller -> `/cmd_vel` -> Gazebo robot.
 3. Real-world integration experiments: Orbbec Gemini 330 camera/SLAM/navigation launch composition and RC-to-ROS bridging for system-level testing.
 
+If you want the fastest visual summary:
+
+- [Signal / Control Diagram](<media/process/signal controll_diagram.png>): control responsibility split across Arduino, ODrive, PC, and camera
+- [Wiring Diagram](<media/process/Wiring Diagram.png>): physical robot power, IO, and device-connection overview
+
 More detail is documented in [docs/software_architecture.md](docs/software_architecture.md).
+
+- [ROS workspace breakdown](docs/ros_workspaces.md): explains what the original `simul_br_ws` and `real_br_ws_intel` workspaces meant, and how their roles map into this cleaned repository
+- [Simulation controller package guide](ros_ws/src/robot_controll/README.md): file-by-file breakdown of the balancing controller package
+- [Real-world ROS integration archive](archive/legacy_code/real_world_integration/README.md): camera, TF, RViz, and partial physical SLAM/navigation integration notes
 
 ## Key Demos
 
@@ -94,6 +128,10 @@ archive/
 - [firmware/physical_balance_controller](firmware/physical_balance_controller/README.md): main physical robot controller
 - [firmware/testers](firmware/testers/README.md): tester and bridge Arduino sketches, including hall-sensor, motor-current, ODrive receiver, and receiver PWM tests
 - [ros_ws/src](ros_ws/src): curated ROS packages for simulation and control
+- [docs/ros_workspaces.md](docs/ros_workspaces.md): detailed explanation of the historical ROS workspaces and their cleaned-repo mapping
+- [ros_ws/src/robot_controll/README.md](ros_ws/src/robot_controll/README.md): active balancing-controller package, file by file
+- [ros_ws/src/robot_ability/README.md](ros_ws/src/robot_ability/README.md): high-level launch composition package
+- [ros_ws/src/navigation/README.md](ros_ws/src/navigation/README.md): navigation stack, maps, and `/before_vel` remap explanation
 - [archive](archive): legacy firmware, old PID experiments, real-world integration traces, and raw reference materials
 - [media](media/README.md): curated portfolio-safe photos, GIFs, and external media plan
 - [docs/build_story.md](docs/build_story.md): visual end-to-end build narrative
@@ -115,7 +153,7 @@ Example simulation workflow:
 cd ros_ws
 catkin_make
 source devel/setup.bash
-roslaunch balance_robot_bringup robot_remote_lidar.launch
+roslaunch robot_bringup robot_remote_lidar.launch
 ```
 
 For navigation-related simulation experiments:

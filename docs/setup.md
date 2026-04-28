@@ -31,7 +31,7 @@ source devel/setup.bash
 Manual or remote simulation workflow:
 
 ```bash
-roslaunch balance_robot_bringup robot_remote_lidar.launch
+roslaunch robot_bringup robot_remote_lidar.launch
 ```
 
 Simulation navigation workflow:
@@ -45,3 +45,4 @@ roslaunch robot_ability robot_navigation_lidar.launch
 - The cleaned repository preserves the main custom packages, not every third-party dependency snapshot.
 - Some legacy launch files are intentionally kept under `archive/legacy_code/` because they represent integration history rather than the main reusable stack.
 - Real-world physical navigation should be treated as an integration experiment, not a verified final capability.
+- Some folder names differ from the actual ROS package names. For example, the folder `balance_robot_bringup/` contains the ROS package named `robot_bringup`.

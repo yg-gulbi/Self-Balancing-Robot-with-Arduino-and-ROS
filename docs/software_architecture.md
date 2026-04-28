@@ -8,6 +8,21 @@ The project evolved into three related software tracks:
 2. ROS/Gazebo simulation for balancing, SLAM, and navigation
 3. Real-world ROS integration experiments for camera/SLAM/navigation bring-up
 
+## Visual Architecture
+
+<p align="center">
+  <img src="../media/process/signal%20controll_diagram.png" alt="Signal / Control Diagram" width="900">
+</p>
+
+This diagram is the quickest way to understand the responsibility split in the project:
+
+- `Arduino Mega 2560` is the real-time balance and safety hub.
+- `ODrive 3.6` handles motor-drive execution below the balancing logic.
+- `PC + camera` represent the higher-level perception and autonomy side.
+- `Receiver + IMU` provide the physical robot's low-latency manual-command and attitude inputs.
+
+For the physical device and power-routing view, pair this page with the [Wiring Diagram](<../media/process/Wiring Diagram.png>) and [hardware_power_and_io.md](hardware_power_and_io.md).
+
 ## Architecture Summary
 
 ```mermaid
@@ -56,6 +71,8 @@ Core idea:
 `move_base` or teleop does not directly drive the balancing robot. Instead, it publishes a higher-level command to `/before_vel`, and the balancing controller converts that into the final `/cmd_vel` sent to the simulated robot.
 
 This separation is one of the most important architectural choices in the project.
+
+The `Signal / Control Diagram` makes that split easier to read: navigation or autonomy belongs on the PC side, but final balancing authority remains on the Arduino side.
 
 ## Real-World ROS Integration Experiments
 

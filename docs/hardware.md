@@ -8,10 +8,31 @@ The public hardware story in this repository is intentionally based only on conf
 
 - Arduino firmware
 - URDF and CAD/mesh files
-- the recovered wiring block diagram
+- the Wiring Diagram
 - curated photos from the physical robot
 
-![Internal hardware photo](../media/hardware/robot_open_front.png)
+<table>
+  <tr>
+    <td width="38%">
+      <img src="../media/hardware/robot_open_front.png" alt="Internal hardware photo" width="100%">
+    </td>
+    <td width="62%">
+      <img src="../media/process/Wiring%20Diagram.png" alt="Wiring Diagram" width="100%">
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <strong>Physical layout evidence</strong><br>
+      Shows the real robot chassis, sensor head, wiring bay, and compute/battery packaging.
+    </td>
+    <td valign="top">
+      <strong>Hardware-system summary</strong><br>
+      Makes the power chain, device wiring, hall/IMU/RC signals, and auxiliary relay path readable at a glance.
+    </td>
+  </tr>
+</table>
+
+The internal photo shows what the robot physically looked like, while the Wiring Diagram makes the device relationships readable: battery, DC-DC converters, Intel mini PC, Gemini 330 camera, Arduino Mega, BNO055, ODrive, hub motor, auxiliary Arduino, and relay-side control path.
 
 ## Confirmed Hardware Summary
 
@@ -39,7 +60,8 @@ The remaining parts can be described confidently at the subsystem level even tho
 ## Hardware Docs Map
 
 - [hardware_bom.md](hardware_bom.md): exact models plus best-effort identifications for the full physical hardware stack
-- [hardware_power_and_io.md](hardware_power_and_io.md): power and signal flow centered on the recovered block diagram
+- [hardware_power_and_io.md](hardware_power_and_io.md): power and signal flow centered on the Wiring Diagram
+- [Wiring Diagram](<../media/process/Wiring Diagram.png>): the fastest hardware-system summary in one image
 - [hardware_layout.md](hardware_layout.md): physical placement and interpretation of the internal layout
 - [hardware_gallery.md](hardware_gallery.md): image-based hardware walkthrough
 

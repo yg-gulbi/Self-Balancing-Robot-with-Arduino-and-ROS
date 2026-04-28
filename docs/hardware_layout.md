@@ -20,7 +20,7 @@ Most reliable visual groupings:
 
 - The earlier annotated figure risked pointing at the wrong physical targets.
 - The raw photo is a safer public source of truth for placement and packaging evidence.
-- Interpreted relationships now live in the clean wiring diagram instead of being baked into the photo.
+- Interpreted relationships now live in the Wiring Diagram instead of being baked into the photo.
 - Recovered process material confirms that internal placement and wiring layout were part of the build process, but the public repository keeps those interpretations in Markdown and diagrams instead of labeling uncertain photo targets.
 
 ## Mechanical Layout Signals
@@ -55,5 +55,5 @@ The full physical stack associated with this body layout was:
 Use these assets together when you need both physical placement and interpreted system relationships:
 
 - [robot_open_front.png](../media/hardware/robot_open_front.png)
-- [hardware_power_io_overview.svg](../media/diagrams/hardware_power_io_overview.svg)
+- [Wiring Diagram.png](<../media/process/Wiring Diagram.png>)
 - [development_process.md](development_process.md)

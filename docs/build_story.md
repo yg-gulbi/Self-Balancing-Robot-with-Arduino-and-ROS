@@ -10,7 +10,7 @@ It is intentionally evidence-first. Images show the process; text explains what 
 
 | Mechanical concept | Wiring architecture | Real-world bring-up |
 | --- | --- | --- |
-| ![CATIA internal assembly views](../media/process/catia_internal_assembly_views.jpg) | ![Recovered wiring block diagram](../media/process/source_wiring_block_diagram.jpg) | ![Tethered driving practice](../media/process/tethered_driving_practice.jpg) |
+| ![CATIA internal assembly views](../media/process/catia_internal_assembly_views.jpg) | ![Wiring Diagram](<../media/process/Wiring Diagram.png>) | ![Tethered driving practice](../media/process/tethered_driving_practice.jpg) |
 
 | Bench testing | Simulation navigation | Final internal hardware |
 | --- | --- | --- |
@@ -19,10 +19,6 @@ It is intentionally evidence-first. Images show the process; text explains what 
 ## 1. Define The Robot Goal
 
 The project started from a guide-robot idea: a compact two-wheeled platform that could move through a space, balance itself, and eventually connect to navigation or perception workflows.
-
-<p align="center">
-  <img src="../media/process/catia_concept_overview.jpg" alt="CATIA concept overview" width="700">
-</p>
 
 The important early decision was to treat the robot as two related systems:
 
@@ -48,16 +44,10 @@ This stage answered practical questions:
 
 ## 3. Plan Power And Signal Flow
 
-The wiring work connected the physical control path and the higher-level compute path. The recovered block diagram shows the intended relationship among the FrSky X8R receiver, Arduino Mega 2560, BNO055 IMU, ODrive 3.6, motors, battery, converters, onboard PC, Orbbec Gemini 330, auxiliary Arduino, and relay module.
+The wiring work connected the physical control path and the higher-level compute path. The Wiring Diagram below summarizes the intended relationship among the FrSky X8R receiver, Arduino Mega 2560, BNO055 IMU, ODrive 3.6, motors, battery, converters, onboard PC, Orbbec Gemini 330, auxiliary Arduino, and relay module.
 
 <p align="center">
-  <img src="../media/process/source_wiring_block_diagram.jpg" alt="Recovered wiring block diagram" width="700">
-</p>
-
-The public diagram below is the cleaned documentation version of that recovered source material.
-
-<p align="center">
-  <img src="../media/diagrams/hardware_power_io_overview.svg" alt="Clean power and IO overview" width="700">
+  <img src="../media/process/Wiring Diagram.png" alt="Wiring Diagram" width="700">
 </p>
 
 Key architecture choices:
