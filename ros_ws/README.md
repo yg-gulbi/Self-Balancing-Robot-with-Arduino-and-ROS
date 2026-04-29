@@ -42,8 +42,10 @@ Expected tools and packages:
 - `move_base`
 - `dynamic_reconfigure`
 - `rqt_reconfigure`
+- `OrbbecSDK_ROS1` for physical Orbbec Gemini 330 camera integration traces
 - `rtabmap_ros` or `rtabmap_launch` for depth SLAM workflows
 - `depthimage_to_laserscan` for depth-camera navigation workflows
+- `realsense_ros_gazebo` for historical D435-style Gazebo depth simulation assets
 
 Third-party packages that are not part of this repository should be placed
 under `src/third_party/` or installed through the normal ROS package manager.
@@ -154,9 +156,9 @@ The tuning flow uses `dynamic_reconfigure`, so gains can be edited from
 
 The control package also keeps automated tuning experiments:
 
-- `src/balance_robot_control/src/pid_bayes_optimizer.py`
-- `src/balance_robot_control/src/pid_loop_test_runner.py`
-- `src/balance_robot_control/src/pid_reconfigure_client.py`
+- `src/balance_robot_control/src/tuning_tools/pid_bayes_optimizer.py`
+- `src/balance_robot_control/src/tuning_tools/pid_loop_test_runner.py`
+- `src/balance_robot_control/src/tuning_tools/pid_reconfigure_client.py`
 
 These scripts are evidence of repeated controller-evaluation experiments. They
 are not presented as a fully solved production auto-tuning system.

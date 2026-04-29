@@ -13,8 +13,11 @@ This repository intentionally does not vendor third-party packages. Place requir
 Expected dependencies from the recovered archive:
 
 - `rtabmap_ros`
+- `OrbbecSDK_ROS1`
 - `realsense_ros_gazebo`
+- `depthimage_to_laserscan`
 - `rosserial`
+- `turtlebot3_gazebo` / `turtlebot3_description`
 
 Depending on which historical workflow you want to reproduce, additional camera drivers or sensor packages may also be needed.
 

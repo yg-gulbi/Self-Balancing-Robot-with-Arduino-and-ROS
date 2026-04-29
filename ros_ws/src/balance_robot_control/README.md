@@ -29,6 +29,17 @@ than one controller script. It includes the main balance-aware control nodes,
 the depth and LiDAR variants, the PID tuning entrypoints, and helper scripts
 such as Bayesian optimization and repeated-loop evaluation.
 
+## Source Layout
+
+| Folder | Purpose |
+| --- | --- |
+| `src/controllers/` | Main balance controllers used during normal LiDAR or depth simulation |
+| `src/tuning_controllers/` | Controller variants that expose tuning hooks such as `dynamic_reconfigure` or `/setpoint_angle` |
+| `src/tuning_tools/` | Outer-loop tuning, repeated test, and reconfigure helper scripts |
+| `src/utils/` | Small support utilities such as Gazebo reset and `/before_vel` teleop |
+
+`CMakeLists.txt` installs these Python scripts with `catkin_install_python`, so launch files can still reference the executable filename directly.
+
 ## File-by-File Guide
 
 ### Active controller files
@@ -45,7 +56,7 @@ Defines the `dynamic_reconfigure` parameters used by the tuning variants:
 
 This file does not run by itself. It generates the Python config class that the tuning nodes import.
 
-#### [`src/pid_control_before_vel_lidar.py`](src/pid_control_before_vel_lidar.py)
+#### [`src/controllers/pid_control_before_vel_lidar.py`](src/controllers/pid_control_before_vel_lidar.py)
 
 Main LiDAR-version balancing controller.
 
@@ -62,7 +73,7 @@ Why it matters:
 - this is the main expression of the balancing architecture
 - it is the default controller for LiDAR-based simulation
 
-#### [`src/pid_control_before_vel_depth.py`](src/pid_control_before_vel_depth.py)
+#### [`src/controllers/pid_control_before_vel_depth.py`](src/controllers/pid_control_before_vel_depth.py)
 
 Depth-camera version of the same controller.
 
@@ -78,7 +89,7 @@ Interpretation:
 - the controller structure stayed the same
 - the depth-camera simulation needed different gains and a small posture offset compensation
 
-#### [`src/pid_control_before_vel_lidar_pid_tuning.py`](src/pid_control_before_vel_lidar_pid_tuning.py)
+#### [`src/tuning_controllers/pid_control_before_vel_lidar_pid_tuning.py`](src/tuning_controllers/pid_control_before_vel_lidar_pid_tuning.py)
 
 LiDAR controller variant used for manual PID tuning.
 
@@ -94,7 +105,7 @@ Why it exists:
 - Gazebo reset behavior interfered with controller tuning
 - this version was built specifically to survive repeated reset-and-retest workflows
 
-#### [`src/pid_control_before_vel_lidar_pid_auto_tuning.py`](src/pid_control_before_vel_lidar_pid_auto_tuning.py)
+#### [`src/tuning_controllers/pid_control_before_vel_lidar_pid_auto_tuning.py`](src/tuning_controllers/pid_control_before_vel_lidar_pid_auto_tuning.py)
 
 Controller variant prepared for automated tuning.
 
@@ -111,7 +122,7 @@ Why `/setpoint_angle` matters:
 
 ### Tuning and automation helpers
 
-#### [`src/pid_bayes_optimizer.py`](src/pid_bayes_optimizer.py)
+#### [`src/tuning_tools/pid_bayes_optimizer.py`](src/tuning_tools/pid_bayes_optimizer.py)
 
 Bayesian optimization driver for LiDAR PID tuning.
 
@@ -129,7 +140,7 @@ Why it matters:
 - this file shows the project went beyond controller implementation into tuning automation
 - it is one of the strongest pieces of evidence that repeated evaluation and optimization were attempted systematically
 
-#### [`src/pid_loop_test_runner.py`](src/pid_loop_test_runner.py)
+#### [`src/tuning_tools/pid_loop_test_runner.py`](src/tuning_tools/pid_loop_test_runner.py)
 
 Simpler repeat-test runner for a fixed PID set.
 
@@ -145,7 +156,7 @@ Why it exists:
 - this is a lighter-weight precursor to the full Bayesian optimizer
 - it helped check whether a candidate PID configuration could survive repeated reset cycles
 
-#### [`src/gazebo_reset_world.py`](src/gazebo_reset_world.py)
+#### [`src/utils/gazebo_reset_world.py`](src/utils/gazebo_reset_world.py)
 
 Small Gazebo utility script.
 
@@ -160,7 +171,7 @@ Why it exists:
 
 - controller tuning and loop testing needed a repeatable reset helper
 
-#### [`src/pid_reconfigure_client.py`](src/pid_reconfigure_client.py)
+#### [`src/tuning_tools/pid_reconfigure_client.py`](src/tuning_tools/pid_reconfigure_client.py)
 
 Minimal `dynamic_reconfigure` client example.
 
@@ -175,7 +186,7 @@ Why it exists:
 
 ### Command input helper
 
-#### [`src/teleop_before_vel.py`](src/teleop_before_vel.py)
+#### [`src/utils/teleop_before_vel.py`](src/utils/teleop_before_vel.py)
 
 Keyboard teleoperation publisher for `/before_vel`.
 

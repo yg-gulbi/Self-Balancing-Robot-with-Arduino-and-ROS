@@ -1,4 +1,4 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <launch>
   <arg name="x_pos" default="0.0"/>
   <arg name="y_pos" default="0.0"/>

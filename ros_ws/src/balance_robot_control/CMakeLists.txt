@@ -162,10 +162,18 @@ include_directories(
 
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
-# catkin_install_python(PROGRAMS
-#   scripts/my_python_script
-#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
+catkin_install_python(PROGRAMS
+  src/controllers/pid_control_before_vel_depth.py
+  src/controllers/pid_control_before_vel_lidar.py
+  src/tuning_controllers/pid_control_before_vel_lidar_pid_auto_tuning.py
+  src/tuning_controllers/pid_control_before_vel_lidar_pid_tuning.py
+  src/tuning_tools/pid_bayes_optimizer.py
+  src/tuning_tools/pid_loop_test_runner.py
+  src/tuning_tools/pid_reconfigure_client.py
+  src/utils/gazebo_reset_world.py
+  src/utils/teleop_before_vel.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
 ## Mark executables for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html
