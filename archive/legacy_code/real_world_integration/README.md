@@ -7,7 +7,7 @@ These files are important because they show what the ROS layer was trying to do 
 1. receive depth-camera data on the onboard PC,
 2. consume robot-state topics such as `/imu` and `/odom`,
 3. publish TF and robot-model information for visualization,
-4. attempt RTAB-Map SLAM and, later, navigation-oriented bring-up.
+4. attempt RTAB-Map SLAM and navigation-oriented bring-up.
 
 They should still be read together with [`docs/results_and_limitations.md`](../../../docs/results_and_limitations.md) so the repository does not over-claim a fully verified autonomous physical navigation result.
 
@@ -72,7 +72,7 @@ What it does **not** do:
 - it does not launch `amcl`
 - it does not form a complete autonomous navigation stack by itself
 
-That makes this file better interpreted as a sensor-preparation launch for future navigation rather than proof of completed physical navigation.
+That makes this file better interpreted as a sensor-preparation launch for navigation experiments rather than proof of completed physical navigation.
 
 ### [`robot_navigation_lidar.launch`](robot_navigation_lidar.launch)
 

@@ -5,7 +5,7 @@
 - Real physical self-balancing control on Arduino
 - Manual FrSky radio driving while balancing
 - ROS/Gazebo balancing robot simulation
-- Simulation-side SLAM and navigation workflows
+- Simulation-side SLAM/navigation launch workflow
 - RC-to-ROS command bridge testing
 - ODrive 3.6, BNO055, FrSky Taranis Q X7 / X8R, Orbbec Gemini 330, and controller bring-up experiments
 
@@ -25,10 +25,10 @@ This repository is written for hiring review. It prioritizes accurate scope over
 - navigation pipeline adaptation for a balancing robot
 - iterative experimentation and recovery of older work
 
-For the full process narrative, see [build_story.md](build_story.md).
+For the full process narrative, see [development_process.md](development_process.md).
 
 ## Current Gaps
 
-- Some historical notes remain as raw archive material
-- Third-party dependency versions should be pinned more tightly in a future cleanup
-- Original full-length MP4 clips are tracked externally instead of stored directly in the repository
+- Historical code and notes are kept out of the main reading path under `archive/`
+- Third-party dependencies are documented, but not vendored into the repository
+- Original full-length MP4 clips are intentionally replaced by lightweight public-safe GIFs and stills

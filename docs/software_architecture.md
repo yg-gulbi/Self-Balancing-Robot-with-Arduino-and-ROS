@@ -11,7 +11,7 @@ The project evolved into three related software tracks:
 ## Visual Architecture
 
 <p align="center">
-  <img src="../media/diagrams/signal%20controll_diagram.png" alt="Signal / Control Diagram" width="900">
+  <img src="../media/diagrams/signal_control_diagram.png" alt="Signal / Control Diagram" width="900">
 </p>
 
 This diagram is the quickest way to understand the responsibility split in the project:
@@ -21,7 +21,7 @@ This diagram is the quickest way to understand the responsibility split in the p
 - `PC + camera` represent the higher-level perception and autonomy side.
 - `Receiver + IMU` provide the physical robot's low-latency manual-command and attitude inputs.
 
-For the physical device and power-routing view, pair this page with the [Wiring Diagram](<../media/diagrams/Wiring Diagram.png>) and [hardware_power_and_io.md](hardware_power_and_io.md).
+For the physical device and power-routing view, pair this page with the [Wiring Diagram](../media/diagrams/wiring_diagram.png) and [hardware.md](hardware.md).
 
 ## Architecture Summary
 

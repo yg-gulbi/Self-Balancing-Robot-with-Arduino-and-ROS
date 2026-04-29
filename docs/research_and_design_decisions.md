@@ -40,4 +40,4 @@ The source material included recovered notes on CAN, depth cameras including the
 
 - Research documents support design rationale; they do not expand the list of completed deliverables by themselves.
 - Raw office documents, chat exports, and datasheets are not required in the main GitHub tree.
-- Any future raw evidence should go to a GitHub Release or private archive first, then be summarized into public Markdown only after privacy and size review.
+- Any raw evidence should go to a GitHub Release or private archive first, then be summarized into public Markdown only after privacy and size review.

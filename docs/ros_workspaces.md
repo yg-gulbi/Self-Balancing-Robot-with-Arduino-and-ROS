@@ -72,7 +72,7 @@ The important limitation is that this workspace represents integration attempts,
 
 One of the easiest ways to misunderstand the original archive is to trust filenames too literally.
 
-For example, the recovered `robot_navigation.launch` from the real-world integration workspace does **not** launch a full `move_base` + `amcl` navigation stack. It mainly starts the Orbbec camera and `depthimage_to_laserscan`, which makes it more of a sensor front-end for future navigation than a complete navigation pipeline.
+For example, the recovered `robot_navigation.launch` from the real-world integration workspace does **not** launch a full `move_base` + `amcl` navigation stack. It mainly starts the Orbbec camera and `depthimage_to_laserscan`, which makes it more of a sensor front-end experiment than a complete navigation pipeline.
 
 ### ROS was consuming physical robot state, not generating it
 
