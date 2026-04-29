@@ -1,17 +1,20 @@
-# robot_ability
+# balance_robot_workflows
 
-This package does not contain the controller logic itself. Instead, it acts as the high-level launch composition layer for the simulation workspace.
+This package is the workflow-orchestration layer for the simulation workspace.
+It does not own the balancing equation itself. Instead, it decides which
+combination of robot model, sensor setup, and higher-level stack should run.
 
 In practice, it answers questions like:
 
-- "run the LiDAR simulation"
-- "run the depth simulation"
-- "run the navigation stack on the balancing robot"
-- "run the depth SLAM experiment"
+- "spawn the balancing robot with LiDAR and run normal control"
+- "spawn the balancing robot with a depth camera and run navigation"
+- "spawn the depth model and launch RTAB-Map SLAM"
+- "start the PID-tuning workflow instead of the normal driving workflow"
 
 ## Package Role
 
 - bundles lower-level packages into reusable launch entrypoints
+- chooses among `LiDAR`, `depth`, and controller-tuning scenarios
 - keeps control, navigation, and SLAM flows separate by use case
 - exposes the workflow that was originally spread across `simul_br_ws`
 
@@ -73,17 +76,22 @@ This is the main RGB-D SLAM simulation entrypoint in the cleaned repository.
 
 ## How It Relates to Other Packages
 
-- `robot_ability` decides **which workflow** to run.
-- `robot_controll` contains the actual balancing-controller logic.
+- `balance_robot_workflows` decides **which workflow** to run.
+- `balance_robot_control` contains the actual balancing-controller logic.
 - `robot_gazebo` starts the correct simulation world and robot model.
 - `navigation` contains `move_base`, AMCL, maps, and planner configs.
 
 So the package split is:
 
-- `robot_ability`: orchestration
-- `robot_controll`: controller implementation
+- `balance_robot_workflows`: orchestration
+- `balance_robot_control`: controller implementation
 - `navigation`: planner/localization stack
 
 ## Why This Package Exists
 
 The original archive had many launch files scattered across several packages and workspaces. This package keeps the cleaned repository easier to read by giving each common workflow a named entrypoint.
+
+The name `balance_robot_workflows` was chosen because this package is really a
+scenario selector. It is where the repo decides whether the balancing robot is
+spawned with LiDAR, with a depth camera, for controller-only driving, for
+manual PID tuning, for navigation, or for depth SLAM.

@@ -2,7 +2,7 @@
 
 ## Wiring Diagram
 
-![Wiring Diagram](<../media/process/Wiring Diagram.png>)
+![Wiring Diagram](<../media/diagrams/Wiring Diagram.png>)
 
 This Wiring Diagram is the repository's main public source for the robot's intended power and signal architecture. It is the reference image to use when explaining how the FrSky Taranis Q X7, FrSky X8R receiver, Arduino Mega 2560, BNO055 IMU, ODrive 3.6, wheel motors, battery, converters, onboard PC, Orbbec Gemini 330, auxiliary Arduino, and relay module were meant to connect.
 

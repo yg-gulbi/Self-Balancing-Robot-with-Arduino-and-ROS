@@ -37,7 +37,7 @@ roslaunch robot_bringup robot_remote_lidar.launch
 Simulation navigation workflow:
 
 ```bash
-roslaunch robot_ability robot_navigation_lidar.launch
+roslaunch balance_robot_workflows robot_navigation_lidar.launch
 ```
 
 ## Important Notes

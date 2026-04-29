@@ -1,11 +1,9 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <launch>
-<!--로봇위치-3,1,0-->
-  <arg name="x_pos" default="0.0"/>   
+  <arg name="x_pos" default="0.0"/>
   <arg name="y_pos" default="0.0"/>
   <arg name="z_pos" default="0.0"/>
-  
-<!--가제보 연결-->
+
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="paused" value="false"/>
     <arg name="use_sim_time" value="true"/>
@@ -13,13 +11,9 @@
     <arg name="headless" value="true"/>
     <arg name="debug" value="false"/>
   </include>
-  
-  <!--로봇 param 정의-->
-  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find robot_description)/urdf/balance_robot_urdf_depth.xacro"/> 
-  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" args="-urdf -model balance_robot -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description"/>  
 
-  <!--제어 컨트롤-->
- <node pkg="robot_controll" type="pid_control_before_vel_depth.py" name="pid_control" output="screen"/>
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find robot_description)/urdf/balance_robot_urdf_depth.xacro"/>
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" args="-urdf -model balance_robot -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description"/>
 
+  <node pkg="balance_robot_control" type="pid_control_before_vel_depth.py" name="pid_control" output="screen"/>
 </launch>
-

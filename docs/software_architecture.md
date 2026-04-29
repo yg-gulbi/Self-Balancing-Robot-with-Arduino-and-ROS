@@ -11,7 +11,7 @@ The project evolved into three related software tracks:
 ## Visual Architecture
 
 <p align="center">
-  <img src="../media/process/signal%20controll_diagram.png" alt="Signal / Control Diagram" width="900">
+  <img src="../media/diagrams/signal%20controll_diagram.png" alt="Signal / Control Diagram" width="900">
 </p>
 
 This diagram is the quickest way to understand the responsibility split in the project:
@@ -21,7 +21,7 @@ This diagram is the quickest way to understand the responsibility split in the p
 - `PC + camera` represent the higher-level perception and autonomy side.
 - `Receiver + IMU` provide the physical robot's low-latency manual-command and attitude inputs.
 
-For the physical device and power-routing view, pair this page with the [Wiring Diagram](<../media/process/Wiring Diagram.png>) and [hardware_power_and_io.md](hardware_power_and_io.md).
+For the physical device and power-routing view, pair this page with the [Wiring Diagram](<../media/diagrams/Wiring Diagram.png>) and [hardware_power_and_io.md](hardware_power_and_io.md).
 
 ## Architecture Summary
 
@@ -34,7 +34,7 @@ flowchart LR
     ODrive --> Motors[36V BLDC Hub Motors]
 
     Teleop[Teleop or move_base] --> BeforeVel[/before_vel/]
-    BeforeVel --> Balance[robot_controll]
+    BeforeVel --> Balance[balance_robot_control]
     Balance --> CmdVel[/cmd_vel/]
     CmdVel --> Gazebo[Gazebo Robot]
 
@@ -64,7 +64,7 @@ Representative packages:
 
 - [`balance_robot_bringup`](../ros_ws/src/balance_robot_bringup)
 - [`balance_robot_gazebo`](../ros_ws/src/balance_robot_gazebo)
-- [`robot_controll`](../ros_ws/src/robot_controll)
+- [`balance_robot_control`](../ros_ws/src/balance_robot_control)
 - [`navigation`](../ros_ws/src/navigation)
 
 Core idea:

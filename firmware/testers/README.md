@@ -2,6 +2,8 @@
 
 This folder contains Arduino sketches that supported testing, integration, or bridging workflows.
 
+The clearest Arduino-to-ROS example here is `rc_to_ros_cmd_vel_bridge.ino`, which uses `rosserial` (`ros.h`) to publish a `geometry_msgs/Twist` command from RC receiver PWM input.
+
 - [`rc_to_ros_cmd_vel_bridge.ino`](rc_to_ros_cmd_vel_bridge.ino): RC PWM input to ROS `cmd_vel` bridge used as a tester for ROS-side experiments
 - [`hall_sensor_test`](hall_sensor_test/hall_sensor_test.ino): three-line BLDC hall sensor state and illegal-state counter, based on the ChIMP hall test approach
 - [`motor_current_test`](motor_current_test/motor_current_test.ino): direct ODrive current command bench test for one or both motors, based on the ChIMP motor test command workflow

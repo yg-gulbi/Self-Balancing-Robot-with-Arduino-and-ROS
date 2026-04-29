@@ -10,7 +10,7 @@ It is intentionally evidence-first. Images show the process; text explains what 
 
 | Mechanical concept | Wiring architecture | Real-world bring-up |
 | --- | --- | --- |
-| ![CATIA internal assembly views](../media/process/catia_internal_assembly_views.jpg) | ![Wiring Diagram](<../media/process/Wiring Diagram.png>) | ![Tethered driving practice](../media/process/tethered_driving_practice.jpg) |
+| ![CATIA internal assembly views](../media/process/catia_internal_assembly_views.jpg) | ![Wiring Diagram](<../media/diagrams/Wiring Diagram.png>) | ![Tethered driving practice](../media/process/tethered_driving_practice.jpg) |
 
 | Bench testing | Simulation navigation | Final internal hardware |
 | --- | --- | --- |
@@ -47,7 +47,7 @@ This stage answered practical questions:
 The wiring work connected the physical control path and the higher-level compute path. The Wiring Diagram below summarizes the intended relationship among the FrSky X8R receiver, Arduino Mega 2560, BNO055 IMU, ODrive 3.6, motors, battery, converters, onboard PC, Orbbec Gemini 330, auxiliary Arduino, and relay module.
 
 <p align="center">
-  <img src="../media/process/Wiring Diagram.png" alt="Wiring Diagram" width="700">
+  <img src="../media/diagrams/Wiring Diagram.png" alt="Wiring Diagram" width="700">
 </p>
 
 Key architecture choices:
@@ -141,8 +141,8 @@ The final repository is deliberately conservative. It highlights the strongest v
 | Physical self-balancing | Completed | Arduino controller and physical demo GIF |
 | RC driving while balancing | Completed | Physical demo media and RC input firmware |
 | ODrive / motor / IMU / RC bring-up | Completed | Firmware, process images, and hardware docs |
-| ROS/Gazebo balancing simulation | Completed | `ros_ws/src/robot_controll` and Gazebo launch files |
-| Simulation SLAM/navigation | Completed as simulation workflow | `robot_ability`, `navigation`, maps, launches, and screenshots |
+| ROS/Gazebo balancing simulation | Completed | `ros_ws/src/balance_robot_control` and Gazebo launch files |
+| Simulation SLAM/navigation | Completed as simulation workflow | `balance_robot_workflows`, `navigation`, maps, launches, and screenshots |
 | Physical autonomous ROS navigation | Partial | Launch/integration evidence exists, but no end-to-end physical autonomous claim |
 
 ## What The Build Process Shows

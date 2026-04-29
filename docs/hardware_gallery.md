@@ -2,7 +2,7 @@
 
 ## Wiring Diagram
 
-![Wiring Diagram](<../media/process/Wiring Diagram.png>)
+![Wiring Diagram](<../media/diagrams/Wiring Diagram.png>)
 
 Caption: Current public system-level wiring summary, keeping the FrSky radio path, Arduino Mega 2560, BNO055, ODrive 3.6, battery, converters, onboard PC, auxiliary Arduino, relay-related blocks, and the Orbbec Gemini 330 relationship readable without inventing pin-level details.
 

@@ -17,7 +17,7 @@ The public hardware story in this repository is intentionally based only on conf
       <img src="../media/hardware/robot_open_front.png" alt="Internal hardware photo" width="100%">
     </td>
     <td width="62%">
-      <img src="../media/process/Wiring%20Diagram.png" alt="Wiring Diagram" width="100%">
+      <img src="../media/diagrams/Wiring%20Diagram.png" alt="Wiring Diagram" width="100%">
     </td>
   </tr>
   <tr>
@@ -61,7 +61,7 @@ The remaining parts can be described confidently at the subsystem level even tho
 
 - [hardware_bom.md](hardware_bom.md): exact models plus best-effort identifications for the full physical hardware stack
 - [hardware_power_and_io.md](hardware_power_and_io.md): power and signal flow centered on the Wiring Diagram
-- [Wiring Diagram](<../media/process/Wiring Diagram.png>): the fastest hardware-system summary in one image
+- [Wiring Diagram](<../media/diagrams/Wiring Diagram.png>): the fastest hardware-system summary in one image
 - [hardware_layout.md](hardware_layout.md): physical placement and interpretation of the internal layout
 - [hardware_gallery.md](hardware_gallery.md): image-based hardware walkthrough
 

@@ -10,17 +10,44 @@ This repository is organized as a hiring-facing portfolio. It separates verified
   <img src="media/hero/physical_balance_hallway.gif" alt="Physical hallway balancing demo" width="720">
 </p>
 
+## Control Loop Spotlight
+
+<p align="center">
+  <img src="media/diagrams/physical_balance_control_loop.png" alt="Physical balance control loop" width="860">
+</p>
+
+This diagram is the fastest way to understand the hardest technical result in the project: the Arduino closes the balance loop locally, blending RC intent, IMU tilt and yaw feedback, wheel-speed feedback, and ODrive current control into one safety-gated actuator path.
+
+<table>
+  <tr>
+    <td width="33%" valign="top">
+      <strong>Balance</strong><br>
+      Body angle and body angular velocity generate the main stabilizing current term that keeps the robot upright.
+    </td>
+    <td width="33%" valign="top">
+      <strong>Motion</strong><br>
+      RC throttle becomes a target speed, then a speed-correction loop shifts the balance point so the robot can drive without collapsing.
+    </td>
+    <td width="33%" valign="top">
+      <strong>Safety</strong><br>
+      PWM filtering, engage persistence, tilt cutoff, and current limiting prevent noisy inputs or bad states from being passed straight to the motors.
+    </td>
+  </tr>
+</table>
+
+See [control_algorithm.md](firmware/physical_balance_controller/control_algorithm.md) for the full control breakdown and [project_troubleshooting_summary.md](docs/project_troubleshooting_summary.md) for the engineering problems that led to this structure.
+
 ## System At A Glance
 
-The two diagrams below explain the project faster than a long paragraph: one shows who controls what, and the other shows how the hardware is wired and powered.
+The two system diagrams below explain the project faster than a long paragraph: one shows who controls what, and the other shows how the hardware is wired and powered.
 
 <table>
   <tr>
     <td width="50%">
-      <img src="media/process/signal%20controll_diagram.png" alt="Signal / Control Diagram" width="100%">
+      <img src="media/diagrams/signal%20controll_diagram.png" alt="Signal / Control Diagram" width="100%">
     </td>
     <td width="50%">
-      <img src="media/process/Wiring%20Diagram.png" alt="Wiring Diagram" width="100%">
+      <img src="media/diagrams/Wiring%20Diagram.png" alt="Wiring Diagram" width="100%">
     </td>
   </tr>
   <tr>
@@ -40,12 +67,25 @@ The two diagrams below explain the project faster than a long paragraph: one sho
 | Area | Status | Scope | Main evidence |
 | --- | --- | --- | --- |
 | Physical self-balancing + RC driving | Done | Real robot balancing and manual driving on Arduino | [physical_balance_controller.ino](firmware/physical_balance_controller/physical_balance_controller.ino), [control_algorithm.md](firmware/physical_balance_controller/control_algorithm.md), [physical_balance_hallway.gif](media/hero/physical_balance_hallway.gif) |
-| ROS/Gazebo balance simulation | Done | Simulated two-wheeled balancing robot with custom control nodes | [ros_ws/src/robot_controll](ros_ws/src/robot_controll), [ros_ws/src/balance_robot_gazebo](ros_ws/src/balance_robot_gazebo) |
-| SLAM in simulation | Done | SLAM-related simulation workflow and launch composition | [ros_ws/src/robot_ability](ros_ws/src/robot_ability), [docs/software_architecture.md](docs/software_architecture.md) |
+| ROS/Gazebo balance simulation | Done | Simulated two-wheeled balancing robot with custom control nodes | [ros_ws/src/balance_robot_control](ros_ws/src/balance_robot_control), [ros_ws/src/balance_robot_gazebo](ros_ws/src/balance_robot_gazebo) |
+| SLAM in simulation | Done | SLAM-related simulation workflow and launch composition | [ros_ws/src/balance_robot_workflows](ros_ws/src/balance_robot_workflows), [docs/software_architecture.md](docs/software_architecture.md) |
 | Navigation in simulation | Done | `move_base -> /before_vel -> balance controller -> /cmd_vel` pipeline | [ros_ws/src/navigation](ros_ws/src/navigation), [docs/software_architecture.md](docs/software_architecture.md) |
 | RC-to-ROS bridge testing | Done | Arduino bridge that published command inputs into ROS | [rc_to_ros_cmd_vel_bridge.ino](firmware/testers/rc_to_ros_cmd_vel_bridge.ino) |
-| ODrive / IMU / RC / motor subsystem tests | Done | Subsystem-focused bring-up and tuning work | [docs/experiments.md](docs/experiments.md), [docs/development_process.md](docs/development_process.md), [robot_open_front.png](media/hardware/robot_open_front.png), [Wiring Diagram.png](<media/process/Wiring Diagram.png>) |
+| ODrive / IMU / RC / motor subsystem tests | Done | Subsystem-focused bring-up and tuning work | [docs/experiments.md](docs/experiments.md), [docs/development_process.md](docs/development_process.md), [robot_open_front.png](media/hardware/robot_open_front.png), [Wiring Diagram.png](<media/diagrams/Wiring Diagram.png>) |
 | Real-world ROS SLAM/navigation integration | Partial | Launch and integration experiments exist, but end-to-end autonomous physical navigation is not claimed | [archive/legacy_code/real_world_integration](archive/legacy_code/real_world_integration), [docs/results_and_limitations.md](docs/results_and_limitations.md) |
+
+## Arduino-To-ROS Code Evidence
+
+The main physical balancing firmware keeps the real-time balance loop on Arduino, but the repository does include Arduino sketches that publish data into ROS through `rosserial`.
+
+| Arduino sketch | ROS direction | Published topic or message | Why it matters |
+| --- | --- | --- | --- |
+| [physical_balance_controller_ros.ino](firmware/physical_balance_controller_ros/physical_balance_controller_ros.ino) | Arduino -> ROS | `sensor_msgs/Imu` on `/imu`, `nav_msgs/Odometry` on `/odom` | ROS-enabled version of the physical balance controller, adapted from the legacy publisher logic |
+| [rc_to_ros_cmd_vel_bridge.ino](firmware/testers/rc_to_ros_cmd_vel_bridge.ino) | Arduino -> ROS | `geometry_msgs/Twist` on `cmd_vel` | Converts FrSky receiver PWM into ROS motion commands for bridge testing |
+| [experimental_balance_controller_imu_ros.ino](archive/legacy_firmware/experimental_balance_controller_imu_ros.ino) | Arduino -> ROS | `sensor_msgs/Imu` on `/imu` | Experimental balance firmware that publishes BNO055 IMU data |
+| [legacy_balance_controller.ino](archive/legacy_firmware/legacy_balance_controller.ino) | Arduino -> ROS trace | `sensor_msgs/Imu` on `/imu`, `nav_msgs/Odometry` on `/odom` publisher code | Legacy state-publishing functions preserved for ROS-side integration, with some calls commented in the archived sketch |
+
+This is why the project title uses `Arduino-ROS`: Arduino handled the physical robot and bridge-side publishing, while ROS/Gazebo handled simulation, visualization, SLAM, navigation, and higher-level integration experiments.
 
 ## System Architecture
 
@@ -57,13 +97,14 @@ Three layers were explored in this project:
 
 If you want the fastest visual summary:
 
-- [Signal / Control Diagram](<media/process/signal controll_diagram.png>): control responsibility split across Arduino, ODrive, PC, and camera
-- [Wiring Diagram](<media/process/Wiring Diagram.png>): physical robot power, IO, and device-connection overview
+- [Signal / Control Diagram](<media/diagrams/signal controll_diagram.png>): control responsibility split across Arduino, ODrive, PC, and camera
+- [Wiring Diagram](<media/diagrams/Wiring Diagram.png>): physical robot power, IO, and device-connection overview
 
 More detail is documented in [docs/software_architecture.md](docs/software_architecture.md).
 
 - [ROS workspace breakdown](docs/ros_workspaces.md): explains what the original `simul_br_ws` and `real_br_ws_intel` workspaces meant, and how their roles map into this cleaned repository
-- [Simulation controller package guide](ros_ws/src/robot_controll/README.md): file-by-file breakdown of the balancing controller package
+- [ros_ws/README.md](ros_ws/README.md): quickest entry point for the curated ROS workspace, launch scenarios, and package map
+- [Simulation controller package guide](ros_ws/src/balance_robot_control/README.md): file-by-file breakdown of the balancing controller package
 - [Real-world ROS integration archive](archive/legacy_code/real_world_integration/README.md): camera, TF, RViz, and partial physical SLAM/navigation integration notes
 
 ## Key Demos
@@ -128,9 +169,10 @@ archive/
 - [firmware/physical_balance_controller](firmware/physical_balance_controller/README.md): main physical robot controller and [control algorithm structure](firmware/physical_balance_controller/control_algorithm.md)
 - [firmware/testers](firmware/testers/README.md): tester and bridge Arduino sketches, including hall-sensor, motor-current, ODrive receiver, and receiver PWM tests
 - [ros_ws/src](ros_ws/src): curated ROS packages for simulation and control
+- [ros_ws/README.md](ros_ws/README.md): workspace-level guide for build, launches, package roles, and name mapping
 - [docs/ros_workspaces.md](docs/ros_workspaces.md): detailed explanation of the historical ROS workspaces and their cleaned-repo mapping
-- [ros_ws/src/robot_controll/README.md](ros_ws/src/robot_controll/README.md): active balancing-controller package, file by file
-- [ros_ws/src/robot_ability/README.md](ros_ws/src/robot_ability/README.md): high-level launch composition package
+- [ros_ws/src/balance_robot_control/README.md](ros_ws/src/balance_robot_control/README.md): active balancing-controller package, file by file
+- [ros_ws/src/balance_robot_workflows/README.md](ros_ws/src/balance_robot_workflows/README.md): high-level launch composition package
 - [ros_ws/src/navigation/README.md](ros_ws/src/navigation/README.md): navigation stack, maps, and `/before_vel` remap explanation
 - [archive](archive): legacy firmware, old PID experiments, real-world integration traces, and raw reference materials
 - [media](media/README.md): curated portfolio-safe photos, GIFs, and external media plan
@@ -159,7 +201,7 @@ roslaunch robot_bringup robot_remote_lidar.launch
 For navigation-related simulation experiments:
 
 ```bash
-roslaunch robot_ability robot_navigation_lidar.launch
+roslaunch balance_robot_workflows robot_navigation_lidar.launch
 ```
 
 Before building, install the required third-party packages listed in [docs/setup.md](docs/setup.md) and place them under `ros_ws/src/third_party/`.

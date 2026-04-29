@@ -26,7 +26,7 @@ These slides show that the robot was not only a software demo. The physical chas
 
 ### 3. Wiring And Control Architecture
 
-![Wiring Diagram](<../media/process/Wiring Diagram.png>)
+![Wiring Diagram](<../media/diagrams/Wiring Diagram.png>)
 
 The Wiring Diagram connects the FrSky Taranis Q X7 / X8R radio path, Arduino Mega 2560, BNO055 IMU, ODrive 3.6, battery, voltage converters, onboard PC, Orbbec Gemini 330, auxiliary Arduino, and relay module. It is the repository's current public system-level summary of the robot wiring and control architecture.
 
@@ -67,8 +67,8 @@ The simulation screenshots show the parallel ROS/Gazebo track: simulated robot p
 | ODrive / motor | Motor controller setup, hall-sensor feedback, motor synchronization, current control experiments | `firmware/physical_balance_controller`, `firmware/testers/motor_current_test`, `firmware/testers/odrive_receiver_test`, `archive/legacy_firmware`, hardware photos |
 | FrSky radio path | X8R PWM input, Taranis Q X7 manual commands, and engage/throttle/steering interpretation | `physical_balance_controller.ino`, `receiver_pwm_test.ino`, `rc_to_ros_cmd_vel_bridge.ino`, receiver troubleshooting notes |
 | IMU / balancing | BNO055 angle and gyro feedback, balance-loop tuning, safety-constrained parameter testing | `physical_balance_controller.ino`, hallway and obstacle-course demos |
-| ROS / navigation | Gazebo balancing simulation, `/before_vel` command separation, SLAM/navigation launch files | `ros_ws/src/robot_controll`, `ros_ws/src/navigation`, `ros_ws/src/robot_ability` |
-| Hardware assembly | Chassis packaging, internal electronics bay, battery and DC-DC power chain | `media/hardware`, `media/process/Wiring Diagram.png` |
+| ROS / navigation | Gazebo balancing simulation, `/before_vel` command separation, SLAM/navigation launch files | `ros_ws/src/balance_robot_control`, `ros_ws/src/navigation`, `ros_ws/src/balance_robot_workflows` |
+| Hardware assembly | Chassis packaging, internal electronics bay, battery and DC-DC power chain | `media/hardware`, `media/diagrams/Wiring Diagram.png` |
 | Research and documentation | CAN, Orbbec Gemini 330, ORB-SLAM2, RTAB-Map, FrSky receiver noise, and ROS autorun investigation | `docs/research_and_design_decisions.md` |
 
 ## Component Bring-Up Process

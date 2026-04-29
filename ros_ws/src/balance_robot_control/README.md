@@ -1,6 +1,7 @@
-# robot_controll
+# balance_robot_control
 
-This package is the cleaned ROS control package that came out of the original `simul_br_ws/src/robot_controll` workspace.
+This package is the cleaned ROS control package that came out of the original
+`simul_br_ws/src/robot_controll` workspace.
 
 Its core idea is simple but unusual:
 
@@ -17,10 +18,16 @@ That makes this package the center of the balancing simulation stack.
 - produces `/cmd_vel`
 - inserts a balancing layer between navigation and the robot base
 - stores both manual tuning and automatic tuning experiments
+- keeps the depth-model and LiDAR-model control variants in one package
 
 The most important system-level consequence is that `move_base` does not command the robot directly. Instead:
 
-`move_base -> /before_vel -> robot_controll -> /cmd_vel`
+`move_base -> /before_vel -> balance_robot_control -> /cmd_vel`
+
+The name `balance_robot_control` was chosen because this package contains more
+than one controller script. It includes the main balance-aware control nodes,
+the depth and LiDAR variants, the PID tuning entrypoints, and helper scripts
+such as Bayesian optimization and repeated-loop evaluation.
 
 ## File-by-File Guide
 
@@ -201,4 +208,4 @@ These files are useful historically because they show the control-design progres
 - These controllers operate in simulation and assume `/imu` and `/odom` already exist.
 - The LiDAR and depth variants are tuned separately rather than abstracted into one generic controller.
 - `dynamic_reconfigure` and Bayesian tuning were explored, but fully robust automated tuning was not claimed as solved.
-- Some naming quirks such as `robot_controll` were preserved from the original workspace.
+- Many script filenames still reflect the original PID-experiment history even though the package itself was renamed to `balance_robot_control`.

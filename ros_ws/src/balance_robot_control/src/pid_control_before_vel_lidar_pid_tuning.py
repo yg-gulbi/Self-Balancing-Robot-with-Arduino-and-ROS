@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
-
-import rospy
-from geometry_msgs.msg import Twist
-from sensor_msgs.msg import Imu
-from nav_msgs.msg import Odometry
 import math
 import time
+
+import rospy
 from dynamic_reconfigure.server import Server
-from robot_controll.cfg import PIDConfig  # 패키지 이름 변경
+from geometry_msgs.msg import Twist
+from nav_msgs.msg import Odometry
+from sensor_msgs.msg import Imu
+
+from balance_robot_control.cfg import PIDConfig
+
 
 class PIDController:
     def __init__(self):
         rospy.init_node('pid_controler', anonymous=True)
-        # PID 파라미터 초기값
+
         self.Kp_angle = 6.0
         self.Kd_angle = -0.75
         self.Kp_speed = 0.3
@@ -20,7 +22,6 @@ class PIDController:
         self.Kd_steering = -0.008
         self.max_output = 500
 
-        # PID 관련 변수
         self.setpoint_angle = 0.0
         self.prev_pitch_angle = 0.0
         self.setpoint_speed = 0.0
@@ -32,7 +33,6 @@ class PIDController:
         self.cmd_timeout = 1.0
         self.prev_time = time.time()
 
-        # ROS topic 구독 및 발행
         self.imu_subscriber = rospy.Subscriber('/imu', Imu, self.imu_callback)
         self.before_vel_subscriber = rospy.Subscriber('/before_vel', Twist, self.before_vel_callback)
         self.odom_subscriber = rospy.Subscriber('/odom', Odometry, self.odom_callback)
@@ -41,11 +41,8 @@ class PIDController:
         self.last_log_time = rospy.get_time()
         self.log_interval = 1
         self.rate = rospy.Rate(200)
-
-        # dynamic_reconfigure 서버
         self.srv = Server(PIDConfig, self.reconfigure_callback)
 
-    # dynamic_reconfigure callback
     def reconfigure_callback(self, config, level):
         self.Kp_angle = config["Kp_angle"]
         self.Kd_angle = config["Kd_angle"]
@@ -56,30 +53,28 @@ class PIDController:
         rospy.loginfo(f"Reconfigured PID: {config}")
         return config
 
-    # 시뮬레이션 reset 체크 함수 <-- 새로 추가됨
-    def check_reset(self, current_time):  
-        if current_time < self.prev_time:  # ROS 시간이 뒤로 갔으면 reset 감지 <-- 수정됨
-            rospy.logwarn("Simulation reset detected. Reinitializing PID state.")  # <-- 수정됨
-            self.prev_time = current_time  # <-- 수정됨
-            self.prev_pitch_angle = 0.0  # <-- 수정됨
-            self.prev_roll_angle = 0.0  # <-- 수정됨
-            self.setpoint_speed = 0.0  # <-- 수정됨
-            self.setpoint_steering = 0.0  # <-- 수정됨
-            cmd = Twist()  # <-- 수정됨
-            cmd.linear.x = 0.0  # <-- 수정됨
-            cmd.angular.z = 0.0  # <-- 수정됨
+    def check_reset(self, current_time):
+        if current_time < self.prev_time:
+            rospy.logwarn("Simulation reset detected. Reinitializing PID state.")
+            self.prev_time = current_time
+            self.prev_pitch_angle = 0.0
+            self.prev_roll_angle = 0.0
+            self.setpoint_speed = 0.0
+            self.setpoint_steering = 0.0
+            cmd = Twist()
+            cmd.linear.x = 0.0
+            cmd.angular.z = 0.0
             try:
-                self.cmd_vel_publisher.publish(cmd)  # <-- 수정됨
+                self.cmd_vel_publisher.publish(cmd)
             except rospy.ROSException:
-                rospy.logwarn("cmd_vel topic closed during reset.")  # <-- 수정됨
+                rospy.logwarn("cmd_vel topic closed during reset.")
 
     def imu_callback(self, msg):
         current_pitch_angle = self.get_pitch(msg)
         current_roll_angle = self.get_roll(msg)
         current_time = rospy.Time.now().to_sec()
 
-        # 시뮬레이션 reset 체크 <-- 새로 추가됨
-        self.check_reset(current_time)  
+        self.check_reset(current_time)
 
         dt = current_time - self.prev_time
         if dt <= 0:
@@ -88,7 +83,6 @@ class PIDController:
         roll_rate = (current_roll_angle - self.prev_roll_angle) / dt
         self.prev_time = current_time
 
-        # 넘어짐 체크
         if abs(current_pitch_angle) > math.radians(70):
             cmd = Twist()
             cmd.linear.x = 0.0
@@ -98,15 +92,15 @@ class PIDController:
             except rospy.ROSException:
                 rospy.logwarn("cmd_vel topic closed.")
             return
-           
+
         if abs(self.setpoint_angle) > math.radians(45):
             self.setpoint_angle = math.radians(45)
-        # PID 계산
+
         speed_error = self.setpoint_speed - self.current_speed
         self.setpoint_angle = self.Kp_speed * speed_error
         angle_error = self.setpoint_angle - current_pitch_angle
         output_angle = self.Kp_angle * angle_error + self.Kd_angle * pitch_rate
-        output_steering = - (self.Kp_steering * self.setpoint_steering + self.Kd_steering * roll_rate)
+        output_steering = -(self.Kp_steering * self.setpoint_steering + self.Kd_steering * roll_rate)
 
         cmd = Twist()
         cmd.linear.x = output_angle
@@ -119,9 +113,12 @@ class PIDController:
         self.prev_pitch_angle = current_pitch_angle
         self.prev_roll_angle = current_roll_angle
 
-        # 로그 출력
         if current_time - self.last_log_time >= self.log_interval:
-            rospy.loginfo(f"setpoint_angle: {self.setpoint_angle:.3f}, current_angle: {current_pitch_angle:.3f}, speed: {self.current_speed:.3f}")
+            rospy.loginfo(
+                f"setpoint_angle: {self.setpoint_angle:.3f}, "
+                f"current_angle: {current_pitch_angle:.3f}, "
+                f"speed: {self.current_speed:.3f}"
+            )
             self.last_log_time = current_time
 
         if current_time - self.last_cmd_time > self.cmd_timeout:
@@ -157,17 +154,17 @@ class PIDController:
     def quaternion_to_euler(self, x, y, z, w):
         t0 = +2.0 * (w * x + y * z)
         t1 = +1.0 - 2.0 * (x * x + y * y)
-        X = math.atan2(t0, t1)
+        roll = math.atan2(t0, t1)
 
         t2 = +2.0 * (w * y - z * x)
         t2 = +1.0 if t2 > +1.0 else t2
         t2 = -1.0 if t2 < -1.0 else t2
-        Y = math.asin(t2)
+        pitch = math.asin(t2)
 
         t3 = +2.0 * (w * z + x * y)
         t4 = +1.0 - 2.0 * (y * y + z * z)
-        Z = math.atan2(t3, t4)
-        return X, Y, Z
+        yaw = math.atan2(t3, t4)
+        return roll, pitch, yaw
 
     def run(self):
         while not rospy.is_shutdown():
@@ -177,4 +174,3 @@ class PIDController:
 if __name__ == '__main__':
     controller = PIDController()
     controller.run()
-

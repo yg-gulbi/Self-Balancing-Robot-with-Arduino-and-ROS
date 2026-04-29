@@ -55,5 +55,5 @@ The full physical stack associated with this body layout was:
 Use these assets together when you need both physical placement and interpreted system relationships:
 
 - [robot_open_front.png](../media/hardware/robot_open_front.png)
-- [Wiring Diagram.png](<../media/process/Wiring Diagram.png>)
+- [Wiring Diagram.png](<../media/diagrams/Wiring Diagram.png>)
 - [development_process.md](development_process.md)

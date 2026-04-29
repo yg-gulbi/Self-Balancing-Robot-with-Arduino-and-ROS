@@ -31,8 +31,8 @@ That means navigation did not drive the robot base directly. Navigation only pro
 
 | Original role | Current location | What it does |
 | --- | --- | --- |
-| balancing control nodes | [ros_ws/src/robot_controll](../ros_ws/src/robot_controll/README.md) | file-by-file balancing controller logic, tuning helpers, auto-tuning experiments |
-| high-level launch composition | [ros_ws/src/robot_ability](../ros_ws/src/robot_ability/README.md) | bundles controller, Gazebo, SLAM, and navigation launch flows |
+| balancing control nodes | [ros_ws/src/balance_robot_control](../ros_ws/src/balance_robot_control/README.md) | file-by-file balancing controller logic, tuning helpers, auto-tuning experiments |
+| high-level launch composition | [ros_ws/src/balance_robot_workflows](../ros_ws/src/balance_robot_workflows/README.md) | bundles controller, Gazebo, SLAM, and navigation launch flows |
 | navigation stack | [ros_ws/src/navigation](../ros_ws/src/navigation/README.md) | `map_server`, `amcl`, `move_base`, map assets, DWA config |
 | Gazebo robot launch presets | `ros_ws/src/balance_robot_gazebo` | starts house/depth/lidar simulation worlds and controller entrypoints |
 | URDF/Xacro robot model | `ros_ws/src/balance_robot_description` | robot body, wheels, IMU, lidar/depth model definitions |
@@ -59,7 +59,7 @@ The important limitation is that this workspace represents integration attempts,
 
 | Original package or role | Current location | What it means |
 | --- | --- | --- |
-| `robot_ability` real-world launch composition | [archive/legacy_code/real_world_integration/robot_slam.launch](../archive/legacy_code/real_world_integration/robot_slam.launch), [archive/legacy_code/real_world_integration/robot_navigation.launch](../archive/legacy_code/real_world_integration/robot_navigation.launch) | Orbbec camera bring-up, RTAB-Map, depth-to-scan conversion, partial navigation front-end |
+| historical workflow-launch layer | [archive/legacy_code/real_world_integration/robot_slam.launch](../archive/legacy_code/real_world_integration/robot_slam.launch), [archive/legacy_code/real_world_integration/robot_navigation.launch](../archive/legacy_code/real_world_integration/robot_navigation.launch) | Orbbec camera bring-up, RTAB-Map, depth-to-scan conversion, partial navigation front-end |
 | `robot_rviz` TF and RViz helpers | [archive/legacy_code/real_world_integration/robot_description_rviz.launch](../archive/legacy_code/real_world_integration/robot_description_rviz.launch), [imu_tf.py](../archive/legacy_code/real_world_integration/imu_tf.py), [odom_tf.py](../archive/legacy_code/real_world_integration/odom_tf.py), [visual_odom_tf.py](../archive/legacy_code/real_world_integration/visual_odom_tf.py) | converts `/imu` and `/odom` into TF frames usable by RViz and SLAM |
 | launch control helper | [archive/legacy_code/real_world_integration/launch_service.py](../archive/legacy_code/real_world_integration/launch_service.py) | start/stop services for SLAM and navigation launch files |
 | camera driver dependency | third-party dependency, not vendored in cleaned repo | `OrbbecSDK_ROS1` publishes `/camera/depth/image_raw`, `/camera/color/image_raw`, camera info, and camera control services |
@@ -86,8 +86,8 @@ The original workspace also contained `robot_gazebo`, robot-description world as
 
 ## Recommended Reading Order
 
-1. [ros_ws/src/robot_controll/README.md](../ros_ws/src/robot_controll/README.md)
-2. [ros_ws/src/robot_ability/README.md](../ros_ws/src/robot_ability/README.md)
+1. [ros_ws/src/balance_robot_control/README.md](../ros_ws/src/balance_robot_control/README.md)
+2. [ros_ws/src/balance_robot_workflows/README.md](../ros_ws/src/balance_robot_workflows/README.md)
 3. [ros_ws/src/navigation/README.md](../ros_ws/src/navigation/README.md)
 4. [archive/legacy_code/real_world_integration/README.md](../archive/legacy_code/real_world_integration/README.md)
 5. [docs/results_and_limitations.md](results_and_limitations.md)

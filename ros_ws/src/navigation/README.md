@@ -14,7 +14,7 @@ Normal mobile-robot flow:
 
 This project:
 
-`move_base -> /before_vel -> robot_controll -> /cmd_vel`
+`move_base -> /before_vel -> balance_robot_control -> /cmd_vel`
 
 That is the key architectural reason this package matters.
 
@@ -72,7 +72,7 @@ What it starts:
 Important note:
 
 - this file assumes a usable `scan` topic already exists
-- the depth-to-scan projection is provided one layer above, by `robot_ability/launch/robot_navigation_depth.launch`
+- the depth-to-scan projection is provided one layer above, by `balance_robot_workflows/launch/robot_navigation_depth.launch`
 
 ### [`launch/turtlebot3_navigation.launch`](launch/turtlebot3_navigation.launch)
 
@@ -114,8 +114,8 @@ This is not a polished launch file. It is better interpreted as a working note t
 
 ## Relationship to the Rest of the Workspace
 
-- `robot_ability` chooses the workflow
+- `balance_robot_workflows` chooses the workflow
 - `navigation` provides map/localization/planning pieces
-- `robot_controll` adapts navigation output to a balancing robot
+- `balance_robot_control` adapts navigation output to a balancing robot
 
-Without `robot_controll`, this package would behave like a more standard mobile-robot navigation stack. With `robot_controll`, it becomes part of a balance-aware simulation system.
+Without `balance_robot_control`, this package would behave like a more standard mobile-robot navigation stack. With `balance_robot_control`, it becomes part of a balance-aware simulation system.
