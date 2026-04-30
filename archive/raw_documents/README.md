@@ -1,14 +1,15 @@
 # Raw Documents
 
-This folder is only for legacy source material that still needs preservation review.
+This folder is only for archived source material that still needs preservation review.
 
 The public repository should prefer Markdown summaries in `docs/` over raw PPTX, DOCX, HWPX, datasheet, chat-log, or large video artifacts. Raw files may contain private names, emails, chat content, duplicate research material, or oversized media that is not useful as the main GitHub experience.
 
-## Current File
+## Current Files
 
-- One recovered trial-and-error PDF generated during the project.
+- `로봇 시행착오.pdf`: recovered trial-and-error PDF generated during the project.
+- `리시버문제_해결방법1.text`: receiver interference notes and mitigation ideas from the project archive.
 
-This PDF has been summarized into [`docs/development_process.md`](../../docs/development_process.md). Keep it only as legacy evidence unless a privacy/size review decides to move raw evidence into a GitHub Release or remove it from the public repository.
+These files are kept as archived evidence unless a privacy/size review decides to move raw evidence into a GitHub Release or remove it from the public repository.
 
 ## Public Policy
 

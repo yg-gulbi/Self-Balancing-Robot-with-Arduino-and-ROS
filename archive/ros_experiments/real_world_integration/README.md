@@ -138,8 +138,8 @@ The files in this folder subscribe to `/imu` and `/odom`, but they do not publis
 
 Representative traces of that topic publishing exist elsewhere in the repository:
 
-- [`archive/legacy_firmware/legacy_balance_controller.ino`](../../legacy_firmware/legacy_balance_controller.ino)
-- [`archive/legacy_firmware/experimental_balance_controller_imu_ros.ino`](../../legacy_firmware/experimental_balance_controller_imu_ros.ino)
+- [`archive/arduino_firmware/legacy_balance_controller.ino`](../../arduino_firmware/legacy_balance_controller.ino)
+- [`archive/arduino_firmware/experimental_balance_controller_imu_ros.ino`](../../arduino_firmware/experimental_balance_controller_imu_ros.ino)
 - [`firmware/testers/rc_to_ros_cmd_vel_bridge.ino`](../../../firmware/testers/rc_to_ros_cmd_vel_bridge.ino)
 
 That is the architectural split:

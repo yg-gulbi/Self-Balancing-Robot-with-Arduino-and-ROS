@@ -1,7 +1,7 @@
 // Physical self-balancing robot controller with rosserial state publishing.
 //
 // This sketch is based on firmware/physical_balance_controller/physical_balance_controller.ino
-// and adds the ROS communication pattern preserved in archive/legacy_firmware/legacy_balance_controller.ino.
+// and adds the ROS communication pattern preserved in archive/arduino_firmware/legacy_balance_controller.ino.
 //
 // Runtime structure:
 // - Arduino keeps the real-time balance, speed, steering, safety, and ODrive current-control loop local.

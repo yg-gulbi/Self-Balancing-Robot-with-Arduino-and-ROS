@@ -227,6 +227,6 @@ packages, or depth-to-scan conversion packages.
 - This is strongest as a simulation and integration workspace.
 - The real physical balance loop was implemented on Arduino firmware, not ROS.
 - Physical camera, TF, and SLAM integration traces are preserved mainly in
-  [`../archive/legacy_code/real_world_integration`](../archive/legacy_code/real_world_integration/README.md).
+  [`../archive/ros_experiments/real_world_integration`](../archive/ros_experiments/real_world_integration/README.md).
 - End-to-end autonomous navigation on the physical balancing robot is not
   claimed as complete in this repository.

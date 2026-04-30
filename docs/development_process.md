@@ -58,13 +58,13 @@ The simulation screenshots show the parallel ROS/Gazebo track: simulated robot p
 | Control integration | Arduino Mega 2560, BNO055 IMU, FrSky X8R receiver, and ODrive command path | Firmware and process notes show IMU feedback, RC input, and motor command integration | Physical balancing and RC driving became the strongest real-world result |
 | Hardware assembly | Internal placement, wiring, battery pack, converter chain, relay/auxiliary area | Recovered wiring notes and internal photo were converted into public diagrams and photos | Public hardware evidence now uses raw photos plus the Wiring Diagram |
 | ROS simulation and navigation | Gazebo balancing robot, `/before_vel`, SLAM/navigation launch composition | ROS packages show simulation control, mapping/navigation experiments, and launch integration | Simulation navigation is documented as completed; physical autonomous navigation is not claimed |
-| Portfolio recovery | Curated demos, firmware, ROS packages, legacy notes, and public-safe media | Raw project material was summarized instead of copied wholesale | Repository now separates final evidence from legacy and research material |
+| Portfolio recovery | Curated demos, firmware, ROS packages, archived notes, and public-safe media | Raw project material was summarized instead of copied wholesale | Repository now separates final evidence from archived experiments and research material |
 
 ## Functional Workstreams
 
 | Workstream | What it covered | Public evidence |
 | --- | --- | --- |
-| ODrive / motor | Motor controller setup, hall-sensor feedback, motor synchronization, current control experiments | `firmware/physical_balance_controller`, `firmware/testers/motor_current_test`, `firmware/testers/odrive_receiver_test`, `archive/legacy_firmware`, hardware photos |
+| ODrive / motor | Motor controller setup, hall-sensor feedback, motor synchronization, current control experiments | `firmware/physical_balance_controller`, `firmware/testers/motor_current_test`, `firmware/testers/odrive_receiver_test`, `archive/arduino_firmware`, hardware photos |
 | FrSky radio path | X8R PWM input, Taranis Q X7 manual commands, and engage/throttle/steering interpretation | `physical_balance_controller.ino`, `receiver_pwm_test.ino`, `rc_to_ros_cmd_vel_bridge.ino`, receiver troubleshooting notes |
 | IMU / balancing | BNO055 angle and gyro feedback, balance-loop tuning, safety-constrained parameter testing | `physical_balance_controller.ino`, hallway and obstacle-course demos |
 | ROS / navigation | Gazebo balancing simulation, `/before_vel` command separation, SLAM/navigation launch files | `ros_ws/src/balance_robot_control`, `ros_ws/src/navigation`, `ros_ws/src/balance_robot_workflows` |

@@ -15,7 +15,7 @@ This summary is based primarily on:
 - `firmware/physical_balance_controller/physical_balance_controller.ino`
 - `firmware/physical_balance_controller/control_algorithm.md`
 - `firmware/testers/*`
-- `archive/legacy_firmware/*`
+- `archive/arduino_firmware/*`
 - `ros_ws/src/*`
 - `docs/*.md`
 

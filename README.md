@@ -33,7 +33,7 @@ Read this first: [physical balance control algorithm](firmware/physical_balance_
 | Simulation navigation pipeline | Completed | [navigation](ros_ws/src/navigation), [balance_robot_workflows](ros_ws/src/balance_robot_workflows) |
 | Simulation SLAM/navigation launch workflow | Implemented | [balance_robot_workflows](ros_ws/src/balance_robot_workflows), [software architecture](docs/software_architecture.md) |
 | Arduino-to-ROS bridge tests | Completed | [rc_to_ros_cmd_vel_bridge.ino](firmware/testers/rc_to_ros_cmd_vel_bridge.ino), [physical_balance_controller_ros.ino](firmware/physical_balance_controller_ros/physical_balance_controller_ros.ino) |
-| Real-world ROS SLAM/navigation | Partial | [real-world integration archive](archive/legacy_code/real_world_integration), [results and limitations](docs/results_and_limitations.md) |
+| Real-world ROS SLAM/navigation | Partial | [real-world integration archive](archive/ros_experiments/real_world_integration), [results and limitations](docs/results_and_limitations.md) |
 
 ## System At A Glance
 
@@ -70,8 +70,8 @@ The project title uses `Arduino-ROS` because Arduino handled the physical robot 
 | --- | --- | --- |
 | [physical_balance_controller_ros.ino](firmware/physical_balance_controller_ros/physical_balance_controller_ros.ino) | ROS-enabled physical controller variant | `/imu`, `/odom` |
 | [rc_to_ros_cmd_vel_bridge.ino](firmware/testers/rc_to_ros_cmd_vel_bridge.ino) | RC receiver to ROS command bridge | `cmd_vel` |
-| [experimental_balance_controller_imu_ros.ino](archive/legacy_firmware/experimental_balance_controller_imu_ros.ino) | Legacy IMU publisher experiment | `/imu` |
-| [legacy_balance_controller.ino](archive/legacy_firmware/legacy_balance_controller.ino) | Preserved legacy ROS publisher trace | `/imu`, `/odom` publisher logic |
+| [experimental_balance_controller_imu_ros.ino](archive/arduino_firmware/experimental_balance_controller_imu_ros.ino) | Archived IMU publisher experiment | `/imu` |
+| [legacy_balance_controller.ino](archive/arduino_firmware/legacy_balance_controller.ino) | Archived ROS publisher trace | `/imu`, `/odom` publisher logic |
 
 ## ROS Workspace
 
@@ -106,7 +106,7 @@ Full original MP4 files are intentionally not stored in this repository; lightwe
 - [Software architecture](docs/software_architecture.md): physical firmware, ROS simulation, and real-world integration tracks.
 - [Experiments](docs/experiments.md): curated test matrix and evidence links.
 - [Setup](docs/setup.md): dependencies and build expectations.
-- [Archive guide](archive/legacy_code/README.md): historical code, not the default starting point.
+- [Archive guide](archive/README.md): historical ROS experiments, Arduino firmware variants, and raw source material.
 
 ## Limitations
 

@@ -195,17 +195,17 @@ Why it matters:
 - the balancing controller expects desired motion on `/before_vel`
 - this file provides a manual way to drive the balance stack without navigation
 
-## Legacy Experiment Lineage
+## Archived Experiment Lineage
 
-Earlier controller variants were intentionally moved to [archive/legacy_code/pid_experiments](../../../archive/legacy_code/pid_experiments/README.md).
+Earlier controller variants were intentionally moved to [archive/ros_experiments/pid_experiments](../../../archive/ros_experiments/pid_experiments/README.md).
 
 Those files preserve the path from rough experiments to the cleaned package above:
 
-- [`pid_control_cmd_vel.py`](../../../archive/legacy_code/pid_experiments/pid_control_cmd_vel.py): earliest command path, before `/before_vel` became standard
-- [`pid_control_before_vel.py`](../../../archive/legacy_code/pid_experiments/pid_control_before_vel.py): early `/before_vel` controller without odometry-based speed feedback
-- [`pid_control_before_vel_odom.py`](../../../archive/legacy_code/pid_experiments/pid_control_before_vel_odom.py): early controller that uses `/odom` speed feedback
-- [`pid_control_before_vel_odom_vel.py`](../../../archive/legacy_code/pid_experiments/pid_control_before_vel_odom_vel.py): transition experiment mixing angle control and speed-estimation ideas
-- [`pid_control_before_vel_revised.py`](../../../archive/legacy_code/pid_experiments/pid_control_before_vel_revised.py): experiment that integrates IMU linear acceleration to estimate speed
+- [`pid_control_cmd_vel.py`](../../../archive/ros_experiments/pid_experiments/pid_control_cmd_vel.py): earliest command path, before `/before_vel` became standard
+- [`pid_control_before_vel.py`](../../../archive/ros_experiments/pid_experiments/pid_control_before_vel.py): early `/before_vel` controller without odometry-based speed feedback
+- [`pid_control_before_vel_odom.py`](../../../archive/ros_experiments/pid_experiments/pid_control_before_vel_odom.py): early controller that uses `/odom` speed feedback
+- [`pid_control_before_vel_odom_vel.py`](../../../archive/ros_experiments/pid_experiments/pid_control_before_vel_odom_vel.py): transition experiment mixing angle control and speed-estimation ideas
+- [`pid_control_before_vel_revised.py`](../../../archive/ros_experiments/pid_experiments/pid_control_before_vel_revised.py): experiment that integrates IMU linear acceleration to estimate speed
 
 These files are useful historically because they show the control-design progression:
 

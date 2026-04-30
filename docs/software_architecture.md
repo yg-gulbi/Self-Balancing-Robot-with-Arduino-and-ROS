@@ -47,8 +47,8 @@ Representative code:
 
 - [`physical_balance_controller.ino`](../firmware/physical_balance_controller/physical_balance_controller.ino)
 - [`control_algorithm.md`](../firmware/physical_balance_controller/control_algorithm.md)
-- [`legacy_balance_controller.ino`](../archive/legacy_firmware/legacy_balance_controller.ino)
-- [`experimental_balance_controller_imu_ros.ino`](../archive/legacy_firmware/experimental_balance_controller_imu_ros.ino)
+- [`legacy_balance_controller.ino`](../archive/arduino_firmware/legacy_balance_controller.ino)
+- [`experimental_balance_controller_imu_ros.ino`](../archive/arduino_firmware/experimental_balance_controller_imu_ros.ino)
 
 Behavior:
 
@@ -79,9 +79,9 @@ The `Signal / Control Diagram` makes that split easier to read: navigation or au
 
 Representative archive files:
 
-- [`robot_slam.launch`](../archive/legacy_code/real_world_integration/robot_slam.launch)
-- [`robot_navigation_lidar.launch`](../archive/legacy_code/real_world_integration/robot_navigation_lidar.launch)
-- [`move_base.launch`](../archive/legacy_code/real_world_integration/move_base.launch)
+- [`robot_slam.launch`](../archive/ros_experiments/real_world_integration/robot_slam.launch)
+- [`robot_navigation_lidar.launch`](../archive/ros_experiments/real_world_integration/robot_navigation_lidar.launch)
+- [`move_base.launch`](../archive/ros_experiments/real_world_integration/move_base.launch)
 
 These files show that camera/SLAM/navigation integration work was performed, but this repository does not claim verified end-to-end autonomous navigation on the physical robot.
 

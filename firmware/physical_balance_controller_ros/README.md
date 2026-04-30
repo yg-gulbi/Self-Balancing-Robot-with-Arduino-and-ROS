@@ -4,11 +4,11 @@ This sketch is a ROS-enabled variant of the main physical balancing controller.
 
 - Main file: [`physical_balance_controller_ros.ino`](physical_balance_controller_ros.ino)
 - Base controller: [`../physical_balance_controller/physical_balance_controller.ino`](../physical_balance_controller/physical_balance_controller.ino)
-- Legacy ROS source: [`../../archive/legacy_firmware/legacy_balance_controller.ino`](../../archive/legacy_firmware/legacy_balance_controller.ino)
+- Archived ROS source: [`../../archive/arduino_firmware/legacy_balance_controller.ino`](../../archive/arduino_firmware/legacy_balance_controller.ino)
 
 ## Purpose
 
-The original physical controller keeps the real-time balance loop fully on Arduino for safety and timing. This variant keeps that architecture, then adds the legacy `rosserial` publishing path so the physical robot can expose state to ROS:
+The original physical controller keeps the real-time balance loop fully on Arduino for safety and timing. This variant keeps that architecture, then adds the archived `rosserial` publishing path so the physical robot can expose state to ROS:
 
 | Topic | Message | Source |
 | --- | --- | --- |

@@ -74,4 +74,4 @@ specific reason. Prefer one of these approaches:
 - [`../../README.md`](../../README.md): ROS workspace usage guide
 - [`../../../docs/setup.md`](../../../docs/setup.md): repository setup notes
 - [`../../../docs/ros_workspaces.md`](../../../docs/ros_workspaces.md): archive workspace interpretation
-- [`../../../archive/legacy_code/real_world_integration/README.md`](../../../archive/legacy_code/real_world_integration/README.md): real-world camera, TF, SLAM, and navigation traces
+- [`../../../archive/ros_experiments/real_world_integration/README.md`](../../../archive/ros_experiments/real_world_integration/README.md): real-world camera, TF, SLAM, and navigation traces
