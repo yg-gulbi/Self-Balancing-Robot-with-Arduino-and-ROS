@@ -90,6 +90,6 @@ The original workspace also contained `robot_gazebo`, robot-description world as
 2. [ros_ws/src/balance_robot_workflows/README.md](../../ros_ws/src/balance_robot_workflows/README.md)
 3. [ros_ws/src/navigation/README.md](../../ros_ws/src/navigation/README.md)
 4. [archive/ros_experiments/real_world_integration/README.md](real_world_integration/README.md)
-5. [docs/results_and_limitations.md](../../docs/results_and_limitations.md)
+5. [docs/results-and-limitations.md](../../docs/results-and-limitations.md)
 
 That sequence explains what the simulation workspace actually accomplished, what the cleaned package entrypoints are, and where the physical-robot ROS integration stopped.

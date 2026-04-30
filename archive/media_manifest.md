@@ -16,7 +16,7 @@ This archive note maps recovered media into cleaner public titles and repo asset
 
 ## Recovered Process Exports
 
-These public images were exported from recovered process material and summarized in `docs/development_process.md`.
+These public images were exported from recovered process material and summarized in `docs/development-process.md`.
 
 | Public image | Use |
 | --- | --- |

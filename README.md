@@ -35,7 +35,7 @@ The Arduino closes the balance loop locally. RC intent, IMU tilt and yaw feedbac
 | Motion | RC throttle becomes a target speed, then shifts the balance point so the robot can drive while staying upright. |
 | Safety | PWM filtering, engage persistence, tilt cutoff, and current limiting prevent bad states from reaching the motors. |
 
-Start here: [physical balance control algorithm](firmware/physical_balance_controller/control_algorithm.md) and [troubleshooting summary](docs/project_troubleshooting_summary.md).
+Start here: [physical balance control algorithm](firmware/physical_balance_controller/control_algorithm.md) and [troubleshooting summary](docs/troubleshooting.md).
 
 ## Project Scope
 
@@ -44,9 +44,9 @@ Start here: [physical balance control algorithm](firmware/physical_balance_contr
 | Physical self-balancing and RC driving | Completed | [physical_balance_controller.ino](firmware/physical_balance_controller/physical_balance_controller.ino), [hallway demo](media/hero/physical_balance_hallway.gif) |
 | ROS/Gazebo balance simulation | Completed | [balance_robot_control](ros_ws/src/balance_robot_control), [balance_robot_gazebo](ros_ws/src/balance_robot_gazebo) |
 | Simulation navigation pipeline | Completed | [navigation](ros_ws/src/navigation), [balance_robot_workflows](ros_ws/src/balance_robot_workflows) |
-| Simulation SLAM/navigation workflow | Completed in simulation | [balance_robot_workflows](ros_ws/src/balance_robot_workflows), [results and limitations](docs/results_and_limitations.md) |
+| Simulation SLAM/navigation workflow | Completed in simulation | [balance_robot_workflows](ros_ws/src/balance_robot_workflows), [results and limitations](docs/results-and-limitations.md) |
 | Arduino-to-ROS bridge tests | Completed | [rc_to_ros_cmd_vel_bridge.ino](firmware/testers/rc_to_ros_cmd_vel_bridge.ino), [physical_balance_controller_ros.ino](firmware/physical_balance_controller_ros/physical_balance_controller_ros.ino) |
-| Real-world ROS SLAM/navigation | Integration experiments | [real-world integration archive](archive/ros_experiments/real_world_integration), [results and limitations](docs/results_and_limitations.md) |
+| Real-world ROS SLAM/navigation | Integration experiments | [real-world integration archive](archive/ros_experiments/real_world_integration), [results and limitations](docs/results-and-limitations.md) |
 
 ## System At A Glance
 
@@ -73,7 +73,17 @@ Start here: [physical balance control algorithm](firmware/physical_balance_contr
 
 Main physical hardware: Arduino Mega 2560, BNO055 IMU, ODrive 3.6, FrSky Taranis Q X7 + X8R, Orbbec Gemini 330, dual hall-sensor BLDC hub motors, 36V battery, onboard mini PC, DC-DC converters, auxiliary Arduino, and relay module.
 
-For a compact software map, see [docs/software_architecture.md](docs/software_architecture.md). For the consolidated hardware explanation, see [docs/hardware.md](docs/hardware.md).
+For the consolidated hardware explanation, see [docs/hardware.md](docs/hardware.md). For the build story and research context, see [docs/development-process.md](docs/development-process.md).
+
+## Repository Layout
+
+| Path | Purpose |
+| --- | --- |
+| `firmware/` | Arduino firmware, physical controller, and tester sketches |
+| `ros_ws/` | Main ROS workspace for simulation, navigation, SLAM workflow, and tuning code |
+| `docs/` | Four focused portfolio docs: hardware, development process, troubleshooting, and results |
+| `media/` | Lightweight public GIFs, photos, and diagrams |
+| `archive/` | Older experiments and recovered context that should not be the first place to read |
 
 ## Why The Title Includes Arduino And ROS
 
@@ -87,6 +97,8 @@ I kept `Arduino-ROS` in the title because the project really used both sides. Ar
 | [legacy_balance_controller.ino](archive/arduino_firmware/legacy_balance_controller.ino) | Archived ROS publisher trace | `/imu`, `/odom` publisher logic |
 
 ## ROS Workspace
+
+This repository keeps the custom ROS packages, but it does not vendor every third-party dependency snapshot. Extra packages such as `rtabmap_ros`, `OrbbecSDK_ROS1`, `depthimage_to_laserscan`, `rosserial`, and TurtleBot3/Realsense simulation assets should be placed under `ros_ws/src/third_party/` when reproducing historical workflows.
 
 ```bash
 cd ros_ws
@@ -116,9 +128,10 @@ I did not put the full original MP4 files in the repo. Instead, I kept lightweig
 
 1. [Physical controller](firmware/physical_balance_controller/README.md): main Arduino firmware for the real balancing robot.
 2. [Control algorithm](firmware/physical_balance_controller/control_algorithm.md): how RC input, IMU feedback, wheel speed, safety, and ODrive current control fit together.
-3. [Troubleshooting summary](docs/project_troubleshooting_summary.md): why filtering, safety gating, ODrive isolation, and staged tuning were needed.
-4. [ROS workspace guide](ros_ws/README.md): how to build and run the main simulation, navigation, SLAM, and tuning workflows.
-5. [Results and limits](docs/results_and_limitations.md): measured project results, code-defined settings, and remaining limits.
+3. [Hardware](docs/hardware.md): physical components, wiring, power flow, and layout interpretation.
+4. [Development process](docs/development-process.md): build timeline, subsystem bring-up, and research decisions.
+5. [Troubleshooting summary](docs/troubleshooting.md): why filtering, safety gating, ODrive isolation, and staged tuning were needed.
+6. [Results and limits](docs/results-and-limitations.md): measured project results, code-defined settings, and remaining limits.
 
 ## Limitations
 

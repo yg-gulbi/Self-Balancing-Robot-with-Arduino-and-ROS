@@ -206,7 +206,7 @@ I would read the ROS side in this order:
 1. [`src/balance_robot_workflows/README.md`](src/balance_robot_workflows/README.md)
 2. [`src/balance_robot_control/README.md`](src/balance_robot_control/README.md)
 3. [`src/navigation/README.md`](src/navigation/README.md)
-4. [`../docs/results_and_limitations.md`](../docs/results_and_limitations.md)
+4. [`../docs/results-and-limitations.md`](../docs/results-and-limitations.md)
 
 ## Troubleshooting
 

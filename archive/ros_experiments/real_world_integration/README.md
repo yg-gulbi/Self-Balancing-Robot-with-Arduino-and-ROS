@@ -9,7 +9,7 @@ These files are important because they show what the ROS layer was trying to do 
 3. publish TF and robot-model information for visualization,
 4. attempt RTAB-Map SLAM and navigation-oriented bring-up.
 
-They should still be read together with [`docs/results_and_limitations.md`](../../../docs/results_and_limitations.md) so this folder is not mistaken for a fully finished autonomous physical navigation result.
+They should still be read together with [`docs/results-and-limitations.md`](../../../docs/results-and-limitations.md) so this folder is not mistaken for a fully finished autonomous physical navigation result.
 
 ## What This Folder Represents
 

@@ -72,6 +72,5 @@ specific reason. Prefer one of these approaches:
 ## Related Files
 
 - [`../../README.md`](../../README.md): ROS workspace usage guide
-- [`../../../docs/setup.md`](../../../docs/setup.md): repository setup notes
 - [`../../../archive/ros_experiments/workspace_history.md`](../../../archive/ros_experiments/workspace_history.md): archive workspace interpretation
 - [`../../../archive/ros_experiments/real_world_integration/README.md`](../../../archive/ros_experiments/real_world_integration/README.md): real-world camera, TF, SLAM, and navigation traces

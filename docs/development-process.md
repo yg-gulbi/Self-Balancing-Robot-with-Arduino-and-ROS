@@ -69,7 +69,20 @@ The simulation screenshots show the parallel ROS/Gazebo track: simulated robot p
 | IMU / balancing | BNO055 angle and gyro feedback, balance-loop tuning, safety-constrained parameter testing | `physical_balance_controller.ino`, hallway and obstacle-course demos |
 | ROS / navigation | Gazebo balancing simulation, `/before_vel` command separation, SLAM/navigation launch files | `ros_ws/src/balance_robot_control`, `ros_ws/src/navigation`, `ros_ws/src/balance_robot_workflows` |
 | Hardware assembly | Chassis packaging, internal electronics bay, battery and DC-DC power chain | `media/hardware`, `media/diagrams/wiring_diagram.png` |
-| Research and documentation | CAN, Orbbec Gemini 330, ORB-SLAM2, RTAB-Map, FrSky receiver noise, and ROS autorun investigation | `docs/research_and_design_decisions.md` |
+| Research and documentation | CAN, Orbbec Gemini 330, ORB-SLAM2, RTAB-Map, FrSky receiver noise, and ROS autorun investigation | This page, `docs/troubleshooting.md`, and `docs/results-and-limitations.md` |
+
+## Research And Design Decisions
+
+The recovered research notes helped shape the project, but they are not separate finished deliverables. The important public-facing decisions are summarized here so the repository stays compact.
+
+| Topic | What it influenced | Final repo framing |
+| --- | --- | --- |
+| CAN protocol | Communication options for vehicle-style or industrial motor-control systems | Useful background only; the final implementation is Arduino + ODrive, not a completed CAN bus system |
+| ODrive bring-up | Voltage checks, firmware setup, hall-sensor connection, controller modes, and current-control testing | Treated as real subsystem bring-up that supports the physical balancing result |
+| Orbbec Gemini 330 | Sensor-head direction, depth-camera placement, and physical ROS integration experiments | Listed as deployed hardware, while physical autonomous depth navigation remains partial |
+| ORB-SLAM2 and RTAB-Map | Visual/RGB-D SLAM tradeoff research for mapping and navigation workflows | Kept as research context and simulation/integration background, not overstated as a finished physical deployment |
+| FrSky receiver interference | Wire length, grounding, shielding, twisted signal-ground routing, and filtering | Folded into the troubleshooting story because it directly affected real RC control reliability |
+| ROS autorun | Boot-time launch patterns using scripts or services | Documented only as investigated; not presented as a production-ready robot startup system |
 
 ## Component Bring-Up Process
 
