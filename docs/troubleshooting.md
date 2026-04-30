@@ -1,5 +1,7 @@
 # Project Troubleshooting Summary
 
+English | [한국어](ko/troubleshooting.md)
+
 This page is the engineering trouble log behind the project. It explains the hardest problems I ran into, how I split them into smaller checks, and what control or architecture changes I made in response. I tried to keep it specific where the code or notes are clear, and careful where the exact root cause was never proven perfectly.
 
 ## How To Read This Page

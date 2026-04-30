@@ -1,5 +1,7 @@
 # Hardware
 
+English | [한국어](ko/hardware.md)
+
 This page is the single hardware reference for the physical self-balancing robot. It combines the previous BOM, power/IO notes, layout interpretation, and gallery material so people do not have to jump across several small hardware documents.
 
 <table>

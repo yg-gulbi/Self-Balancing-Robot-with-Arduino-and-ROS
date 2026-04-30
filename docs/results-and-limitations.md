@@ -1,5 +1,7 @@
 # Results And Limitations
 
+English | [한국어](ko/results-and-limitations.md)
+
 This page separates the finished results, the simulation-side results, the real-world integration experiments, and the parts that should be treated as future work.
 
 ## Project Result Snapshot

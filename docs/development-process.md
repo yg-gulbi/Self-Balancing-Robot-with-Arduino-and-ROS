@@ -1,5 +1,7 @@
 # Development Process
 
+English | [한국어](ko/development-process.md)
+
 ## Purpose
 
 This page organizes the recovered build-process material into a readable story instead of dumping raw presentation decks, private chat logs, or large source files into the repository.
