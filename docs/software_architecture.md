@@ -1,12 +1,6 @@
 # Software Architecture
 
-## Overview
-
-The project evolved into three related software tracks:
-
-1. Physical robot firmware on Arduino
-2. ROS/Gazebo simulation for balancing, SLAM, and navigation
-3. Real-world ROS integration experiments for camera/SLAM/navigation bring-up
+This page is a compact map of the project structure. Detailed control logic lives in [`control_algorithm.md`](../firmware/physical_balance_controller/control_algorithm.md), ROS launch usage lives in [`ros_ws/README.md`](../ros_ws/README.md), and final claims are bounded in [`results_and_limitations.md`](results_and_limitations.md).
 
 ## Visual Architecture
 
@@ -14,75 +8,28 @@ The project evolved into three related software tracks:
   <img src="../media/diagrams/signal_control_diagram.png" alt="Signal / Control Diagram" width="900">
 </p>
 
-This diagram is the quickest way to understand the responsibility split in the project:
+## Three Paths
 
-- `Arduino Mega 2560` is the real-time balance and safety hub.
-- `ODrive 3.6` handles motor-drive execution below the balancing logic.
-- `PC + camera` represent the higher-level perception and autonomy side.
-- `Receiver + IMU` provide the physical robot's low-latency manual-command and attitude inputs.
+| Path | Role | Main entrypoint |
+| --- | --- | --- |
+| Physical firmware path | Arduino owns the real-time balance loop, reads RC/IMU feedback, and commands ODrive current. | [`firmware/physical_balance_controller`](../firmware/physical_balance_controller/README.md) |
+| ROS simulation path | Gazebo, balancing controllers, navigation, SLAM workflow launches, and PID tuning run in the curated ROS workspace. | [`ros_ws/README.md`](../ros_ws/README.md) |
+| Archived real-world integration path | Camera, TF, RViz, SLAM, navigation, and Arduino-to-ROS traces are preserved as integration evidence. | [`archive/README.md`](../archive/README.md) |
 
-For the physical device and power-routing view, pair this page with the [Wiring Diagram](../media/diagrams/wiring_diagram.png) and [hardware.md](hardware.md).
+## Control Authority
 
-## Architecture Summary
+The important architecture decision is that high-level commands do not bypass the balancing layer.
 
-```mermaid
-flowchart LR
-    TX[FrSky Taranis Q X7] --> RC[FrSky X8R]
-    RC --> Arduino[Arduino Mega 2560 Firmware]
-    IMU[BNO055 IMU] --> Arduino
-    Arduino --> ODrive[ODrive 3.6 Current Control]
-    ODrive --> Motors[36V BLDC Hub Motors]
-
-    Teleop[Teleop or move_base] --> BeforeVel[/before_vel/]
-    BeforeVel --> Balance[balance_robot_control]
-    Balance --> CmdVel[/cmd_vel/]
-    CmdVel --> Gazebo[Gazebo Robot]
-
-    Camera[Orbbec Gemini 330] --> SLAM[SLAM / TF / Navigation Launches]
+```text
+teleop or move_base
+  -> /before_vel
+  -> balance-aware controller
+  -> /cmd_vel
+  -> simulated robot
 ```
 
-## Physical Robot Path
+The physical robot follows the same philosophy at a lower level: Arduino remains close to the unstable hardware, and ROS-side work is treated as higher-level intent, visualization, or integration evidence.
 
-Representative code:
+## Scope Note
 
-- [`physical_balance_controller.ino`](../firmware/physical_balance_controller/physical_balance_controller.ino)
-- [`control_algorithm.md`](../firmware/physical_balance_controller/control_algorithm.md)
-- [`legacy_balance_controller.ino`](../archive/arduino_firmware/legacy_balance_controller.ino)
-- [`experimental_balance_controller_imu_ros.ino`](../archive/arduino_firmware/experimental_balance_controller_imu_ros.ino)
-
-Behavior:
-
-- FrSky Taranis Q X7 sends manual commands to the FrSky X8R receiver.
-- Arduino Mega 2560 reads RC PWM inputs from the FrSky X8R.
-- BNO055 provides body angle and gyro information.
-- ODrive 3.6 provides motor state and accepts current commands.
-- The balancing and driving loop runs entirely on Arduino for the physical robot.
-
-## Simulation Path
-
-Representative packages:
-
-- [`balance_robot_bringup`](../ros_ws/src/balance_robot_bringup)
-- [`balance_robot_gazebo`](../ros_ws/src/balance_robot_gazebo)
-- [`balance_robot_control`](../ros_ws/src/balance_robot_control)
-- [`navigation`](../ros_ws/src/navigation)
-
-Core idea:
-
-`move_base` or teleop does not directly drive the balancing robot. Instead, it publishes a higher-level command to `/before_vel`, and the balancing controller converts that into the final `/cmd_vel` sent to the simulated robot.
-
-This separation is one of the most important architectural choices in the project.
-
-The `Signal / Control Diagram` makes that split easier to read: navigation or autonomy belongs on the PC side, but final balancing authority remains on the Arduino side.
-
-## Real-World ROS Integration Experiments
-
-Representative archive files:
-
-- [`robot_slam.launch`](../archive/ros_experiments/real_world_integration/robot_slam.launch)
-- [`robot_navigation_lidar.launch`](../archive/ros_experiments/real_world_integration/robot_navigation_lidar.launch)
-- [`move_base.launch`](../archive/ros_experiments/real_world_integration/move_base.launch)
-
-These files show that camera/SLAM/navigation integration work was performed, but this repository does not claim verified end-to-end autonomous navigation on the physical robot.
-
-Some simulation-side depth files in the repository still use historical `d435` topic names or `realsense_ros_gazebo` assets. Those should be read as older simulation or placeholder RGB-D configurations, not as the deployed physical camera choice for the real robot.
+Real physical balancing and RC driving are completed results. ROS/Gazebo navigation and SLAM workflows are simulation-side or integration-side results. Verified end-to-end autonomous navigation on the physical balancing robot is not claimed here.

@@ -47,6 +47,52 @@ The final controller is not just one control equation. It is a stack of counterm
 | Steering plus yaw damping | Turning without destroying the common balance effort | `steering_controller`, `kpSteer`, `kdSteer` |
 | Separate ROS intent topic | Preventing high-level navigation from bypassing balance logic | `/before_vel` design in `ros_ws/src/balance_robot_control` and `ros_ws/src/navigation` |
 
+## 1A. Why Filtering Was Needed At All
+
+One of the easiest mistakes in a balancing-robot project is to treat filtering as a cosmetic cleanup step. In this project, the filters existed because several signals were noisy enough to create control problems if they were trusted raw.
+
+### The Underlying Problem
+
+The controller depended on signals that were all vulnerable in different ways:
+
+- RC PWM could jump briefly or drift around the neutral point.
+- ODrive wheel-speed feedback could contain sudden spikes, parse irregularities, or implausible jumps.
+- IMU-derived body motion was useful, but still had to coexist with calibration offset, mounting bias, and mechanical vibration.
+
+That matters because this robot was not controlling a stable plant. A short-lived bad sample was not just a logging nuisance. It could directly alter the equilibrium point, torque request, or motor activation state of an unstable machine.
+
+### What Would Go Wrong Without Filters
+
+If the raw signals were used directly, the project would face several concrete failure modes:
+
+- a short RC PWM spike could look like a real throttle or steering command
+- a tiny center-value drift could make the robot creep or keep "asking" for motion near neutral
+- a noisy engage channel could arm or disarm the motors at the wrong time
+- a spiky wheel-speed estimate could distort the speed loop and produce an exaggerated corrective current
+- a single bad encoder or ODrive read could be interpreted as a real state change instead of a measurement fault
+
+This is why the project did not rely on one generic filter. Different failure modes got different countermeasures.
+
+### What Was Introduced
+
+For RC input:
+
+- exponential low-pass filtering on `throttle`, `steering`, and `engage`
+- neutral offsets instead of assuming exact `1500 us` center
+- deadband around the neutral region
+- persistence logic before the engage signal can change motor state
+
+For wheel or ODrive feedback:
+
+- repeated defensive parsing in older firmware
+- median-style outlier replacement and adaptive threshold checks in archived firmware
+- first-order smoothing of wheel-speed estimates in the cleaned controller
+- constrained integrators so noisy speed feedback cannot accumulate forever
+
+### Why This Is A Control Design Decision
+
+The important point is that filtering here was part of the control architecture, not a post-processing detail. The project learned that `measurement trust` had to be designed explicitly. The controller only becomes meaningful after deciding which signals are trustworthy enough to influence balance, speed bias, steering, and motor activation.
+
 ## 1. RC Receiver PWM Spike And Wheel Twitch
 
 ### Symptom
@@ -289,6 +335,22 @@ The ODrive feedback path also shows evidence of defensive thinking:
 - Speed-related integrals are constrained so noisy feedback cannot accumulate unbounded correction.
 
 This suggests the project recognized a key truth of balancing systems: feedback quality is part of controller stability. A mathematically correct control law can still fail if its velocity estimate is delayed, spiky, or parsed inconsistently.
+
+### What Filtering Problem This Solved
+
+The wheel-speed path was not filtered just to make plots look nicer. It was solving a control problem:
+
+- the speed loop depends on average wheel velocity to decide how much forward or backward bias to add
+- if that velocity estimate suddenly jumps, the speed loop can inject a false correction into both motors
+- because the balance and speed terms are mixed together, a bad speed sample can contaminate the common stabilizing effort
+
+The archived firmware shows a stronger defensive version of this idea:
+
+- adaptive thresholds were computed from recent history
+- abrupt jumps were compared against those thresholds
+- samples that looked implausible were replaced by a median-like fallback instead of being trusted immediately
+
+The cleaned controller is simpler, but the design lesson stayed the same: speed feedback is useful only if it is bounded, interpretable, and resistant to one-sample corruption.
 
 ## 8. ROS Command-Path Problem And The `/before_vel` Solution
 

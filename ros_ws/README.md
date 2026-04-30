@@ -78,6 +78,18 @@ Use these as the main public-facing entrypoints.
 | Run depth navigation simulation | `roslaunch balance_robot_workflows robot_navigation_depth.launch` | You want depth data projected into a scan-like navigation pipeline |
 | Run depth SLAM simulation | `roslaunch balance_robot_workflows robot_slam_depth.launch` | You want the RGB-D/RTAB-Map SLAM experiment |
 
+## Recommended Execution Order
+
+For a first review, run the workspace in this order:
+
+1. `roslaunch balance_robot_workflows robot_control_lidar.launch`
+2. `rosrun balance_robot_control teleop_before_vel.py`
+3. `roslaunch balance_robot_workflows robot_navigation_lidar.launch`
+4. `roslaunch balance_robot_workflows robot_control_lidar_pid_tuning.launch`
+5. `roslaunch balance_robot_workflows robot_slam_depth.launch`
+
+Use the first command as the default control demo. Use navigation after the control path is working. Use PID tuning when inspecting gain behavior. Use SLAM last because it depends on the most external RGB-D packages.
+
 ## Manual Driving
 
 For manual command testing, start a control workflow first:
@@ -186,15 +198,14 @@ are not presented as a fully solved production auto-tuning system.
 | `src/navigation/` | `navigation` | `move_base`, AMCL, maps, planner parameters, and RViz configs |
 | `src/third_party/` | external packages | Optional location for dependencies not committed to this repo |
 
-## Reading Order
+## Review Path
 
-If you are reviewing the project on GitHub, read in this order:
+If you are reviewing the ROS side on GitHub, read in this order:
 
 1. [`src/balance_robot_workflows/README.md`](src/balance_robot_workflows/README.md)
 2. [`src/balance_robot_control/README.md`](src/balance_robot_control/README.md)
 3. [`src/navigation/README.md`](src/navigation/README.md)
-4. [`../docs/software_architecture.md`](../docs/software_architecture.md)
-5. [`../docs/results_and_limitations.md`](../docs/results_and_limitations.md)
+4. [`../docs/results_and_limitations.md`](../docs/results_and_limitations.md)
 
 ## Troubleshooting
 
@@ -228,5 +239,7 @@ packages, or depth-to-scan conversion packages.
 - The real physical balance loop was implemented on Arduino firmware, not ROS.
 - Physical camera, TF, and SLAM integration traces are preserved mainly in
   [`../archive/ros_experiments/real_world_integration`](../archive/ros_experiments/real_world_integration/README.md).
+- Historical workspace-name mapping is preserved in
+  [`../archive/ros_experiments/workspace_history.md`](../archive/ros_experiments/workspace_history.md).
 - End-to-end autonomous navigation on the physical balancing robot is not
   claimed as complete in this repository.

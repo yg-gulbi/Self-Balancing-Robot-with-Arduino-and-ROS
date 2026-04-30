@@ -31,12 +31,12 @@ That means navigation did not drive the robot base directly. Navigation only pro
 
 | Original role | Current location | What it does |
 | --- | --- | --- |
-| balancing control nodes | [ros_ws/src/balance_robot_control](../ros_ws/src/balance_robot_control/README.md) | file-by-file balancing controller logic, tuning helpers, auto-tuning experiments |
-| high-level launch composition | [ros_ws/src/balance_robot_workflows](../ros_ws/src/balance_robot_workflows/README.md) | bundles controller, Gazebo, SLAM, and navigation launch flows |
-| navigation stack | [ros_ws/src/navigation](../ros_ws/src/navigation/README.md) | `map_server`, `amcl`, `move_base`, map assets, DWA config |
+| balancing control nodes | [ros_ws/src/balance_robot_control](../../ros_ws/src/balance_robot_control/README.md) | file-by-file balancing controller logic, tuning helpers, auto-tuning experiments |
+| high-level launch composition | [ros_ws/src/balance_robot_workflows](../../ros_ws/src/balance_robot_workflows/README.md) | bundles controller, Gazebo, SLAM, and navigation launch flows |
+| navigation stack | [ros_ws/src/navigation](../../ros_ws/src/navigation/README.md) | `map_server`, `amcl`, `move_base`, map assets, DWA config |
 | Gazebo robot launch presets | `ros_ws/src/balance_robot_gazebo` | starts house/depth/lidar simulation worlds and controller entrypoints |
 | URDF/Xacro robot model | `ros_ws/src/balance_robot_description` | robot body, wheels, IMU, lidar/depth model definitions |
-| earlier controller variants | [archive/ros_experiments/pid_experiments](../archive/ros_experiments/pid_experiments/README.md) | older control ideas that came before the cleaned `/before_vel` structure |
+| earlier controller variants | [archive/ros_experiments/pid_experiments](pid_experiments/README.md) | older control ideas that came before the cleaned `/before_vel` structure |
 
 ### `real_br_ws_intel`
 
@@ -59,12 +59,12 @@ The important limitation is that this workspace represents integration attempts,
 
 | Original package or role | Current location | What it means |
 | --- | --- | --- |
-| historical workflow-launch layer | [archive/ros_experiments/real_world_integration/robot_slam.launch](../archive/ros_experiments/real_world_integration/robot_slam.launch), [archive/ros_experiments/real_world_integration/robot_navigation.launch](../archive/ros_experiments/real_world_integration/robot_navigation.launch) | Orbbec camera bring-up, RTAB-Map, depth-to-scan conversion, partial navigation front-end |
-| `robot_rviz` TF and RViz helpers | [archive/ros_experiments/real_world_integration/robot_description_rviz.launch](../archive/ros_experiments/real_world_integration/robot_description_rviz.launch), [imu_tf.py](../archive/ros_experiments/real_world_integration/imu_tf.py), [odom_tf.py](../archive/ros_experiments/real_world_integration/odom_tf.py), [visual_odom_tf.py](../archive/ros_experiments/real_world_integration/visual_odom_tf.py) | converts `/imu` and `/odom` into TF frames usable by RViz and SLAM |
-| launch control helper | [archive/ros_experiments/real_world_integration/launch_service.py](../archive/ros_experiments/real_world_integration/launch_service.py) | start/stop services for SLAM and navigation launch files |
+| historical workflow-launch layer | [archive/ros_experiments/real_world_integration/robot_slam.launch](real_world_integration/robot_slam.launch), [archive/ros_experiments/real_world_integration/robot_navigation.launch](real_world_integration/robot_navigation.launch) | Orbbec camera bring-up, RTAB-Map, depth-to-scan conversion, partial navigation front-end |
+| `robot_rviz` TF and RViz helpers | [archive/ros_experiments/real_world_integration/robot_description_rviz.launch](real_world_integration/robot_description_rviz.launch), [imu_tf.py](real_world_integration/imu_tf.py), [odom_tf.py](real_world_integration/odom_tf.py), [visual_odom_tf.py](real_world_integration/visual_odom_tf.py) | converts `/imu` and `/odom` into TF frames usable by RViz and SLAM |
+| launch control helper | [archive/ros_experiments/real_world_integration/launch_service.py](real_world_integration/launch_service.py) | start/stop services for SLAM and navigation launch files |
 | camera driver dependency | third-party dependency, not vendored in cleaned repo | `OrbbecSDK_ROS1` publishes `/camera/depth/image_raw`, `/camera/color/image_raw`, camera info, and camera control services |
-| physical robot `/imu` and `/odom` publishers | [archive/arduino_firmware/legacy_balance_controller.ino](../archive/arduino_firmware/legacy_balance_controller.ino), [experimental_balance_controller_imu_ros.ino](../archive/arduino_firmware/experimental_balance_controller_imu_ros.ino) | archived `rosserial` firmware traces that published robot-state topics into ROS |
-| RC-to-ROS bridge experiment | [firmware/testers/rc_to_ros_cmd_vel_bridge.ino](../firmware/testers/rc_to_ros_cmd_vel_bridge.ino) | Arduino bridge that published ROS motion commands from RC input |
+| physical robot `/imu` and `/odom` publishers | [archive/arduino_firmware/legacy_balance_controller.ino](../arduino_firmware/legacy_balance_controller.ino), [experimental_balance_controller_imu_ros.ino](../arduino_firmware/experimental_balance_controller_imu_ros.ino) | archived `rosserial` firmware traces that published robot-state topics into ROS |
+| RC-to-ROS bridge experiment | [firmware/testers/rc_to_ros_cmd_vel_bridge.ino](../../firmware/testers/rc_to_ros_cmd_vel_bridge.ino) | Arduino bridge that published ROS motion commands from RC input |
 
 ## Important Interpretation Notes
 
@@ -86,10 +86,10 @@ The original workspace also contained `robot_gazebo`, robot-description world as
 
 ## Recommended Reading Order
 
-1. [ros_ws/src/balance_robot_control/README.md](../ros_ws/src/balance_robot_control/README.md)
-2. [ros_ws/src/balance_robot_workflows/README.md](../ros_ws/src/balance_robot_workflows/README.md)
-3. [ros_ws/src/navigation/README.md](../ros_ws/src/navigation/README.md)
-4. [archive/ros_experiments/real_world_integration/README.md](../archive/ros_experiments/real_world_integration/README.md)
-5. [docs/results_and_limitations.md](results_and_limitations.md)
+1. [ros_ws/src/balance_robot_control/README.md](../../ros_ws/src/balance_robot_control/README.md)
+2. [ros_ws/src/balance_robot_workflows/README.md](../../ros_ws/src/balance_robot_workflows/README.md)
+3. [ros_ws/src/navigation/README.md](../../ros_ws/src/navigation/README.md)
+4. [archive/ros_experiments/real_world_integration/README.md](real_world_integration/README.md)
+5. [docs/results_and_limitations.md](../../docs/results_and_limitations.md)
 
 That sequence explains what the simulation workspace actually accomplished, what the cleaned package entrypoints are, and where the physical-robot ROS integration stopped.

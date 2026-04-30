@@ -1,7 +1,7 @@
 # balance_robot_control
 
-This package is the cleaned ROS control package that came out of the original
-`simul_br_ws/src/robot_controll` workspace.
+This package is the cleaned ROS control package for the current `ros_ws`
+simulation stack.
 
 Its core idea is simple but unusual:
 

@@ -4,6 +4,14 @@ End-to-end self-balancing robot project combining Arduino-based real-time contro
 
 The strongest verified result is the physical two-wheeled robot balancing and driving under Arduino control. ROS is used for simulation, visualization, navigation experiments, and Arduino-to-ROS bridge evidence, while real-world autonomous ROS navigation is documented as partial integration work rather than a completed claim.
 
+## What This Project Proves
+
+| Claim | Boundary |
+| --- | --- |
+| A real two-wheeled robot balanced and drove under Arduino control. | Completed physical result, backed by firmware and demo media. |
+| ROS/Gazebo was used for simulation, controller tuning, navigation, and SLAM workflow experiments. | Implemented as simulation and integration workflows. |
+| Arduino and ROS were connected through bridge and state-publishing experiments. | Evidence exists, but full physical autonomous navigation is not claimed. |
+
 <p align="center">
   <img src="media/hero/physical_balance_hallway.gif" alt="Physical hallway balancing demo" width="720">
 </p>
@@ -31,7 +39,7 @@ Read this first: [physical balance control algorithm](firmware/physical_balance_
 | Physical self-balancing and RC driving | Completed | [physical_balance_controller.ino](firmware/physical_balance_controller/physical_balance_controller.ino), [hallway demo](media/hero/physical_balance_hallway.gif) |
 | ROS/Gazebo balance simulation | Completed | [balance_robot_control](ros_ws/src/balance_robot_control), [balance_robot_gazebo](ros_ws/src/balance_robot_gazebo) |
 | Simulation navigation pipeline | Completed | [navigation](ros_ws/src/navigation), [balance_robot_workflows](ros_ws/src/balance_robot_workflows) |
-| Simulation SLAM/navigation launch workflow | Implemented | [balance_robot_workflows](ros_ws/src/balance_robot_workflows), [software architecture](docs/software_architecture.md) |
+| Simulation SLAM/navigation launch workflow | Implemented | [balance_robot_workflows](ros_ws/src/balance_robot_workflows), [results and limitations](docs/results_and_limitations.md) |
 | Arduino-to-ROS bridge tests | Completed | [rc_to_ros_cmd_vel_bridge.ino](firmware/testers/rc_to_ros_cmd_vel_bridge.ino), [physical_balance_controller_ros.ino](firmware/physical_balance_controller_ros/physical_balance_controller_ros.ino) |
 | Real-world ROS SLAM/navigation | Partial | [real-world integration archive](archive/ros_experiments/real_world_integration), [results and limitations](docs/results_and_limitations.md) |
 
@@ -60,7 +68,7 @@ Read this first: [physical balance control algorithm](firmware/physical_balance_
 
 Main physical hardware: Arduino Mega 2560, BNO055 IMU, ODrive 3.6, FrSky Taranis Q X7 + X8R, Orbbec Gemini 330, dual hall-sensor BLDC hub motors, 36V battery, onboard mini PC, DC-DC converters, auxiliary Arduino, and relay module.
 
-For the consolidated hardware explanation, see [docs/hardware.md](docs/hardware.md).
+For a compact software map, see [docs/software_architecture.md](docs/software_architecture.md). For the consolidated hardware explanation, see [docs/hardware.md](docs/hardware.md).
 
 ## Arduino-To-ROS Evidence
 
@@ -101,12 +109,11 @@ Full original MP4 files are intentionally not stored in this repository; lightwe
 
 ## Read Next
 
-- [Results and limitations](docs/results_and_limitations.md): clear boundary between completed work and partial integration.
-- [Development process](docs/development_process.md): compact build story from CAD and wiring to bench tests, tethered practice, and ROS simulation.
-- [Software architecture](docs/software_architecture.md): physical firmware, ROS simulation, and real-world integration tracks.
-- [Experiments](docs/experiments.md): curated test matrix and evidence links.
-- [Setup](docs/setup.md): dependencies and build expectations.
-- [Archive guide](archive/README.md): historical ROS experiments, Arduino firmware variants, and raw source material.
+1. [Physical controller](firmware/physical_balance_controller/README.md): main Arduino firmware for the real balancing robot.
+2. [Control algorithm](firmware/physical_balance_controller/control_algorithm.md): how RC input, IMU feedback, wheel speed, safety, and ODrive current control fit together.
+3. [Troubleshooting summary](docs/project_troubleshooting_summary.md): why filtering, safety gating, ODrive isolation, and staged tuning were needed.
+4. [ROS workspace guide](ros_ws/README.md): how to build and run the curated simulation, navigation, SLAM, and tuning workflows.
+5. [Final results and claim boundary](docs/results_and_limitations.md): what is completed, simulated, partial, and not claimed.
 
 ## Limitations
 

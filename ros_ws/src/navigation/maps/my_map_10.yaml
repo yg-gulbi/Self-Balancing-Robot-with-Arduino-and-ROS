@@ -1,7 +1,6 @@
-image: /home/yggulbi/simul_br_ws/src/navigation/maps/my_map_10.pgm
+image: my_map_10.pgm
 resolution: 0.050000
 origin: [-0.447280, -3.490581, 0.000000]
 negate: 0
 occupied_thresh: 0.65
 free_thresh: 0.196
-
