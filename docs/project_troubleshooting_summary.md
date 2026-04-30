@@ -40,7 +40,7 @@ The final controller is not just one control equation. It is a stack of counterm
 | Low-pass filtering on RC PWM | Short spikes and noisy command edges | `filtered_throttle_pwm`, `filtered_steering_pwm`, `filtered_engage_pwm`, `kAlpha_1`, `kAlpha_2` |
 | Neutral offset and deadband | Receiver center drift causing unintended motion | `kSteeringPwmOffset`, `kThrottlePwmOffset`, `kControlThreshold` |
 | Engage persistence | False motor enable or disable from noisy PWM | `engage_signal_persistence`, `EngageMotors()` |
-| Tilt cutoff | Preventing control action after a large fall angle | `kTiltDisengageThresholdDegrees`, `tilt_limit_exceeded` |
+| Tilt cutoff | Cutting motor command before the robot reaches a hard fall posture | `kTiltDisengageThresholdDegrees`, `tilt_limit_exceeded` |
 | Current clamp | Limiting violent recovery or runaway commands | `kMaxAbsCurrent`, `ApplyMotorCommands()` |
 | LQR-style balance term | Keeping the unstable body upright | `balance_controller` built from `theta`, `theta_dot`, `integral_error` |
 | PID-like speed correction | Making forward and backward motion coexist with balancing | `speed_control`, `kpspeed`, `kispeed`, `kdspeed` |
@@ -280,6 +280,8 @@ Key logic:
 - `abs(theta)` above `kTiltDisengageThresholdDegrees` sets `tilt_limit_exceeded`.
 - Motors can be pushed to `IDLE` instead of remaining in a control state forever.
 - Final current is constrained by `kMaxAbsCurrent`.
+
+The physical tilt cutoff was set to `30 deg` because the protection bracket touches the floor at about `28 deg`. That made the cutoff a practical damage-prevention threshold, not just an arbitrary control number.
 
 In a balancing robot, these supervisory rules are part of the control design. They are not merely protective wrappers around the "real" algorithm. The real algorithm includes the conditions under which actuation is allowed.
 

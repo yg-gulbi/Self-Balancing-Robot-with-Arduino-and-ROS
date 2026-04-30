@@ -2,19 +2,32 @@
 
 This repository is my self-balancing robot project. The real robot was controlled on Arduino, and I used ROS/Gazebo for simulation, tuning, SLAM, and navigation experiments.
 
-The main thing I actually finished was getting the physical two-wheeled robot to balance and drive under Arduino control. On the ROS side, I built simulation, visualization, navigation, and Arduino-ROS bridge experiments. Real-world autonomous ROS navigation was explored, but I do not want to overstate that part as fully finished.
+The main result is a physical two-wheeled robot that balanced for about 1 hour and drove through a 10 m hallway and obstacle course under Arduino control. On the ROS side, I built Gazebo control, navigation, SLAM map-generation, PID tuning, and Arduino-to-ROS bridge workflows.
 
 ## What I Actually Finished
 
 | What I did | How far it went |
 | --- | --- |
-| A real two-wheeled robot balanced and drove under Arduino control. | This is the strongest finished part of the project, with firmware and demo media. |
-| ROS/Gazebo was used for simulation, controller tuning, navigation, and SLAM workflows. | This part was built and organized as simulation and integration workflows. |
-| Arduino and ROS were connected through bridge and state-publishing experiments. | That part exists in code and test sketches, but I am not presenting it as full physical autonomous navigation. |
+| A real two-wheeled robot balanced and drove under Arduino control. | About 1 hour standing balance, 10 m hallway driving, and obstacle-course driving were achieved. |
+| ROS/Gazebo was used for simulation, controller tuning, navigation, and SLAM workflows. | The robot moved through the ROS navigation command path, and map generation was checked in the SLAM workflow. |
+| Arduino and ROS were connected through bridge and state-publishing experiments. | `/imu`, `/odom`, and `cmd_vel` were checked with `rostopic echo` through rosserial-style workflows. |
 
 <p align="center">
   <img src="media/hero/physical_balance_hallway.gif" alt="Physical hallway balancing demo" width="720">
 </p>
+
+## Result Snapshot
+
+| Area | Result |
+| --- | --- |
+| Physical balance duration | About 1 hour standing balance |
+| Physical driving | 10 m hallway driving and obstacle-course driving |
+| Physical safety limit | Motor command cutoff at `30 deg`, chosen because the protection bracket touches the floor at about `28 deg` |
+| ODrive current limit | `+-8 A` command clamp in firmware |
+| RC signal handling | `+-50 us` deadband, throttle/steering filter alpha `0.4`, engage filter alpha `0.02` |
+| Arduino-to-ROS bridge | `/imu`, `/odom`, and `cmd_vel` checked with `rostopic echo` |
+| ROS/Gazebo navigation | Robot motion through the ROS navigation command path was checked |
+| ROS/Gazebo SLAM | Map generation was checked in the SLAM workflow |
 
 ## Core Result
 
@@ -39,9 +52,9 @@ Start here: [physical balance control algorithm](firmware/physical_balance_contr
 | Physical self-balancing and RC driving | Completed | [physical_balance_controller.ino](firmware/physical_balance_controller/physical_balance_controller.ino), [hallway demo](media/hero/physical_balance_hallway.gif) |
 | ROS/Gazebo balance simulation | Completed | [balance_robot_control](ros_ws/src/balance_robot_control), [balance_robot_gazebo](ros_ws/src/balance_robot_gazebo) |
 | Simulation navigation pipeline | Completed | [navigation](ros_ws/src/navigation), [balance_robot_workflows](ros_ws/src/balance_robot_workflows) |
-| Simulation SLAM/navigation launch workflow | Implemented | [balance_robot_workflows](ros_ws/src/balance_robot_workflows), [results and limitations](docs/results_and_limitations.md) |
+| Simulation SLAM/navigation workflow | Completed in simulation | [balance_robot_workflows](ros_ws/src/balance_robot_workflows), [results and limitations](docs/results_and_limitations.md) |
 | Arduino-to-ROS bridge tests | Completed | [rc_to_ros_cmd_vel_bridge.ino](firmware/testers/rc_to_ros_cmd_vel_bridge.ino), [physical_balance_controller_ros.ino](firmware/physical_balance_controller_ros/physical_balance_controller_ros.ino) |
-| Real-world ROS SLAM/navigation | Partial | [real-world integration archive](archive/ros_experiments/real_world_integration), [results and limitations](docs/results_and_limitations.md) |
+| Real-world ROS SLAM/navigation | Integration experiments | [real-world integration archive](archive/ros_experiments/real_world_integration), [results and limitations](docs/results_and_limitations.md) |
 
 ## System At A Glance
 
@@ -113,11 +126,11 @@ I did not put the full original MP4 files in the repo. Instead, I kept lightweig
 2. [Control algorithm](firmware/physical_balance_controller/control_algorithm.md): how RC input, IMU feedback, wheel speed, safety, and ODrive current control fit together.
 3. [Troubleshooting summary](docs/project_troubleshooting_summary.md): why filtering, safety gating, ODrive isolation, and staged tuning were needed.
 4. [ROS workspace guide](ros_ws/README.md): how to build and run the main simulation, navigation, SLAM, and tuning workflows.
-5. [What I finished and what is still limited](docs/results_and_limitations.md): a simple boundary page so the project is not overstated.
+5. [Results and limits](docs/results_and_limitations.md): measured project results, code-defined settings, and remaining limits.
 
 ## Limitations
 
-- End-to-end autonomous ROS navigation on the physical balancing robot is not presented as fully finished here.
+- Full end-to-end autonomous ROS navigation on the physical balancing robot remains future work.
 - Some older code remains in `archive/` because it still helps explain how the project evolved.
 - Third-party ROS dependencies are not vendored into this repository.
 - Raw process files, chat exports, and full-length videos were summarized or replaced with lighter public assets.
