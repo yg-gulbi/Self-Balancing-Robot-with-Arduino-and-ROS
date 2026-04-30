@@ -1,16 +1,16 @@
 # Arduino-ROS Self-Balancing Robot
 
-End-to-end self-balancing robot project combining Arduino-based real-time control with a ROS/Gazebo simulation, tuning, SLAM, and navigation workflow.
+This repository is my self-balancing robot project. The real robot was controlled on Arduino, and I used ROS/Gazebo for simulation, tuning, SLAM, and navigation experiments.
 
-The strongest verified result is the physical two-wheeled robot balancing and driving under Arduino control. ROS is used for simulation, visualization, navigation experiments, and Arduino-to-ROS bridge evidence, while real-world autonomous ROS navigation is documented as partial integration work rather than a completed claim.
+The main thing I actually finished was getting the physical two-wheeled robot to balance and drive under Arduino control. On the ROS side, I built simulation, visualization, navigation, and Arduino-ROS bridge experiments. Real-world autonomous ROS navigation was explored, but I do not want to overstate that part as fully finished.
 
-## What This Project Proves
+## What I Actually Finished
 
-| Claim | Boundary |
+| What I did | How far it went |
 | --- | --- |
-| A real two-wheeled robot balanced and drove under Arduino control. | Completed physical result, backed by firmware and demo media. |
-| ROS/Gazebo was used for simulation, controller tuning, navigation, and SLAM workflow experiments. | Implemented as simulation and integration workflows. |
-| Arduino and ROS were connected through bridge and state-publishing experiments. | Evidence exists, but full physical autonomous navigation is not claimed. |
+| A real two-wheeled robot balanced and drove under Arduino control. | This is the strongest finished part of the project, with firmware and demo media. |
+| ROS/Gazebo was used for simulation, controller tuning, navigation, and SLAM workflows. | This part was built and organized as simulation and integration workflows. |
+| Arduino and ROS were connected through bridge and state-publishing experiments. | That part exists in code and test sketches, but I am not presenting it as full physical autonomous navigation. |
 
 <p align="center">
   <img src="media/hero/physical_balance_hallway.gif" alt="Physical hallway balancing demo" width="720">
@@ -22,7 +22,7 @@ The strongest verified result is the physical two-wheeled robot balancing and dr
   <img src="media/diagrams/physical_balance_control_loop.png" alt="Physical balance control loop" width="860">
 </p>
 
-The Arduino closes the balance loop locally: RC intent, IMU tilt/yaw feedback, wheel-speed feedback, safety checks, and ODrive current commands are blended into one real-time actuator path.
+The Arduino closes the balance loop locally. RC intent, IMU tilt and yaw feedback, wheel-speed feedback, safety checks, and ODrive current commands are all combined into one real-time control path.
 
 | Control layer | What it does |
 | --- | --- |
@@ -30,11 +30,11 @@ The Arduino closes the balance loop locally: RC intent, IMU tilt/yaw feedback, w
 | Motion | RC throttle becomes a target speed, then shifts the balance point so the robot can drive while staying upright. |
 | Safety | PWM filtering, engage persistence, tilt cutoff, and current limiting prevent bad states from reaching the motors. |
 
-Read this first: [physical balance control algorithm](firmware/physical_balance_controller/control_algorithm.md) and [troubleshooting summary](docs/project_troubleshooting_summary.md).
+Start here: [physical balance control algorithm](firmware/physical_balance_controller/control_algorithm.md) and [troubleshooting summary](docs/project_troubleshooting_summary.md).
 
-## Verified Scope
+## Project Scope
 
-| Area | Status | Evidence |
+| Area | Status | Where to look |
 | --- | --- | --- |
 | Physical self-balancing and RC driving | Completed | [physical_balance_controller.ino](firmware/physical_balance_controller/physical_balance_controller.ino), [hallway demo](media/hero/physical_balance_hallway.gif) |
 | ROS/Gazebo balance simulation | Completed | [balance_robot_control](ros_ws/src/balance_robot_control), [balance_robot_gazebo](ros_ws/src/balance_robot_gazebo) |
@@ -70,9 +70,9 @@ Main physical hardware: Arduino Mega 2560, BNO055 IMU, ODrive 3.6, FrSky Taranis
 
 For a compact software map, see [docs/software_architecture.md](docs/software_architecture.md). For the consolidated hardware explanation, see [docs/hardware.md](docs/hardware.md).
 
-## Arduino-To-ROS Evidence
+## Why The Title Includes Arduino And ROS
 
-The project title uses `Arduino-ROS` because Arduino handled the physical robot and bridge-side publishing, while ROS/Gazebo handled simulation, visualization, SLAM/navigation workflows, and integration experiments.
+I kept `Arduino-ROS` in the title because the project really used both sides. Arduino handled the physical robot and some ROS publishing tests, while ROS/Gazebo handled simulation, visualization, SLAM and navigation workflows, and integration experiments.
 
 | Sketch | ROS role | Published data |
 | --- | --- | --- |
@@ -98,26 +98,26 @@ roslaunch balance_robot_workflows robot_navigation_lidar.launch
 
 Use [ros_ws/README.md](ros_ws/README.md) for workspace usage and [balance_robot_control/README.md](ros_ws/src/balance_robot_control/README.md) for the controller package layout.
 
-## Public Demos
+## Demo Media
 
 - [Physical hallway balancing GIF](media/hero/physical_balance_hallway.gif)
 - [Physical obstacle-course balancing GIF](media/demos/physical_balance_obstacle_course.gif)
 - [Robot-focused hallway still](media/demos/hallway_robot_only.jpg)
 - [Open-front hardware photo](media/hardware/robot_open_front.png)
 
-Full original MP4 files are intentionally not stored in this repository; lightweight public-safe GIFs and cropped images are used instead.
+I did not put the full original MP4 files in the repo. Instead, I kept lightweight GIFs and cropped images so the repository stays easier to browse.
 
 ## Read Next
 
 1. [Physical controller](firmware/physical_balance_controller/README.md): main Arduino firmware for the real balancing robot.
 2. [Control algorithm](firmware/physical_balance_controller/control_algorithm.md): how RC input, IMU feedback, wheel speed, safety, and ODrive current control fit together.
 3. [Troubleshooting summary](docs/project_troubleshooting_summary.md): why filtering, safety gating, ODrive isolation, and staged tuning were needed.
-4. [ROS workspace guide](ros_ws/README.md): how to build and run the curated simulation, navigation, SLAM, and tuning workflows.
-5. [Final results and claim boundary](docs/results_and_limitations.md): what is completed, simulated, partial, and not claimed.
+4. [ROS workspace guide](ros_ws/README.md): how to build and run the main simulation, navigation, SLAM, and tuning workflows.
+5. [What I finished and what is still limited](docs/results_and_limitations.md): a simple boundary page so the project is not overstated.
 
 ## Limitations
 
-- End-to-end autonomous ROS navigation on the physical balancing robot is not claimed.
-- Some historical code remains in `archive/` only as evidence of earlier integration attempts.
+- End-to-end autonomous ROS navigation on the physical balancing robot is not presented as fully finished here.
+- Some older code remains in `archive/` because it still helps explain how the project evolved.
 - Third-party ROS dependencies are not vendored into this repository.
-- Original raw process files, chat exports, and full-length videos are summarized or replaced with public-safe assets.
+- Raw process files, chat exports, and full-length videos were summarized or replaced with lighter public assets.

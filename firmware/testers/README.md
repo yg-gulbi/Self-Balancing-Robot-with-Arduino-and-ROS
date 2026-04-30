@@ -11,4 +11,4 @@ The clearest Arduino-to-ROS example here is `rc_to_ros_cmd_vel_bridge.ino`, whic
 - [`receiver_pwm_test`](receiver_pwm_test/receiver_pwm_test.ino): FrSky receiver PWM pulse-width inspection sketch, based on HoverBot's receiver test workflow
 - [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md): attribution and license notes for referenced public test code
 
-These files are useful evidence for subsystem testing, but they are not the main physical balancing controller.
+These files are useful for subsystem testing, but they are not the main physical balancing controller.

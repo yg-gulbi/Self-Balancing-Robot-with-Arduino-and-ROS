@@ -1,26 +1,26 @@
-# Final Results And Claim Boundary
+# What I Finished And What I Didn't
 
-This page is the repository's scope boundary. It separates what was completed, what was implemented in simulation, what remains partial integration evidence, and what is not claimed.
+I wrote this page so the project reads clearly without sounding bigger than it really was. It separates the parts I finished, the parts I built in simulation, the parts I only got partway through on the real robot, and the parts I do not want to pretend were completed.
 
-## Claim Boundary
+## Summary
 
-| Status | Area | Public claim | Main evidence |
+| Status | Area | What I can say honestly | Where to look |
 | --- | --- | --- | --- |
-| Completed | Physical self-balancing and RC driving | The real two-wheeled robot balanced and drove under Arduino control. | [`physical_balance_controller.ino`](../firmware/physical_balance_controller/physical_balance_controller.ino), [`physical_balance_hallway.gif`](../media/hero/physical_balance_hallway.gif), [`physical_balance_obstacle_course.gif`](../media/demos/physical_balance_obstacle_course.gif) |
-| Completed | Arduino-to-ROS bridge evidence | Arduino sketches published robot or command data into ROS through `rosserial`-style workflows. | [`physical_balance_controller_ros.ino`](../firmware/physical_balance_controller_ros/physical_balance_controller_ros.ino), [`rc_to_ros_cmd_vel_bridge.ino`](../firmware/testers/rc_to_ros_cmd_vel_bridge.ino), [`archive/arduino_firmware`](../archive/arduino_firmware/README.md) |
-| Completed | Hardware and subsystem bring-up | ODrive, BNO055, FrSky receiver, motor feedback, and power/control packaging were brought up as part of the physical robot. | [`hardware.md`](hardware.md), [`experiments.md`](experiments.md), [`development_process.md`](development_process.md) |
-| Implemented in simulation | ROS/Gazebo balancing workflow | The balancing robot was modeled and controlled in Gazebo with ROS control nodes. | [`ros_ws/README.md`](../ros_ws/README.md), [`balance_robot_control`](../ros_ws/src/balance_robot_control/README.md), [`balance_robot_workflows`](../ros_ws/src/balance_robot_workflows/README.md) |
-| Implemented in simulation | Navigation command pipeline | Navigation output was routed through `/before_vel` before reaching final `/cmd_vel`. | [`ros_ws/README.md`](../ros_ws/README.md), [`navigation`](../ros_ws/src/navigation/README.md) |
-| Implemented in simulation | SLAM/navigation launch workflow | Depth-camera and SLAM-oriented launch composition exists as a simulation/integration workflow. | [`robot_slam_depth.launch`](../ros_ws/src/balance_robot_workflows/launch/robot_slam_depth.launch), [`ros_ws/README.md`](../ros_ws/README.md) |
-| Partial integration | Real-world ROS camera/SLAM/navigation | Camera, TF, RViz, SLAM, and navigation bring-up traces exist, but full physical autonomous navigation is not claimed. | [`archive/ros_experiments/real_world_integration`](../archive/ros_experiments/real_world_integration/README.md) |
-| Not claimed | End-to-end autonomous navigation on the physical robot | The repository does not claim a verified physical robot that autonomously maps, localizes, plans, and drives to goals while balancing. | This page and [`README.md`](../README.md) |
-| Not claimed | Fully reproducible hardware rebuild | The cleaned repository documents the project and preserves evidence, but it is not a complete manufacturing or wiring reproduction package. | [`hardware.md`](hardware.md), [`archive/README.md`](../archive/README.md) |
+| Finished | Physical self-balancing and RC driving | The real two-wheeled robot balanced and drove under Arduino control. | [`physical_balance_controller.ino`](../firmware/physical_balance_controller/physical_balance_controller.ino), [`physical_balance_hallway.gif`](../media/hero/physical_balance_hallway.gif), [`physical_balance_obstacle_course.gif`](../media/demos/physical_balance_obstacle_course.gif) |
+| Finished | Arduino-to-ROS bridge tests | I made Arduino sketches that published robot or command data into ROS through `rosserial`-style workflows. | [`physical_balance_controller_ros.ino`](../firmware/physical_balance_controller_ros/physical_balance_controller_ros.ino), [`rc_to_ros_cmd_vel_bridge.ino`](../firmware/testers/rc_to_ros_cmd_vel_bridge.ino), [`archive/arduino_firmware`](../archive/arduino_firmware/README.md) |
+| Finished | Hardware and subsystem bring-up | ODrive, BNO055, FrSky receiver, motor feedback, and the main power/control packaging were all brought up on the real robot. | [`hardware.md`](hardware.md), [`experiments.md`](experiments.md), [`development_process.md`](development_process.md) |
+| Built in simulation | ROS/Gazebo balancing workflow | The balancing robot was modeled and controlled in Gazebo with ROS control nodes. | [`ros_ws/README.md`](../ros_ws/README.md), [`balance_robot_control`](../ros_ws/src/balance_robot_control/README.md), [`balance_robot_workflows`](../ros_ws/src/balance_robot_workflows/README.md) |
+| Built in simulation | Navigation command pipeline | Navigation output was routed through `/before_vel` before reaching final `/cmd_vel`. | [`ros_ws/README.md`](../ros_ws/README.md), [`navigation`](../ros_ws/src/navigation/README.md) |
+| Built in simulation | SLAM and navigation launch workflow | Depth-camera and SLAM-oriented launch composition exists on the simulation and integration side. | [`robot_slam_depth.launch`](../ros_ws/src/balance_robot_workflows/launch/robot_slam_depth.launch), [`ros_ws/README.md`](../ros_ws/README.md) |
+| Tried on the real robot, but not fully finished | Real-world ROS camera/SLAM/navigation | Camera, TF, RViz, SLAM, and navigation bring-up traces exist, but I am not calling this full physical autonomous navigation. | [`archive/ros_experiments/real_world_integration`](../archive/ros_experiments/real_world_integration/README.md) |
+| Not finished | End-to-end autonomous navigation on the physical robot | This repository does not show a real balancing robot that maps, localizes, plans, and drives to goals fully on its own. | This page and [`README.md`](../README.md) |
+| Not finished | Fully reproducible hardware rebuild package | The repository explains the robot well, but it is not a complete manufacturing or wiring reproduction package. | [`hardware.md`](hardware.md), [`archive/README.md`](../archive/README.md) |
 
-## Why This Boundary Matters
+## Why I Wrote This
 
-The strongest result is the physical balancing robot and the control work around it. The ROS side is valuable because it shows simulation, navigation adaptation, tuning workflows, and integration experiments, but it should not be read as proof of completed autonomous navigation on the real robot.
+The strongest part of this project is the physical balancing robot and the control work around it. The ROS side still matters because it shows simulation, navigation adaptation, tuning workflows, and integration experiments, but I do not want it to read like I fully finished autonomous navigation on the real robot when I did not.
 
-This distinction protects the project from overclaiming while still showing the full-stack robotics process:
+I still wanted the repository to show the full robotics process:
 
 - low-level embedded balancing control
 - noisy sensor and RC signal handling
@@ -29,9 +29,9 @@ This distinction protects the project from overclaiming while still showing the 
 - navigation command adaptation for an unstable balancing platform
 - partial real-world ROS integration around camera, TF, and robot-state publishing
 
-## Current Gaps
+## What Is Still Missing
 
-- Full physical autonomous ROS navigation is not verified in this repository.
+- Full physical autonomous ROS navigation is not finished in this repository.
 - Third-party ROS dependencies are documented but not vendored.
-- Full-length original videos are replaced by lightweight public-safe GIFs and stills.
-- Historical workspaces are preserved under `archive/`, not presented as the main runnable stack.
+- Full-length original videos are replaced by lighter GIFs and stills.
+- Older workspaces are kept under `archive/`, not presented as the main runnable stack.

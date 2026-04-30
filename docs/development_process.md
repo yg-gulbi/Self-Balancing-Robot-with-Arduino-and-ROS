@@ -2,11 +2,11 @@
 
 ## Purpose
 
-This page summarizes the recovered build-process material as visual evidence instead of publishing raw presentation decks, private chat logs, or large source files.
+This page organizes the recovered build-process material into a readable story instead of dumping raw presentation decks, private chat logs, or large source files into the repository.
 
-The goal is to show how the robot progressed from concept, CAD assembly, wiring, bench tests, tethered driving practice, and simulation into the verified portfolio claims.
+The goal is to show how the robot moved from concept, CAD assembly, wiring, bench tests, tethered driving practice, and simulation into the final project results.
 
-## Visual Build Evidence
+## Visual Build Story
 
 ### 1. Concept And Mechanical Assembly
 
@@ -42,27 +42,27 @@ Before the completed robot demos, the wheel/motor/control electronics were teste
 
 The tethered driving photos show the practical safety step between bench testing and free driving. The robot was practiced with an overhead support line while balance and drive parameters were adjusted.
 
-### 6. Simulation And Navigation Evidence
+### 6. Simulation And Navigation
 
 ![Simulation navigation views](../media/process/simulation_unreal_navigation_views.jpg)
 
-The simulation screenshots show the parallel ROS/Gazebo track: simulated robot placement, map/navigation views, and environment testing. This supports the repository's separation between completed simulation navigation and partial physical autonomous navigation.
+The simulation screenshots show the parallel ROS/Gazebo track: simulated robot placement, map and navigation views, and environment testing. This is why the repository treats simulation navigation as a finished software-side result, while physical autonomous navigation stays in the partial category.
 
 ## Build Timeline
 
-| Phase | Focus | Public interpretation | Outcome |
+| Phase | Focus | What that stage meant | Outcome |
 | --- | --- | --- | --- |
 | Concept definition | Two-wheeled guide robot with mobility, maneuverability, and efficient space use | Final presentation material framed the robot as a compact mobile guidance platform | Project goal narrowed to a balancing robot plus ROS navigation exploration |
 | Subsystem planning | ODrive 3.6, Arduino Mega 2560, BNO055 IMU, FrSky Taranis Q X7 + X8R, Orbbec Gemini 330, and power conversion | Research notes and weekly reports separated hardware control from ROS navigation work | Main workstreams became physical balance control and ROS/Gazebo simulation |
 | ODrive and motor bring-up | Ubuntu setup, ODrive tooling, voltage checks, firmware setup, motor and hall-sensor connection | Weekly report material records staged motor-controller bring-up before full robot integration | Motor control path was validated before balancing experiments |
 | Control integration | Arduino Mega 2560, BNO055 IMU, FrSky X8R receiver, and ODrive command path | Firmware and process notes show IMU feedback, RC input, and motor command integration | Physical balancing and RC driving became the strongest real-world result |
-| Hardware assembly | Internal placement, wiring, battery pack, converter chain, relay/auxiliary area | Recovered wiring notes and internal photo were converted into public diagrams and photos | Public hardware evidence now uses raw photos plus the Wiring Diagram |
-| ROS simulation and navigation | Gazebo balancing robot, `/before_vel`, SLAM/navigation launch composition | ROS packages show simulation control, mapping/navigation experiments, and launch integration | Simulation navigation is documented as completed; physical autonomous navigation is not claimed |
-| Portfolio recovery | Curated demos, firmware, ROS packages, archived notes, and public-safe media | Raw project material was summarized instead of copied wholesale | Repository now separates final evidence from archived experiments and research material |
+| Hardware assembly | Internal placement, wiring, battery pack, converter chain, relay/auxiliary area | Recovered wiring notes and the internal photo were turned into cleaner public diagrams and photos | The hardware section now uses the raw photo plus the Wiring Diagram |
+| ROS simulation and navigation | Gazebo balancing robot, `/before_vel`, SLAM/navigation launch composition | ROS packages show simulation control, mapping and navigation experiments, and launch integration | Simulation navigation is treated as completed; physical autonomous navigation is not |
+| Portfolio recovery | Demos, firmware, ROS packages, archived notes, and lighter media | Raw project material was summarized instead of copied wholesale | The repository now separates the main results from older experiments and research material |
 
 ## Functional Workstreams
 
-| Workstream | What it covered | Public evidence |
+| Workstream | What it covered | Main files or media |
 | --- | --- | --- |
 | ODrive / motor | Motor controller setup, hall-sensor feedback, motor synchronization, current control experiments | `firmware/physical_balance_controller`, `firmware/testers/motor_current_test`, `firmware/testers/odrive_receiver_test`, `archive/arduino_firmware`, hardware photos |
 | FrSky radio path | X8R PWM input, Taranis Q X7 manual commands, and engage/throttle/steering interpretation | `physical_balance_controller.ino`, `receiver_pwm_test.ino`, `rc_to_ros_cmd_vel_bridge.ino`, receiver troubleshooting notes |
@@ -83,32 +83,32 @@ The recovered process material shows that each major part was brought up separat
 | FrSky X8R + Taranis Q X7 | Convert manual remote input into safe steering, throttle, and engage commands | Measured PWM pulse width with interrupts, filtered noisy channel values, added thresholds around neutral, and used engage persistence to avoid accidental motor activation | Used for manual driving while balancing and for RC-to-ROS bridge testing |
 | Arduino Mega 2560 | Keep the low-level balance loop deterministic and independent from ROS | Integrated PWM input, IMU readings, ODrive serial communication, safety checks, and current-command output in one firmware loop | Became the main physical controller for the completed real robot behavior |
 | Power chain | Feed motor power, onboard compute, and low-voltage auxiliaries from one robot package | Recovered wiring notes show a 36V main bus, a 36V to 19V conversion stage, and a 19V to 5V stage for lower-voltage electronics | Documented through the clean power/IO diagram and internal hardware photo |
-| Orbbec Gemini 330 | Explore perception hardware for SLAM/navigation | Compared depth-camera capability and SLAM approaches before the physical autonomous navigation path was fully completed | Kept as deployed sensor-head evidence and research context, not as a completed physical navigation claim |
-| ROS/Gazebo stack | Test balancing/navigation ideas without risking hardware | Built simulation launch files, separated navigation command input through `/before_vel`, and tuned control behavior in Gazebo | Used as the completed simulation and navigation evidence track |
+| Orbbec Gemini 330 | Explore perception hardware for SLAM/navigation | Compared depth-camera capability and SLAM approaches before the physical autonomous navigation path was fully completed | Kept as deployed sensor-head hardware and research context, not as a finished physical navigation result |
+| ROS/Gazebo stack | Test balancing/navigation ideas without risking hardware | Built simulation launch files, separated navigation command input through `/before_vel`, and tuned control behavior in Gazebo | Used as the main simulation and navigation track |
 
 ## Trial-And-Error Highlights
 
 | Challenge | Iteration path | Lesson captured in the repository |
 | --- | --- | --- |
-| Real balancing was sensitive to small tuning changes | Started with subsystem checks, then combined IMU angle, gyro rate, wheel speed feedback, and ODrive current commands under safety limits | Physical balancing should be judged through the final controller and curated demos, not by raw notes alone |
+| Real balancing was sensitive to small tuning changes | Started with subsystem checks, then combined IMU angle, gyro rate, wheel speed feedback, and ODrive current commands under safety limits | Physical balancing makes the most sense when you look at the final controller and demos, not just scattered raw notes |
 | RC input could jump or drift around neutral | PWM values were filtered, neutral thresholds were added, and engage logic required persistence before motor activation | Manual control was treated as a signal-processing problem, not just a wiring task |
 | Motor feedback could produce unstable behavior if trusted blindly | Encoder speed history and filtering were used to reduce the effect of abnormal readings | Feedback quality mattered as much as the controller equation |
 | IMU calibration affected repeatability | BNO055 calibration offsets were saved and loaded, and calibration status was exposed through serial output | Sensor calibration became part of the operating process |
 | Hardware packaging created interpretation risk | Internal photos showed the real layout, but exact labels could be misleading if drawn directly on the image | Public docs now use raw photos plus a clean diagram instead of uncertain photo annotations |
-| SLAM/navigation ambition exceeded verified physical evidence | Visual/depth SLAM and RTAB-Map/ORB-SLAM2 were researched while simulation navigation matured | The repository separates completed simulation work from partial physical integration |
+| SLAM/navigation ambition went further than the finished physical result | Visual/depth SLAM and RTAB-Map/ORB-SLAM2 were researched while simulation navigation matured | The repository separates completed simulation work from partial physical integration |
 
 ## Problems And Resolutions
 
 | Problem | What was learned | Portfolio-safe result |
 | --- | --- | --- |
-| Balance tuning on the real robot was sensitive to hall-sensor and IMU feedback | Physical testing needed staged safety setup and iterative parameter adjustment | Real balancing is shown through curated physical demo media and firmware |
+| Balance tuning on the real robot was sensitive to hall-sensor and IMU feedback | Physical testing needed staged safety setup and iterative parameter adjustment | Real balancing is shown through the physical demo media and firmware |
 | FrSky receiver signals were vulnerable to wiring length and noise concerns | Shorter wiring, better connections, shielding/twisted signal-ground routing, and filtering were identified as mitigations | Troubleshooting is documented as engineering process, not as a final wiring guarantee |
 | Depth-camera and SLAM options had integration uncertainty | Orbbec Gemini 330, ORB-SLAM2, and RTAB-Map were compared before final physical navigation was complete | Simulation and integration experiments are documented separately from completed physical balancing |
-| Raw project files mixed useful evidence with private or noisy material | Public docs summarize the technical process and omit chat logs and raw decks | GitHub remains reviewer-friendly and avoids publishing unnecessary personal material |
+| Raw project files mixed useful material with private or noisy material | Public docs summarize the technical process and omit chat logs and raw decks | GitHub stays cleaner and avoids publishing unnecessary personal material |
 
-## Final Public Claims
+## Final Summary
 
-- Real robot balancing and RC driving were completed and are backed by firmware plus curated demo media.
+- Real robot balancing and RC driving were completed and are backed by firmware plus demo media.
 - ROS/Gazebo balancing, SLAM-related launch composition, and simulation navigation were completed as software-side work.
-- Real-world ROS SLAM/navigation integration existed as experiments, but full autonomous navigation on the physical robot is not claimed.
+- Real-world ROS SLAM/navigation integration existed as experiments, but full autonomous navigation on the physical robot is not presented as finished.
 - Raw process artifacts are treated as source material for these summaries, not as primary public deliverables.

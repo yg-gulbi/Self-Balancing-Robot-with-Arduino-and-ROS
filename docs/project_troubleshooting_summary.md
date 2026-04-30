@@ -1,14 +1,14 @@
 # Project Troubleshooting Summary
 
-This page explains the hardest engineering problems in the project, how they were isolated, and what control or architecture changes were introduced in response. It is written for technical review: specific where evidence is strong, conservative where the exact root cause was not fully proven.
+This page is the engineering trouble log behind the project. It explains the hardest problems I ran into, how I split them into smaller checks, and what control or architecture changes I made in response. I tried to keep it specific where the code or notes are clear, and careful where the exact root cause was never proven perfectly.
 
 ## How To Read This Page
 
-- `Confirmed`: supported directly by firmware, tester sketches, public docs, or repeatable project notes.
-- `Likely inference`: the strongest explanation consistent with the evidence, but not a formally proven root cause.
-- `Not claimed`: something that may have been explored, but is not presented as a verified final result.
+- `Confirmed`: directly supported by firmware, tester sketches, public docs, or repeatable project notes.
+- `Likely inference`: the explanation that fits the project material best, even if I cannot prove it like a lab result.
+- `Not claimed`: something I may have explored, but I am not presenting it as a finished final result.
 
-## Evidence Scope
+## What This Summary Is Based On
 
 This summary is based primarily on:
 
@@ -19,14 +19,14 @@ This summary is based primarily on:
 - `ros_ws/src/*`
 - `docs/*.md`
 
-External references influenced the interpretation where relevant, especially for ODrive hoverboard bring-up and RF or EMI behavior, but the main goal of this page is to explain what this specific project did in practice.
+External references helped where it made sense, especially around ODrive hoverboard bring-up and RF or EMI behavior, but the main goal of this page is to explain what this specific project actually did in practice.
 
 ## High-Level Problem Map
 
-| Area | Main symptom | How it was isolated | Main mitigation or design response | Confidence |
+| Area | Main symptom | How it was isolated | Main mitigation or design response | How sure I am |
 | --- | --- | --- | --- | --- |
-| RC receiver path | Wheel twitch and PWM spikes | Serial monitoring, wiring changes, metal proximity sensitivity, foil experiment | Better receiver placement, twisted signal-ground routing, filtering, deadband, engage persistence | Confirmed plus likely inference |
-| ODrive path | Intermittent uncontrolled motor behavior | Hall test, receiver test, Arduino path checks, ODrive-focused tester sketches, firmware downgrade result | Firmware downgrade plus tighter safety gating in the controller | Confirmed plus likely inference |
+| RC receiver path | Wheel twitch and PWM spikes | Serial monitoring, wiring changes, metal proximity sensitivity, foil experiment | Better receiver placement, twisted signal-ground routing, filtering, deadband, engage persistence | Mostly confirmed, with some inference |
+| ODrive path | Intermittent uncontrolled motor behavior | Hall test, receiver test, Arduino path checks, ODrive-focused tester sketches, firmware downgrade result | Firmware downgrade plus tighter safety gating in the controller | Mostly confirmed, with some inference |
 | Physical balancing | Fall risk and extreme tuning sensitivity | Tethered practice, staged subsystem bring-up, gain iteration | LQR-style balance term, speed loop, steering loop, current clamp, tilt cutoff | Confirmed |
 | IMU repeatability | Balance point drift and inconsistent upright reference | Calibration checks, saved offsets, angle offset tuning | BNO055 calibration handling and explicit `imu_angle_offset` | Confirmed |
 | Navigation command path | High-level ROS commands could not directly drive a balancing robot | Simulation controller design and `/before_vel` pipeline | Separate navigation intent from final low-level balance output | Confirmed |
@@ -35,7 +35,7 @@ External references influenced the interpretation where relevant, especially for
 
 The final controller is not just one control equation. It is a stack of countermeasures that came from real hardware failures and tuning lessons.
 
-| Technique | Problem it addresses | Code evidence |
+| Technique | Problem it addresses | Where it shows up in code |
 | --- | --- | --- |
 | Low-pass filtering on RC PWM | Short spikes and noisy command edges | `filtered_throttle_pwm`, `filtered_steering_pwm`, `filtered_engage_pwm`, `kAlpha_1`, `kAlpha_2` |
 | Neutral offset and deadband | Receiver center drift causing unintended motion | `kSteeringPwmOffset`, `kThrottlePwmOffset`, `kControlThreshold` |
@@ -91,7 +91,7 @@ For wheel or ODrive feedback:
 
 ### Why This Is A Control Design Decision
 
-The important point is that filtering here was part of the control architecture, not a post-processing detail. The project learned that `measurement trust` had to be designed explicitly. The controller only becomes meaningful after deciding which signals are trustworthy enough to influence balance, speed bias, steering, and motor activation.
+The important point is that filtering here was part of the control architecture, not a post-processing detail. I ended up learning that `measurement trust` had to be designed explicitly. The controller only becomes meaningful after deciding which signals are trustworthy enough to affect balance, speed bias, steering, and motor activation.
 
 ## 1. RC Receiver PWM Spike And Wheel Twitch
 
@@ -106,7 +106,7 @@ During physical driving and balancing bring-up, the wheel could twitch even when
 - The problem changed noticeably depending on receiver placement near metal structure.
 - An aluminum-foil troubleshooting experiment was tried to test whether nearby conductive material was affecting the signal path.
 
-### What The Evidence Suggested
+### What It Most Likely Meant
 
 The strongest explanation is a combination of RF placement sensitivity and ordinary signal-integrity problems on single-ended PWM lines:
 
@@ -153,20 +153,20 @@ The project did not immediately blame the whole robot. It broke the problem into
 
 That isolation process is important because it shows the failure was treated as a system-debugging problem, not as random gain tuning.
 
-### Most Defensible Conclusion
+### Most Honest Conclusion
 
 The most defensible public statement is:
 
 > The runaway issue was isolated toward the ODrive firmware or hoverboard hall-sensor bring-up path rather than being proven as a receiver-side or Arduino-side PWM problem.
 
-Why that statement is reasonable:
+Why I think that statement is fair:
 
 - Hall testing looked normal enough to keep investigating elsewhere.
 - Receiver PWM issues existed, but they did not fully explain the ODrive-specific symptom pattern.
 - A known ODrive community pattern existed around hoverboard hall behavior after firmware `0.5.1`.
 - Downgrading firmware removed the runaway symptom in this project.
 
-The exact firmware-level root cause was not formally proven, so the strongest honest wording is `empirically solved by firmware downgrade`, not `fully root-caused firmware bug`.
+The exact firmware-level root cause was not formally proven, so the most honest wording is `empirically solved by firmware downgrade`, not `fully root-caused firmware bug`.
 
 ### What Was Introduced In Response
 
@@ -328,7 +328,7 @@ The project learned that `upright` is not a purely theoretical reference. It is 
 
 ## 7. Wheel-Speed Feedback Trust And Serial Robustness
 
-The ODrive feedback path also shows evidence of defensive thinking:
+The ODrive feedback path also shows the same defensive mindset:
 
 - Legacy firmware used repeated reads, smoothing, and outlier handling around ODrive feedback.
 - The final controller flushes `Serial3` before and after wheel-speed reads.
@@ -395,8 +395,8 @@ That pattern led to concrete design responses:
 - explicit safety supervision
 - a separate ROS intent topic instead of direct final velocity control
 
-## Reviewer-Safe Summary
+## Short Version
 
-If this project needs to be summarized briefly for a reviewer or interview:
+If I had to summarize this project briefly for a reviewer or interview:
 
 > The main challenge was not deriving one balancing equation in isolation, but making the full sensing, RC, motor-control, and safety loop trustworthy on real hardware. Receiver PWM noise was reduced through placement, routing, filtering, deadband, and engage persistence. ODrive runaway behavior was isolated toward the firmware or hoverboard hall path and was empirically stabilized by downgrading firmware. The final controller used LQR-style body-angle feedback, PID-like speed bias, steering and yaw damping, current limiting, tilt cutoff, and activation gating so the robot could balance and drive without letting any one noisy subsystem take over the actuators directly.

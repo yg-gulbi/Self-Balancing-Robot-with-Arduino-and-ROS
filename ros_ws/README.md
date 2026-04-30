@@ -1,14 +1,14 @@
 # ROS Workspace Guide
 
-This folder is the curated ROS workspace for the self-balancing robot project.
-It is meant to explain how the simulation, balancing controller, SLAM, and
-navigation launch files fit together.
+This folder is the main ROS workspace for the self-balancing robot project.
+It shows how the simulation, balancing controller, SLAM, and navigation launch
+files fit together.
 
 The physical robot's fast balance loop runs on Arduino. In this workspace, ROS
 is used for Gazebo simulation, workflow orchestration, navigation, SLAM, RViz,
 and controller tuning experiments.
 
-## Core Command Flow
+## Main Command Flow
 
 The key idea is that high-level commands do not drive the balancing robot
 directly.
@@ -65,7 +65,7 @@ anything from this workspace.
 
 ## Quick Start
 
-Use these as the main public-facing entrypoints.
+These are the launch files I would start with.
 
 | Goal | Command | Use this when |
 | --- | --- | --- |
@@ -88,7 +88,7 @@ For a first review, run the workspace in this order:
 4. `roslaunch balance_robot_workflows robot_control_lidar_pid_tuning.launch`
 5. `roslaunch balance_robot_workflows robot_slam_depth.launch`
 
-Use the first command as the default control demo. Use navigation after the control path is working. Use PID tuning when inspecting gain behavior. Use SLAM last because it depends on the most external RGB-D packages.
+Use the first command as the default control demo. Move on to navigation after the control path is working. Use PID tuning when you want to inspect gain behavior. Leave SLAM for last because it depends on the most external RGB-D packages.
 
 ## Manual Driving
 
@@ -172,8 +172,9 @@ The control package also keeps automated tuning experiments:
 - `src/balance_robot_control/src/tuning_tools/pid_loop_test_runner.py`
 - `src/balance_robot_control/src/tuning_tools/pid_reconfigure_client.py`
 
-These scripts are evidence of repeated controller-evaluation experiments. They
-are not presented as a fully solved production auto-tuning system.
+These scripts show that I tried repeated controller-evaluation and tuning
+experiments. I do not present them as a fully solved production auto-tuning
+system.
 
 ## Topic Contract
 
@@ -198,9 +199,9 @@ are not presented as a fully solved production auto-tuning system.
 | `src/navigation/` | `navigation` | `move_base`, AMCL, maps, planner parameters, and RViz configs |
 | `src/third_party/` | external packages | Optional location for dependencies not committed to this repo |
 
-## Review Path
+## If You Want To Read The ROS Side Quickly
 
-If you are reviewing the ROS side on GitHub, read in this order:
+I would read the ROS side in this order:
 
 1. [`src/balance_robot_workflows/README.md`](src/balance_robot_workflows/README.md)
 2. [`src/balance_robot_control/README.md`](src/balance_robot_control/README.md)
@@ -235,11 +236,11 @@ packages, or depth-to-scan conversion packages.
 
 ## Scope And Limits
 
-- This is strongest as a simulation and integration workspace.
+- This workspace is strongest on the simulation and integration side.
 - The real physical balance loop was implemented on Arduino firmware, not ROS.
 - Physical camera, TF, and SLAM integration traces are preserved mainly in
   [`../archive/ros_experiments/real_world_integration`](../archive/ros_experiments/real_world_integration/README.md).
 - Historical workspace-name mapping is preserved in
   [`../archive/ros_experiments/workspace_history.md`](../archive/ros_experiments/workspace_history.md).
 - End-to-end autonomous navigation on the physical balancing robot is not
-  claimed as complete in this repository.
+  presented as fully finished in this repository.

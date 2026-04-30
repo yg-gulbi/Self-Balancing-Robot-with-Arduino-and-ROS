@@ -1,13 +1,13 @@
 # Media
 
-This directory stores only public-ready media assets with curated names.
+This directory stores only the media that I wanted to keep in the public repository, with cleaner filenames.
 
 ## Structure
 
 - `hero/`: README hero asset
 - `demos/`: supporting physical demo GIFs and stills
 - `hardware/`: hardware photos used to support the public device story
-- `process/`: public-safe build-process images such as bench tests, tethered practice, and CAD screenshots
+- `process/`: build-process images such as bench tests, tethered practice, and CAD screenshots
 - `diagrams/`: canonical GitHub-facing architecture diagrams used across the docs
 - `links.md`: policy for full-length original clips
 
@@ -21,4 +21,4 @@ This directory stores only public-ready media assets with curated names.
 
 - Do not store raw phone or chat-export filenames here.
 - Do not store full original MP4 clips here.
-- Keep only lightweight GIFs, cropped images, and portfolio-safe visuals.
+- Keep only lightweight GIFs, cropped images, and visuals that are easy to show publicly.

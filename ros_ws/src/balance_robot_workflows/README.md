@@ -16,7 +16,7 @@ In practice, it answers questions like:
 - bundles lower-level packages into reusable launch entrypoints
 - chooses among `LiDAR`, `depth`, and controller-tuning scenarios
 - keeps control, navigation, and SLAM flows separate by use case
-- exposes current review-friendly entrypoints for control, navigation, SLAM, and tuning
+- exposes the main entrypoints for control, navigation, SLAM, and tuning
 
 ## Launch Files
 

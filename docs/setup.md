@@ -3,7 +3,7 @@
 ## Repository Layout
 
 - `firmware/`: Arduino code
-- `ros_ws/`: curated ROS workspace
+- `ros_ws/`: main ROS workspace
 - `archive/`: archived ROS experiments, Arduino firmware variants, and raw reference materials
 
 ## ROS Dependencies

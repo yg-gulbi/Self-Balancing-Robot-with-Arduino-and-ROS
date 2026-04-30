@@ -9,7 +9,7 @@ These files are important because they show what the ROS layer was trying to do 
 3. publish TF and robot-model information for visualization,
 4. attempt RTAB-Map SLAM and navigation-oriented bring-up.
 
-They should still be read together with [`docs/results_and_limitations.md`](../../../docs/results_and_limitations.md) so the repository does not over-claim a fully verified autonomous physical navigation result.
+They should still be read together with [`docs/results_and_limitations.md`](../../../docs/results_and_limitations.md) so this folder is not mistaken for a fully finished autonomous physical navigation result.
 
 ## What This Folder Represents
 
@@ -30,10 +30,10 @@ Instead, it is the ROS integration layer that sat on top of the physical robot:
 - visualization and TF adaptation for the physical robot were implemented.
 - RTAB-Map SLAM launch composition was attempted.
 
-## What Was Not Claimed As Finished
+## What Was Not Finished
 
-- end-to-end autonomous physical SLAM success is not claimed here
-- end-to-end autonomous physical navigation success is not claimed here
+- end-to-end autonomous physical SLAM was not finished here
+- end-to-end autonomous physical navigation was not finished here
 
 That distinction matters when reading filenames such as `robot_navigation.launch`, because the real physical workflow was still incomplete.
 
@@ -76,7 +76,7 @@ That makes this file better interpreted as a sensor-preparation launch for navig
 
 ### [`robot_navigation_lidar.launch`](robot_navigation_lidar.launch)
 
-Older navigation-oriented launch composition trace kept as recovered evidence.
+Older navigation-oriented launch composition trace kept as recovered archive material.
 
 Compared with `robot_navigation.launch`, this file is closer to a normal map-server/AMCL/`move_base` navigation flow, but it should still be treated as integration history rather than a verified final robot demo.
 
@@ -90,7 +90,7 @@ Notably, this recovered file uses a direct `cmd_vel` default, which is a useful 
 
 Recovered RViz-focused launch that loads the robot model, TF helper nodes, joint state publication, robot state publication, and RViz itself.
 
-This is strong evidence that the ROS integration effort emphasized making the physical robot interpretable inside RViz, not only launching camera nodes.
+This shows that the ROS integration effort emphasized making the physical robot interpretable inside RViz, not only launching camera nodes.
 
 ### [`imu_tf.py`](imu_tf.py)
 

@@ -1,6 +1,6 @@
 # External Media Policy
 
-This repository uses lightweight public-safe GIFs and still images instead of raw full-length MP4 files.
+This repository uses lightweight GIFs and still images instead of raw full-length MP4 files.
 
 ## Public Clips Included In Repo
 

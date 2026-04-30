@@ -1,6 +1,6 @@
 # Physical Balance Controller
 
-This folder contains the canonical physical robot controller for the portfolio repository.
+This folder contains the main physical robot controller for the repository.
 
 - Main file: [`physical_balance_controller.ino`](physical_balance_controller.ino)
 - ROS-enabled variant: [`../physical_balance_controller_ros`](../physical_balance_controller_ros)
@@ -11,7 +11,7 @@ Why this file is the main controller:
 
 - It is the clearest standalone physical robot balancing implementation in the archive.
 - It keeps the balancing and drive loop on Arduino rather than requiring ROS in the low-level loop.
-- It best matches the actual completed physical robot behavior claimed by this repository.
+- It best matches the actual completed physical robot behavior shown in this repository.
 
 ## What The Controller Does
 

@@ -138,7 +138,7 @@ What it does:
 Why it matters:
 
 - this file shows the project went beyond controller implementation into tuning automation
-- it is one of the strongest pieces of evidence that repeated evaluation and optimization were attempted systematically
+- it is one of the clearest signs that repeated evaluation and optimization were attempted systematically
 
 #### [`src/tuning_tools/pid_loop_test_runner.py`](src/tuning_tools/pid_loop_test_runner.py)
 
@@ -218,5 +218,5 @@ These files are useful historically because they show the control-design progres
 
 - These controllers operate in simulation and assume `/imu` and `/odom` already exist.
 - The LiDAR and depth variants are tuned separately rather than abstracted into one generic controller.
-- `dynamic_reconfigure` and Bayesian tuning were explored, but fully robust automated tuning was not claimed as solved.
+- `dynamic_reconfigure` and Bayesian tuning were explored, but I do not present automated tuning as fully solved.
 - Many script filenames still reflect the original PID-experiment history even though the package itself was renamed to `balance_robot_control`.

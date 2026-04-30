@@ -1,6 +1,6 @@
 # Hardware
 
-This page is the single public hardware reference for the physical self-balancing robot. It combines the previous BOM, power/IO notes, layout interpretation, and gallery material so reviewers do not have to jump across several small hardware documents.
+This page is the single hardware reference for the physical self-balancing robot. It combines the previous BOM, power/IO notes, layout interpretation, and gallery material so people do not have to jump across several small hardware documents.
 
 <table>
   <tr>
@@ -13,7 +13,7 @@ This page is the single public hardware reference for the physical self-balancin
   </tr>
   <tr>
     <td valign="top">
-      <strong>Physical layout evidence</strong><br>
+      <strong>Physical layout</strong><br>
       Real chassis, sensor head, electronics bay, battery area, compute enclosure, and wheel base.
     </td>
     <td valign="top">
@@ -38,7 +38,7 @@ This page is the single public hardware reference for the physical self-balancin
 
 Some exact part numbers were not retained, so these are described conservatively from firmware, wiring diagrams, photos, and process material.
 
-| Subsystem | Best-effort identification | Evidence |
+| Subsystem | Best-effort identification | Why I think so |
 | --- | --- | --- |
 | Wheels and motors | Dual 36V hall-sensor BLDC hub motors, likely hoverboard-style, roughly 165 mm wheel diameter | Firmware uses hall feedback and about `0.0825 m` wheel radius; photos match hub-wheel assemblies |
 | Battery | 36V battery pack, likely lithium-ion | Wiring diagram and internal photo both show a 36V system bus |
@@ -78,10 +78,10 @@ The public photo is left mostly unannotated because earlier direct callouts risk
 
 Some simulation-side URDF and launch files still reference `RealSense D435` assets or `d435` topic names. Those belong to historical simulation or placeholder RGB-D workflows. The deployed physical camera documented here is the Orbbec Gemini 330.
 
-## Evidence Limits
+## Limits Of This Page
 
 - The Wiring Diagram is a high-level project diagram, not a manufacturing schematic.
-- Wire colors, connector pinouts, regulator part numbers, and exact battery chemistry should not be inferred beyond visible evidence.
+- Wire colors, connector pinouts, regulator part numbers, and exact battery chemistry should not be inferred beyond what is visible in the material.
 - This page is written for portfolio review and system understanding, not as a complete rebuild guide.
 
 ## Supporting Images
@@ -89,6 +89,6 @@ Some simulation-side URDF and launch files still reference `RealSense D435` asse
 | Asset | Why it matters |
 | --- | --- |
 | [Wiring Diagram](../media/diagrams/wiring_diagram.png) | Main hardware, power, and wiring overview |
-| [Open-front robot photo](../media/hardware/robot_open_front.png) | Real electronics packaging and sensor-head evidence |
+| [Open-front robot photo](../media/hardware/robot_open_front.png) | Real electronics packaging and sensor-head layout |
 | [Wheel bench test](../media/process/wheel_bench_test.jpg) | Motor, wheel, and controller bring-up before full-body balancing |
 | [Tethered driving practice](../media/process/tethered_driving_practice.jpg) | Safety-supported physical tuning stage |
