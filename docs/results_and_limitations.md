@@ -18,9 +18,9 @@ This page separates the finished results, the simulation-side results, the real-
 | Area | Value | Why it matters |
 | --- | --- | --- |
 | Physical tilt cutoff | `30 deg` | Set just above the protection bracket contact angle of about `28 deg`, so the controller cuts motor output before a hard fall can damage the robot |
-| ODrive current clamp | `+-8 A` | Prevents extreme current commands during recovery or unstable states |
+| ODrive current clamp | `+/-8 A` | Prevents extreme current commands during recovery or unstable states |
 | Firmware target speed limit | `1.5 m/s` | This is a target limit in code, not a measured top speed |
-| RC neutral deadband | `+-50 us` | Prevents small PWM drift around neutral from becoming motion |
+| RC neutral deadband | `+/-50 us` | Prevents small PWM drift around neutral from becoming motion |
 | RC neutral offsets | throttle `1488 us`, steering `1492 us` | The controller uses calibrated centers instead of assuming exact `1500 us` |
 | RC filter alpha | throttle/steering `0.4`, engage `0.02` | Throttle and steering stay responsive while engage is filtered more strongly |
 | Main balance gains | `K_theta=24`, `K_theta_dot=1.7`, `Ki=0` | LQR-style body angle and angular velocity feedback |

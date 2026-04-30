@@ -4,14 +4,6 @@ This repository is my self-balancing robot project. The real robot was controlle
 
 The main result is a physical two-wheeled robot that balanced for about 1 hour and drove through a 10 m hallway and obstacle course under Arduino control. On the ROS side, I built Gazebo control, navigation, SLAM map-generation, PID tuning, and Arduino-to-ROS bridge workflows.
 
-## What I Actually Finished
-
-| What I did | How far it went |
-| --- | --- |
-| A real two-wheeled robot balanced and drove under Arduino control. | About 1 hour standing balance, 10 m hallway driving, and obstacle-course driving were achieved. |
-| ROS/Gazebo was used for simulation, controller tuning, navigation, and SLAM workflows. | The robot moved through the ROS navigation command path, and map generation was checked in the SLAM workflow. |
-| Arduino and ROS were connected through bridge and state-publishing experiments. | `/imu`, `/odom`, and `cmd_vel` were checked with `rostopic echo` through rosserial-style workflows. |
-
 <p align="center">
   <img src="media/hero/physical_balance_hallway.gif" alt="Physical hallway balancing demo" width="720">
 </p>
@@ -23,8 +15,8 @@ The main result is a physical two-wheeled robot that balanced for about 1 hour a
 | Physical balance duration | About 1 hour standing balance |
 | Physical driving | 10 m hallway driving and obstacle-course driving |
 | Physical safety limit | Motor command cutoff at `30 deg`, chosen because the protection bracket touches the floor at about `28 deg` |
-| ODrive current limit | `+-8 A` command clamp in firmware |
-| RC signal handling | `+-50 us` deadband, throttle/steering filter alpha `0.4`, engage filter alpha `0.02` |
+| ODrive current limit | `+/-8 A` command clamp in firmware |
+| RC signal handling | `+/-50 us` deadband, throttle/steering filter alpha `0.4`, engage filter alpha `0.02` |
 | Arduino-to-ROS bridge | `/imu`, `/odom`, and `cmd_vel` checked with `rostopic echo` |
 | ROS/Gazebo navigation | Robot motion through the ROS navigation command path was checked |
 | ROS/Gazebo SLAM | Map generation was checked in the SLAM workflow |

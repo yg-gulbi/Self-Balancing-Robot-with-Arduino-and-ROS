@@ -97,7 +97,7 @@ The important point is that filtering here was part of the control architecture,
 
 ### Symptom
 
-During physical driving and balancing bring-up, the wheel could twitch even when the operator did not intend a sudden command change. The user also verified on Arduino serial output that the FrSky X8R PWM readings could jump unexpectedly.
+During physical driving and balancing bring-up, the wheel could twitch even when I did not intend a sudden command change. I also checked through Arduino serial output that the FrSky X8R PWM readings could jump unexpectedly.
 
 ### What Was Checked
 
@@ -174,7 +174,7 @@ Even after the downgrade, the controller architecture was tightened so that ODri
 
 - `EngageMotors()` explicitly switches axes between `CLOSED_LOOP_CONTROL` and `IDLE`.
 - Large tilt can force `tilt_limit_exceeded`, which blocks motor activation.
-- Final current is clamped to `+-8 A` before calling `ODrive.SetCurrent`.
+- Final current is clamped to `+/-8 A` before calling `ODrive.SetCurrent`.
 - Integral terms are reset when motors are inactive or tilt safety is exceeded.
 
 These are not cosmetic safety checks. They are supervisory control features added because the hardware path had already demonstrated that it could misbehave in ways a pure balance equation would not catch.
