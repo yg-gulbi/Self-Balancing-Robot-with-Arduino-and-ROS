@@ -4,7 +4,7 @@ English | [한국어](README.ko.md)
 
 This repository is my self-balancing robot project. The real robot was controlled on Arduino, and I used ROS/Gazebo for simulation, tuning, SLAM, and navigation experiments.
 
-The main result is a physical two-wheeled robot that balanced for about 1 hour and drove through a 10 m hallway and obstacle course under Arduino control. On the ROS side, I built Gazebo control, navigation, SLAM map-generation, PID tuning, and Arduino-to-ROS bridge workflows.
+The main result is a physical two-wheeled robot that balanced for about 1 hour and drove through a 10 m hallway and obstacle course under Arduino control. On the ROS side, I built Gazebo control, navigation, SLAM map-generation, PID tuning, and Arduino-to-ROS bridge workflows. The sim-to-real bridge is documented as a command-layer transfer: high-level motion intent is separated from the balance and safety layer instead of driving the robot directly.
 
 <p align="center">
   <img src="media/hero/physical_balance_hallway.gif" alt="Physical hallway balancing demo" width="720">
@@ -20,7 +20,7 @@ The main result is a physical two-wheeled robot that balanced for about 1 hour a
 | ODrive current limit | `+/-8 A` command clamp in firmware |
 | RC signal handling | `+/-50 us` deadband, throttle/steering filter alpha `0.4`, engage filter alpha `0.02` |
 | Arduino-to-ROS bridge | `/imu`, `/odom`, and `cmd_vel` checked with `rostopic echo` |
-| ROS/Gazebo navigation | Robot motion through the ROS navigation command path was checked |
+| ROS/Gazebo navigation | Robot motion through the ROS navigation command path was checked and captured in the depth-navigation simulation |
 | ROS/Gazebo SLAM | Map generation was checked in the SLAM workflow |
 
 ## Core Result
@@ -45,10 +45,27 @@ Start here: [physical balance control algorithm](firmware/physical_balance_contr
 | --- | --- | --- |
 | Physical self-balancing and RC driving | Completed | [physical_balance_controller.ino](firmware/physical_balance_controller/physical_balance_controller.ino), [hallway demo](media/hero/physical_balance_hallway.gif) |
 | ROS/Gazebo balance simulation | Completed | [balance_robot_control](ros_ws/src/balance_robot_control), [balance_robot_gazebo](ros_ws/src/balance_robot_gazebo) |
-| Simulation navigation pipeline | Completed | [navigation](ros_ws/src/navigation), [balance_robot_workflows](ros_ws/src/balance_robot_workflows) |
+| Simulation navigation pipeline | Completed | [navigation](ros_ws/src/navigation), [balance_robot_workflows](ros_ws/src/balance_robot_workflows), [depth-navigation capture](media/process/simulation_depth_navigation_views.png) |
 | Simulation SLAM/navigation workflow | Completed in simulation | [balance_robot_workflows](ros_ws/src/balance_robot_workflows), [results and limitations](docs/results-and-limitations.md) |
+| Sim2Real bridge | Documented | [sim-to-real bridge](docs/sim2real.md), [results and limitations](docs/results-and-limitations.md) |
 | Arduino-to-ROS bridge tests | Completed | [rc_to_ros_cmd_vel_bridge.ino](firmware/testers/rc_to_ros_cmd_vel_bridge.ino), [physical_balance_controller_ros.ino](firmware/physical_balance_controller_ros/physical_balance_controller_ros.ino) |
 | Real-world ROS SLAM/navigation | Integration experiments | [real-world integration archive](archive/ros_experiments/real_world_integration), [results and limitations](docs/results-and-limitations.md) |
+
+## Sim2Real Bridge
+
+<p align="center">
+  <img src="media/process/simulation_depth_navigation_views.png" alt="ROS/Gazebo depth-navigation simulation with RViz map and Gazebo robot model" width="860">
+</p>
+
+The simulation used the same two-wheeled, 3D-printed design direction as the physical robot, but the key transfer was the command structure. A high-level command is treated as motion intent first; the balance and safety layer decides what can safely reach the robot.
+
+| Transfer point | Simulation side | Physical side |
+| --- | --- | --- |
+| Command path | `move_base -> /before_vel -> balance_robot_control -> /cmd_vel` | RC or ROS-side intent -> Arduino balance/safety loop -> ODrive current commands |
+| Robot state | Gazebo `/imu`, `/odom`, scan/depth data, RViz map/navigation state | BNO055 IMU, ODrive feedback, RC PWM, Gemini 330 integration traces |
+| What was proven | Navigation command routing, depth-navigation workflow, SLAM/map-generation workflow | Real balancing, RC driving, current limiting, tilt cutoff, and staged safety tuning |
+
+This is why I describe the project as a sim-to-real bridge, not as finished physical autonomous navigation. The bridge is the transfer of robot design, command layering, and safety boundaries from simulation work into the real Arduino-controlled robot. See [docs/sim2real.md](docs/sim2real.md) for the detailed breakdown.
 
 ## System At A Glance
 
@@ -83,7 +100,7 @@ For the consolidated hardware explanation, see [docs/hardware.md](docs/hardware.
 | --- | --- |
 | `firmware/` | Arduino firmware, physical controller, and tester sketches |
 | `ros_ws/` | Main ROS workspace for simulation, navigation, SLAM workflow, and tuning code |
-| `docs/` | Four focused portfolio docs: hardware, development process, troubleshooting, and results |
+| `docs/` | Focused portfolio docs: hardware, development process, Sim2Real, troubleshooting, and results |
 | `media/` | Lightweight public GIFs, photos, and diagrams |
 | `archive/` | Older experiments and recovered context that should not be the first place to read |
 
@@ -121,10 +138,12 @@ Use [ros_ws/README.md](ros_ws/README.md) for workspace usage and [balance_robot_
 
 - [Physical hallway balancing GIF](media/hero/physical_balance_hallway.gif)
 - [Physical obstacle-course balancing GIF](media/demos/physical_balance_obstacle_course.gif)
+- [ROS/Gazebo depth-navigation still](media/process/simulation_depth_navigation_views.png)
+- [ROS/Gazebo depth-navigation WebM clip](media/process/simulation_depth_navigation_demo.webm)
 - [Robot-focused hallway still](media/demos/hallway_robot_only.jpg)
 - [Open-front hardware photo](media/hardware/robot_open_front.png)
 
-I did not put the full original MP4 files in the repo. Instead, I kept lightweight GIFs and cropped images so the repository stays easier to browse.
+I did not put the full original phone MP4 files in the repo. Instead, I kept lightweight GIFs, still images, and one compact WebM simulation clip so the repository stays easier to browse.
 
 ## Read Next
 
@@ -132,8 +151,9 @@ I did not put the full original MP4 files in the repo. Instead, I kept lightweig
 2. [Control algorithm](firmware/physical_balance_controller/control_algorithm.md): how RC input, IMU feedback, wheel speed, safety, and ODrive current control fit together.
 3. [Hardware](docs/hardware.md): physical components, wiring, power flow, and layout interpretation.
 4. [Development process](docs/development-process.md): build timeline, subsystem bring-up, and research decisions.
-5. [Troubleshooting summary](docs/troubleshooting.md): why filtering, safety gating, ODrive isolation, and staged tuning were needed.
-6. [Results and limits](docs/results-and-limitations.md): measured project results, code-defined settings, and remaining limits.
+5. [Sim2Real bridge](docs/sim2real.md): how the ROS/Gazebo workflow and physical Arduino robot were connected without overstating physical autonomy.
+6. [Troubleshooting summary](docs/troubleshooting.md): why filtering, safety gating, ODrive isolation, and staged tuning were needed.
+7. [Results and limits](docs/results-and-limitations.md): measured project results, code-defined settings, and remaining limits.
 
 ## Limitations
 

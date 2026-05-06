@@ -46,9 +46,15 @@ Tethered driving photo는 bench testing과 free driving 사이의 practical safe
 
 ### 6. Simulation And Navigation
 
-![Simulation navigation views](../../media/process/simulation_unreal_navigation_views.jpg)
+![Simulation depth-navigation views](../../media/process/simulation_depth_navigation_views.png)
 
-Simulation screenshot은 ROS/Gazebo 쪽 parallel track을 보여줍니다. Simulated robot placement, map/navigation view, environment testing이 포함됩니다. 그래서 이 저장소는 simulation navigation을 완료된 software-side result로 다루고, physical autonomous navigation은 partial category로 분리합니다.
+업데이트된 simulation capture는 depth-camera robot model, RViz map/navigation state, Gazebo environment를 한 화면에서 보여줍니다. 함께 넣은 [depth-navigation WebM clip](../../media/process/simulation_depth_navigation_demo.webm)은 workflow가 실제로 움직이는 장면을 기록합니다. 그래서 이 저장소는 simulation navigation을 완료된 software-side result로 다루고, physical autonomous navigation은 partial category로 분리합니다.
+
+### 7. Sim2Real Bridge
+
+Sim-to-real 연결은 양쪽 모두 같은 원칙을 따릅니다. High-level command는 motion intent이지 direct motor authority가 아닙니다. Gazebo에서는 `move_base -> /before_vel -> balance_robot_control -> /cmd_vel` 구조로 나타나고, 실제 로봇에서는 RC 또는 ROS-side intent가 Arduino balance/safety loop를 거친 뒤 ODrive current command로 나갑니다.
+
+Transfer point, 실제 tuning gap, completed simulation navigation과 unfinished physical autonomous navigation의 경계는 [Sim2Real Bridge](sim2real.md)에 정리했습니다.
 
 ## Build Timeline
 
@@ -60,6 +66,7 @@ Simulation screenshot은 ROS/Gazebo 쪽 parallel track을 보여줍니다. Simul
 | Control integration | Arduino Mega 2560, BNO055 IMU, FrSky X8R receiver, ODrive command path | Firmware와 process notes가 IMU feedback, RC input, motor command integration을 보여줌 | Physical balancing과 RC driving이 가장 강한 real-world result가 됨 |
 | Hardware assembly | Internal placement, wiring, battery pack, converter chain, relay/auxiliary area | Recovered wiring notes와 internal photo를 cleaner public diagrams/photos로 정리 | Hardware section이 raw photo와 Wiring Diagram을 중심으로 구성됨 |
 | ROS simulation and navigation | Gazebo balancing robot, `/before_vel`, SLAM/navigation launch composition | ROS packages가 simulation control, mapping/navigation experiment, launch integration을 보여줌 | Simulation navigation은 completed로, physical autonomous navigation은 not completed로 분리 |
+| Sim2Real framing | 같은 3D-printed design direction, command-layer separation, safety-aware control boundary | Simulation은 robot design과 ROS command structure를 사용했고, physical robot은 low-level balance authority를 Arduino에 유지 | 무엇이 transfer됐고, 무엇이 real tuning이 필요했으며, 무엇이 future work인지 분리 |
 | Portfolio recovery | Demos, firmware, ROS packages, archived notes, lighter media | Raw project material을 그대로 복사하지 않고 요약 | Main result와 older experiment/research material이 분리됨 |
 
 ## Functional Workstreams
@@ -70,6 +77,7 @@ Simulation screenshot은 ROS/Gazebo 쪽 parallel track을 보여줍니다. Simul
 | FrSky radio path | X8R PWM input, Taranis Q X7 manual commands, engage/throttle/steering interpretation | `physical_balance_controller.ino`, `receiver_pwm_test.ino`, `rc_to_ros_cmd_vel_bridge.ino`, receiver troubleshooting notes |
 | IMU / balancing | BNO055 angle/gyro feedback, balance-loop tuning, safety-constrained parameter testing | `physical_balance_controller.ino`, hallway and obstacle-course demos |
 | ROS / navigation | Gazebo balancing simulation, `/before_vel` command separation, SLAM/navigation launch files | `ros_ws/src/balance_robot_control`, `ros_ws/src/navigation`, `ros_ws/src/balance_robot_workflows` |
+| Sim2Real bridge | ROS/Gazebo command workflow와 physical Arduino balance loop 사이의 transfer | `docs/ko/sim2real.md`, `ros_ws/src/balance_robot_control`, `firmware/physical_balance_controller` |
 | Hardware assembly | Chassis packaging, internal electronics bay, battery and DC-DC power chain | `media/hardware`, `media/diagrams/wiring_diagram.png` |
 | Research and documentation | CAN, Orbbec Gemini 330, ORB-SLAM2, RTAB-Map, FrSky receiver noise, ROS autorun investigation | 이 문서, `docs/ko/troubleshooting.md`, `docs/ko/results-and-limitations.md` |
 
@@ -125,5 +133,6 @@ Simulation screenshot은 ROS/Gazebo 쪽 parallel track을 보여줍니다. Simul
 
 - 실제 로봇 balancing과 RC driving은 완료되었고, firmware와 demo media로 뒷받침됩니다.
 - ROS/Gazebo balancing, SLAM-related launch composition, simulation navigation은 software-side work로 완료되었습니다.
+- Sim-to-real bridge는 design, command layering, safety boundary의 transfer로 문서화했고, finished physical autonomous navigation으로 과장하지 않습니다.
 - Real-world ROS SLAM/navigation integration은 experiment로 존재하지만, physical robot의 full autonomous navigation으로 제시하지 않습니다.
 - Raw process artifact는 primary public deliverable이 아니라 이 요약 문서들의 source material로 다룹니다.

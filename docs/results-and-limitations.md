@@ -11,7 +11,7 @@ This page separates the finished results, the simulation-side results, the real-
 | Physical balance duration | About 1 hour | Real robot standing balance under Arduino control |
 | Physical driving | 10 m hallway driving | Real robot driving while balancing |
 | Obstacle driving | Completed on a simple indoor obstacle course | Shown through the obstacle-course demo media |
-| ROS/Gazebo navigation | Robot motion checked through the navigation command path | High-level commands were routed through `/before_vel` before final `/cmd_vel` |
+| ROS/Gazebo navigation | Robot motion checked through the navigation command path and public depth-navigation capture | High-level commands were routed through `/before_vel` before final `/cmd_vel` |
 | ROS/Gazebo SLAM | Map generation checked | Depth SLAM workflow was used for map-generation testing |
 | Arduino-to-ROS bridge | `/imu`, `/odom`, and `cmd_vel` checked with `rostopic echo` | rosserial-style bridge sketches are kept in firmware and archive folders |
 
@@ -23,7 +23,8 @@ This page separates the finished results, the simulation-side results, the real-
 | RC receiver and command handling | Real robot | [`receiver_pwm_test.ino`](../firmware/testers/receiver_pwm_test/receiver_pwm_test.ino), [`rc_to_ros_cmd_vel_bridge.ino`](../firmware/testers/rc_to_ros_cmd_vel_bridge.ino) | Completed subsystem tests and bridge workflow |
 | ODrive, hall feedback, and motor control | Real robot | [`motor_current_test.ino`](../firmware/testers/motor_current_test/motor_current_test.ino), [`odrive_receiver_test.ino`](../firmware/testers/odrive_receiver_test/odrive_receiver_test.ino), [`development-process.md`](development-process.md) | Completed bring-up path behind the physical controller |
 | ROS balance simulation and tuning | Simulation | [`balance_robot_control`](../ros_ws/src/balance_robot_control), [`balance_robot_gazebo`](../ros_ws/src/balance_robot_gazebo), archived PID experiments | Completed software-side workflow |
-| SLAM and navigation workflow | Simulation / integration | [`balance_robot_workflows`](../ros_ws/src/balance_robot_workflows), [`navigation`](../ros_ws/src/navigation), [`archive/ros_experiments/real_world_integration`](../archive/ros_experiments/real_world_integration/README.md) | Simulation result plus partial physical integration context |
+| SLAM and navigation workflow | Simulation / integration | [`balance_robot_workflows`](../ros_ws/src/balance_robot_workflows), [`navigation`](../ros_ws/src/navigation), [`simulation_depth_navigation_views.png`](../media/process/simulation_depth_navigation_views.png), [`simulation_depth_navigation_demo.webm`](../media/process/simulation_depth_navigation_demo.webm), [`archive/ros_experiments/real_world_integration`](../archive/ros_experiments/real_world_integration/README.md) | Simulation result plus partial physical integration context |
+| Sim2Real bridge | Simulation and real robot | [`sim2real.md`](sim2real.md), [`control_algorithm.md`](../firmware/physical_balance_controller/control_algorithm.md), [`ros_ws/README.md`](../ros_ws/README.md) | Transfer of design, command layering, and safety boundaries, not finished physical autonomy |
 
 ## Code-Defined Settings
 
@@ -50,8 +51,9 @@ This page separates the finished results, the simulation-side results, the real-
 | Finished | Arduino-to-ROS bridge tests | Arduino sketches published robot or command data into ROS, and `/imu`, `/odom`, and `cmd_vel` were checked with `rostopic echo`. | [`physical_balance_controller_ros.ino`](../firmware/physical_balance_controller_ros/physical_balance_controller_ros.ino), [`rc_to_ros_cmd_vel_bridge.ino`](../firmware/testers/rc_to_ros_cmd_vel_bridge.ino), [`archive/arduino_firmware`](../archive/arduino_firmware/README.md) |
 | Finished | Hardware and subsystem bring-up | ODrive, BNO055, FrSky receiver, motor feedback, and the main power/control packaging were all brought up on the real robot. | [`hardware.md`](hardware.md), [`development-process.md`](development-process.md) |
 | Built in simulation | ROS/Gazebo balancing workflow | The balancing robot was modeled and controlled in Gazebo with ROS control nodes. | [`ros_ws/README.md`](../ros_ws/README.md), [`balance_robot_control`](../ros_ws/src/balance_robot_control/README.md), [`balance_robot_workflows`](../ros_ws/src/balance_robot_workflows/README.md) |
-| Built in simulation | Navigation command pipeline | Navigation output was routed through `/before_vel`, and robot motion through that path was checked. | [`ros_ws/README.md`](../ros_ws/README.md), [`navigation`](../ros_ws/src/navigation/README.md) |
-| Built in simulation | SLAM and navigation workflow | Depth-camera SLAM workflow was used to check map generation. | [`robot_slam_depth.launch`](../ros_ws/src/balance_robot_workflows/launch/robot_slam_depth.launch), [`ros_ws/README.md`](../ros_ws/README.md) |
+| Built in simulation | Navigation command pipeline | Navigation output was routed through `/before_vel`, and robot motion through that path was checked. | [`ros_ws/README.md`](../ros_ws/README.md), [`navigation`](../ros_ws/src/navigation/README.md), [`simulation_depth_navigation_views.png`](../media/process/simulation_depth_navigation_views.png) |
+| Built in simulation | SLAM and navigation workflow | Depth-camera SLAM workflow was used to check map generation. | [`robot_slam_depth.launch`](../ros_ws/src/balance_robot_workflows/launch/robot_slam_depth.launch), [`ros_ws/README.md`](../ros_ws/README.md), [`simulation_depth_navigation_demo.webm`](../media/process/simulation_depth_navigation_demo.webm) |
+| Documented bridge | Sim2Real transfer | The simulation and hardware paths share robot form factor, command-layer separation, and a balance/safety boundary, while physical full autonomy remains unfinished. | [`sim2real.md`](sim2real.md) |
 | Integration experiment | Real-world ROS camera/SLAM/navigation | Camera, TF, RViz, SLAM, and navigation bring-up traces exist for the physical robot side. | [`archive/ros_experiments/real_world_integration`](../archive/ros_experiments/real_world_integration/README.md) |
 | Future work | End-to-end autonomous navigation on the physical robot | The next step would be a real balancing robot that maps, localizes, plans, and drives to goals fully on its own. | This page and [`README.md`](../README.md) |
 | Future work | Fully reproducible hardware rebuild package | The repository explains the robot well, but it is not a complete manufacturing or wiring reproduction package. | [`hardware.md`](hardware.md), [`archive/README.md`](../archive/README.md) |
@@ -67,11 +69,12 @@ The repository shows the full robotics process:
 - actuator and feedback bring-up
 - ROS/Gazebo simulation and workflow composition
 - navigation command adaptation for an unstable balancing platform
+- sim-to-real command-layer transfer between Gazebo workflows and Arduino balance control
 - real-world ROS integration experiments around camera, TF, and robot-state publishing
 
 ## Remaining Limits
 
 - Full physical autonomous ROS navigation remains future work.
 - Third-party ROS dependencies are documented but not vendored.
-- Full-length original videos are replaced by lighter GIFs and stills.
+- Full-length original videos are replaced by lighter GIFs, stills, and a compact WebM simulation clip.
 - Older workspaces are kept under `archive/`, not presented as the main runnable stack.

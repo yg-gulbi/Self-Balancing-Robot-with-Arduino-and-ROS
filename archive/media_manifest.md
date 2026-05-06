@@ -11,6 +11,7 @@ This archive note maps recovered media into cleaner public titles and repo asset
 | Robot-focused hallway still | photo | `media/demos/hallway_robot_only.jpg` | Supporting real-world driving image | Cropped to avoid operator-focused framing |
 | Physical obstacle-course balancing demo | video/GIF | `media/demos/physical_balance_obstacle_course.gif` | Supporting balancing demo | Lightweight public GIF only |
 | Physical hallway balancing demo | video/GIF | `media/hero/physical_balance_hallway.gif` | README hero demo | Lightweight public GIF only |
+| ROS/Gazebo depth-navigation simulation | video/still | `media/process/simulation_depth_navigation_demo.webm`, `media/process/simulation_depth_navigation_views.png` | Supporting simulation navigation evidence | Compact public WebM and still only |
 | Short-course and alternate raw clips | video | Not committed | Optional external clip after privacy review | Keep out of repo unless faces/operators are removed |
 | Close-up setup clip | video | Not committed | Optional process clip after privacy review | Keep out of repo unless it adds clear technical value |
 
@@ -26,10 +27,12 @@ These public images were exported from recovered process material and summarized
 | `media/diagrams/wiring_diagram.png` | public wiring diagram used across the hardware documentation |
 | `media/process/wheel_bench_test.jpg` | wheel and electronics bench-test stage |
 | `media/process/tethered_driving_practice.jpg` | tethered physical driving practice |
-| `media/process/simulation_unreal_navigation_views.jpg` | ROS/Gazebo simulation and navigation views |
+| `media/process/simulation_depth_navigation_views.png` | current ROS/Gazebo depth-navigation view with RViz and Gazebo side by side |
+| `media/process/simulation_unreal_navigation_views.jpg` | older presentation-style ROS/Gazebo simulation and navigation views |
 
 ## Selection Notes
 
 - The hallway GIF is used as the hero because it shows the clearest continuous balancing run.
 - The obstacle-course GIF is used to show controlled physical motion around simple obstacles.
+- The depth-navigation WebM is included because it is compact and directly supports the simulation/navigation result.
 - Full raw clips should stay outside the Git repository unless they are trimmed, anonymized, and clearly useful to the technical story.

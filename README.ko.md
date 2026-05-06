@@ -4,7 +4,7 @@
 
 이 저장소는 Arduino와 ROS/Gazebo를 함께 사용한 셀프 밸런싱 로봇 프로젝트입니다. 실제 로봇은 Arduino에서 제어했고, ROS/Gazebo는 시뮬레이션, 튜닝, SLAM, 내비게이션 실험에 사용했습니다.
 
-가장 중요한 결과는 실제 2륜 로봇이 Arduino 제어로 약 1시간 동안 균형을 유지했고, 10 m 복도 주행과 실내 장애물 코스 주행을 수행했다는 점입니다. ROS 쪽에서는 Gazebo 제어, 내비게이션, SLAM 지도 생성, PID 튜닝, Arduino-to-ROS 브리지 흐름을 구성했습니다.
+가장 중요한 결과는 실제 2륜 로봇이 Arduino 제어로 약 1시간 동안 균형을 유지했고, 10 m 복도 주행과 실내 장애물 코스 주행을 수행했다는 점입니다. ROS 쪽에서는 Gazebo 제어, 내비게이션, SLAM 지도 생성, PID 튜닝, Arduino-to-ROS 브리지 흐름을 구성했습니다. Sim-to-real bridge는 command-layer transfer로 정리했습니다. High-level motion intent가 robot을 직접 구동하지 않고 balance/safety layer를 거치도록 분리한 것이 핵심입니다.
 
 <p align="center">
   <img src="media/hero/physical_balance_hallway.gif" alt="Physical hallway balancing demo" width="720">
@@ -20,7 +20,7 @@
 | ODrive 전류 제한 | 펌웨어에서 `+/-8 A`로 current command clamp |
 | RC 신호 처리 | `+/-50 us` deadband, throttle/steering filter alpha `0.4`, engage filter alpha `0.02` |
 | Arduino-to-ROS 브리지 | `/imu`, `/odom`, `cmd_vel`을 `rostopic echo`로 확인 |
-| ROS/Gazebo 내비게이션 | ROS 내비게이션 명령 경로를 통해 로봇 이동 확인 |
+| ROS/Gazebo 내비게이션 | ROS 내비게이션 명령 경로를 통한 로봇 이동을 depth-navigation 시뮬레이션으로 확인 |
 | ROS/Gazebo SLAM | SLAM workflow에서 지도 생성 확인 |
 
 ## 핵심 결과
@@ -45,10 +45,27 @@ Arduino는 실시간 balance loop를 로컬에서 닫습니다. RC 입력, IMU t
 | --- | --- | --- |
 | 실제 self-balancing 및 RC 주행 | 완료 | [physical_balance_controller.ino](firmware/physical_balance_controller/physical_balance_controller.ino), [hallway demo](media/hero/physical_balance_hallway.gif) |
 | ROS/Gazebo balance simulation | 완료 | [balance_robot_control](ros_ws/src/balance_robot_control), [balance_robot_gazebo](ros_ws/src/balance_robot_gazebo) |
-| Simulation navigation pipeline | 완료 | [navigation](ros_ws/src/navigation), [balance_robot_workflows](ros_ws/src/balance_robot_workflows) |
+| Simulation navigation pipeline | 완료 | [navigation](ros_ws/src/navigation), [balance_robot_workflows](ros_ws/src/balance_robot_workflows), [depth-navigation capture](media/process/simulation_depth_navigation_views.png) |
 | Simulation SLAM/navigation workflow | 시뮬레이션에서 완료 | [balance_robot_workflows](ros_ws/src/balance_robot_workflows), [결과와 한계](docs/ko/results-and-limitations.md) |
+| Sim2Real bridge | 문서화 | [sim-to-real bridge](docs/ko/sim2real.md), [결과와 한계](docs/ko/results-and-limitations.md) |
 | Arduino-to-ROS bridge tests | 완료 | [rc_to_ros_cmd_vel_bridge.ino](firmware/testers/rc_to_ros_cmd_vel_bridge.ino), [physical_balance_controller_ros.ino](firmware/physical_balance_controller_ros/physical_balance_controller_ros.ino) |
 | Real-world ROS SLAM/navigation | 통합 실험 | [real-world integration archive](archive/ros_experiments/real_world_integration), [결과와 한계](docs/ko/results-and-limitations.md) |
+
+## Sim2Real Bridge
+
+<p align="center">
+  <img src="media/process/simulation_depth_navigation_views.png" alt="ROS/Gazebo depth-navigation simulation with RViz map and Gazebo robot model" width="860">
+</p>
+
+Simulation은 실제 로봇과 같은 two-wheeled, 3D-printed design direction을 사용했습니다. 하지만 가장 중요한 transfer는 외형만이 아니라 command structure입니다. High-level command를 바로 motor command로 쓰지 않고, 먼저 motion intent로 다룬 뒤 balance/safety layer가 실제로 로봇에 전달할 수 있는 출력을 결정합니다.
+
+| Transfer point | Simulation side | Physical side |
+| --- | --- | --- |
+| Command path | `move_base -> /before_vel -> balance_robot_control -> /cmd_vel` | RC 또는 ROS-side intent -> Arduino balance/safety loop -> ODrive current commands |
+| Robot state | Gazebo `/imu`, `/odom`, scan/depth data, RViz map/navigation state | BNO055 IMU, ODrive feedback, RC PWM, Gemini 330 integration traces |
+| What was proven | Navigation command routing, depth-navigation workflow, SLAM/map-generation workflow | Real balancing, RC driving, current limiting, tilt cutoff, staged safety tuning |
+
+그래서 이 프로젝트는 finished physical autonomous navigation이 아니라 sim-to-real bridge로 설명합니다. Bridge의 핵심은 simulation work에서 정리한 robot design, command layering, safety boundary를 실제 Arduino-controlled robot으로 옮긴 점입니다. 자세한 내용은 [docs/ko/sim2real.md](docs/ko/sim2real.md)에 정리했습니다.
 
 ## 시스템 한눈에 보기
 
@@ -83,7 +100,7 @@ Arduino는 실시간 balance loop를 로컬에서 닫습니다. RC 입력, IMU t
 | --- | --- |
 | `firmware/` | Arduino firmware, 실제 controller, tester sketches |
 | `ros_ws/` | 시뮬레이션, 내비게이션, SLAM workflow, tuning code를 위한 main ROS workspace |
-| `docs/` | hardware, development process, troubleshooting, results 중심의 포트폴리오 문서 |
+| `docs/` | hardware, development process, Sim2Real, troubleshooting, results 중심의 포트폴리오 문서 |
 | `media/` | GitHub에서 보기 쉬운 GIF, 사진, diagram |
 | `archive/` | 처음 읽을 위치는 아니지만, 오래된 실험과 복구된 맥락을 보존한 공간 |
 
@@ -121,10 +138,12 @@ Workspace 사용법은 [ros_ws/README.md](ros_ws/README.md)를, controller packa
 
 - [Physical hallway balancing GIF](media/hero/physical_balance_hallway.gif)
 - [Physical obstacle-course balancing GIF](media/demos/physical_balance_obstacle_course.gif)
+- [ROS/Gazebo depth-navigation still](media/process/simulation_depth_navigation_views.png)
+- [ROS/Gazebo depth-navigation WebM clip](media/process/simulation_depth_navigation_demo.webm)
 - [Robot-focused hallway still](media/demos/hallway_robot_only.jpg)
 - [Open-front hardware photo](media/hardware/robot_open_front.png)
 
-원본 전체 MP4는 저장소에 넣지 않았습니다. 대신 GitHub에서 가볍게 볼 수 있도록 GIF와 cropped image 중심으로 정리했습니다.
+원본 전체 phone MP4는 저장소에 넣지 않았습니다. 대신 GitHub에서 가볍게 볼 수 있도록 GIF, still image, compact WebM simulation clip 중심으로 정리했습니다.
 
 ## 다음으로 읽기
 
@@ -132,8 +151,9 @@ Workspace 사용법은 [ros_ws/README.md](ros_ws/README.md)를, controller packa
 2. [Control algorithm](firmware/physical_balance_controller/control_algorithm.md): RC input, IMU feedback, wheel speed, safety, ODrive current control이 어떻게 연결되는지 설명합니다.
 3. [Hardware](docs/ko/hardware.md): 실제 부품, wiring, power flow, layout interpretation.
 4. [Development process](docs/ko/development-process.md): build timeline, subsystem bring-up, research decisions.
-5. [Troubleshooting summary](docs/ko/troubleshooting.md): filtering, safety gating, ODrive isolation, staged tuning이 왜 필요했는지 설명합니다.
-6. [Results and limits](docs/ko/results-and-limitations.md): 측정된 결과, code-defined settings, remaining limits.
+5. [Sim2Real bridge](docs/ko/sim2real.md): ROS/Gazebo workflow와 실제 Arduino robot을 어떻게 연결했고 physical autonomy를 어디까지로 말할 수 있는지 정리합니다.
+6. [Troubleshooting summary](docs/ko/troubleshooting.md): filtering, safety gating, ODrive isolation, staged tuning이 왜 필요했는지 설명합니다.
+7. [Results and limits](docs/ko/results-and-limitations.md): 측정된 결과, code-defined settings, remaining limits.
 
 ## 한계
 

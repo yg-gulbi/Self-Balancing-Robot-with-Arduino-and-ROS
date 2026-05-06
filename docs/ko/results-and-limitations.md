@@ -11,7 +11,7 @@
 | Physical balance duration | 약 1시간 | Arduino control 아래 실제 로봇 standing balance |
 | Physical driving | 10 m hallway driving | 균형을 유지하면서 실제 로봇 주행 |
 | Obstacle driving | 간단한 실내 장애물 코스 완료 | Obstacle-course demo media로 확인 가능 |
-| ROS/Gazebo navigation | Navigation command path를 통한 robot motion 확인 | High-level command가 final `/cmd_vel` 전에 `/before_vel`을 거치도록 구성 |
+| ROS/Gazebo navigation | Navigation command path와 public depth-navigation capture로 robot motion 확인 | High-level command가 final `/cmd_vel` 전에 `/before_vel`을 거치도록 구성 |
 | ROS/Gazebo SLAM | Map generation 확인 | Depth SLAM workflow로 map-generation test 수행 |
 | Arduino-to-ROS bridge | `/imu`, `/odom`, `cmd_vel`을 `rostopic echo`로 확인 | rosserial-style bridge sketch는 firmware와 archive folder에 보존 |
 
@@ -23,7 +23,8 @@
 | RC receiver and command handling | Real robot | [`receiver_pwm_test.ino`](../../firmware/testers/receiver_pwm_test/receiver_pwm_test.ino), [`rc_to_ros_cmd_vel_bridge.ino`](../../firmware/testers/rc_to_ros_cmd_vel_bridge.ino) | Completed subsystem tests and bridge workflow |
 | ODrive, hall feedback, and motor control | Real robot | [`motor_current_test.ino`](../../firmware/testers/motor_current_test/motor_current_test.ino), [`odrive_receiver_test.ino`](../../firmware/testers/odrive_receiver_test/odrive_receiver_test.ino), [`development-process.md`](development-process.md) | Physical controller 뒤의 completed bring-up path |
 | ROS balance simulation and tuning | Simulation | [`balance_robot_control`](../../ros_ws/src/balance_robot_control), [`balance_robot_gazebo`](../../ros_ws/src/balance_robot_gazebo), archived PID experiments | Completed software-side workflow |
-| SLAM and navigation workflow | Simulation / integration | [`balance_robot_workflows`](../../ros_ws/src/balance_robot_workflows), [`navigation`](../../ros_ws/src/navigation), [`archive/ros_experiments/real_world_integration`](../../archive/ros_experiments/real_world_integration/README.md) | Simulation result와 partial physical integration context |
+| SLAM and navigation workflow | Simulation / integration | [`balance_robot_workflows`](../../ros_ws/src/balance_robot_workflows), [`navigation`](../../ros_ws/src/navigation), [`simulation_depth_navigation_views.png`](../../media/process/simulation_depth_navigation_views.png), [`simulation_depth_navigation_demo.webm`](../../media/process/simulation_depth_navigation_demo.webm), [`archive/ros_experiments/real_world_integration`](../../archive/ros_experiments/real_world_integration/README.md) | Simulation result와 partial physical integration context |
+| Sim2Real bridge | Simulation and real robot | [`sim2real.md`](sim2real.md), [`control_algorithm.md`](../../firmware/physical_balance_controller/control_algorithm.md), [`ros_ws/README.md`](../../ros_ws/README.md) | Design, command layering, safety boundary의 transfer이며, finished physical autonomy는 아님 |
 
 ## Code-Defined Settings
 
@@ -50,8 +51,9 @@
 | Finished | Arduino-to-ROS bridge tests | Arduino sketch가 robot/command data를 ROS로 publish했고, `/imu`, `/odom`, `cmd_vel`을 `rostopic echo`로 확인했습니다. | [`physical_balance_controller_ros.ino`](../../firmware/physical_balance_controller_ros/physical_balance_controller_ros.ino), [`rc_to_ros_cmd_vel_bridge.ino`](../../firmware/testers/rc_to_ros_cmd_vel_bridge.ino), [`archive/arduino_firmware`](../../archive/arduino_firmware/README.md) |
 | Finished | Hardware and subsystem bring-up | ODrive, BNO055, FrSky receiver, motor feedback, main power/control packaging을 실제 로봇에서 bring-up했습니다. | [`hardware.md`](hardware.md), [`development-process.md`](development-process.md) |
 | Built in simulation | ROS/Gazebo balancing workflow | Balancing robot을 Gazebo에서 model/control했습니다. | [`ros_ws/README.md`](../../ros_ws/README.md), [`balance_robot_control`](../../ros_ws/src/balance_robot_control/README.md), [`balance_robot_workflows`](../../ros_ws/src/balance_robot_workflows/README.md) |
-| Built in simulation | Navigation command pipeline | Navigation output을 `/before_vel`로 routing했고, 그 path를 통한 robot motion을 확인했습니다. | [`ros_ws/README.md`](../../ros_ws/README.md), [`navigation`](../../ros_ws/src/navigation/README.md) |
-| Built in simulation | SLAM and navigation workflow | Depth-camera SLAM workflow로 map generation을 확인했습니다. | [`robot_slam_depth.launch`](../../ros_ws/src/balance_robot_workflows/launch/robot_slam_depth.launch), [`ros_ws/README.md`](../../ros_ws/README.md) |
+| Built in simulation | Navigation command pipeline | Navigation output을 `/before_vel`로 routing했고, 그 path를 통한 robot motion을 확인했습니다. | [`ros_ws/README.md`](../../ros_ws/README.md), [`navigation`](../../ros_ws/src/navigation/README.md), [`simulation_depth_navigation_views.png`](../../media/process/simulation_depth_navigation_views.png) |
+| Built in simulation | SLAM and navigation workflow | Depth-camera SLAM workflow로 map generation을 확인했습니다. | [`robot_slam_depth.launch`](../../ros_ws/src/balance_robot_workflows/launch/robot_slam_depth.launch), [`ros_ws/README.md`](../../ros_ws/README.md), [`simulation_depth_navigation_demo.webm`](../../media/process/simulation_depth_navigation_demo.webm) |
+| Documented bridge | Sim2Real transfer | Simulation과 hardware path는 robot form factor, command-layer separation, balance/safety boundary를 공유하지만 physical full autonomy는 unfinished로 둡니다. | [`sim2real.md`](sim2real.md) |
 | Integration experiment | Real-world ROS camera/SLAM/navigation | Physical robot side의 camera, TF, RViz, SLAM, navigation bring-up trace가 존재합니다. | [`archive/ros_experiments/real_world_integration`](../../archive/ros_experiments/real_world_integration/README.md) |
 | Future work | End-to-end autonomous navigation on the physical robot | 다음 단계는 실제 balancing robot이 map, localize, plan, goal driving까지 완전히 수행하는 것입니다. | 이 문서와 [`README.ko.md`](../../README.ko.md) |
 | Future work | Fully reproducible hardware rebuild package | 저장소는 로봇을 잘 설명하지만, 완전한 manufacturing/wiring reproduction package는 아닙니다. | [`hardware.md`](hardware.md), [`archive/README.md`](../../archive/README.md) |
@@ -67,11 +69,12 @@
 - actuator와 feedback bring-up
 - ROS/Gazebo simulation과 workflow composition
 - unstable balancing platform을 위한 navigation command adaptation
+- Gazebo workflow와 Arduino balance control 사이의 sim-to-real command-layer transfer
 - camera, TF, robot-state publishing 주변의 real-world ROS integration experiments
 
 ## Remaining Limits
 
 - Full physical autonomous ROS navigation은 future work입니다.
 - Third-party ROS dependencies는 documented but not vendored입니다.
-- Full-length original video는 lighter GIF와 still image로 대체했습니다.
+- Full-length original video는 lighter GIF, still image, compact WebM simulation clip으로 대체했습니다.
 - Older workspace는 main runnable stack이 아니라 `archive/` 아래에 보존했습니다.

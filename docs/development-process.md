@@ -46,9 +46,15 @@ The tethered driving photos show the practical safety step between bench testing
 
 ### 6. Simulation And Navigation
 
-![Simulation navigation views](../media/process/simulation_unreal_navigation_views.jpg)
+![Simulation depth-navigation views](../media/process/simulation_depth_navigation_views.png)
 
-The simulation screenshots show the parallel ROS/Gazebo track: simulated robot placement, map and navigation views, and environment testing. This is why the repository treats simulation navigation as a finished software-side result, while physical autonomous navigation stays in the partial category.
+The updated simulation capture shows the parallel ROS/Gazebo track with the depth-camera robot model, RViz map/navigation state, and Gazebo environment in one frame. The companion [depth-navigation WebM clip](../media/process/simulation_depth_navigation_demo.webm) records the workflow in motion. This is why the repository treats simulation navigation as a finished software-side result, while physical autonomous navigation stays in the partial category.
+
+### 7. Sim2Real Bridge
+
+The sim-to-real connection was built around the same principle on both sides: high-level commands are motion intent, not direct motor authority. In Gazebo this appears as `move_base -> /before_vel -> balance_robot_control -> /cmd_vel`; on the real robot it appears as RC or ROS-side intent entering the Arduino balance and safety loop before ODrive current commands are sent.
+
+See [Sim2Real Bridge](sim2real.md) for the transfer points, real-world tuning gaps, and the boundary between completed simulation navigation and unfinished physical autonomous navigation.
 
 ## Build Timeline
 
@@ -60,6 +66,7 @@ The simulation screenshots show the parallel ROS/Gazebo track: simulated robot p
 | Control integration | Arduino Mega 2560, BNO055 IMU, FrSky X8R receiver, and ODrive command path | Firmware and process notes show IMU feedback, RC input, and motor command integration | Physical balancing and RC driving became the strongest real-world result |
 | Hardware assembly | Internal placement, wiring, battery pack, converter chain, relay/auxiliary area | Recovered wiring notes and the internal photo were turned into cleaner public diagrams and photos | The hardware section now uses the raw photo plus the Wiring Diagram |
 | ROS simulation and navigation | Gazebo balancing robot, `/before_vel`, SLAM/navigation launch composition | ROS packages show simulation control, mapping and navigation experiments, and launch integration | Simulation navigation is treated as completed; physical autonomous navigation is not |
+| Sim2Real framing | Same 3D-printed design direction, command-layer separation, and safety-aware control boundary | The simulation used the robot design and ROS command structure while the physical robot kept low-level balance authority on Arduino | The repo explains what transferred, what required real tuning, and what remains future work |
 | Portfolio recovery | Demos, firmware, ROS packages, archived notes, and lighter media | Raw project material was summarized instead of copied wholesale | The repository now separates the main results from older experiments and research material |
 
 ## Functional Workstreams
@@ -70,6 +77,7 @@ The simulation screenshots show the parallel ROS/Gazebo track: simulated robot p
 | FrSky radio path | X8R PWM input, Taranis Q X7 manual commands, and engage/throttle/steering interpretation | `physical_balance_controller.ino`, `receiver_pwm_test.ino`, `rc_to_ros_cmd_vel_bridge.ino`, receiver troubleshooting notes |
 | IMU / balancing | BNO055 angle and gyro feedback, balance-loop tuning, safety-constrained parameter testing | `physical_balance_controller.ino`, hallway and obstacle-course demos |
 | ROS / navigation | Gazebo balancing simulation, `/before_vel` command separation, SLAM/navigation launch files | `ros_ws/src/balance_robot_control`, `ros_ws/src/navigation`, `ros_ws/src/balance_robot_workflows` |
+| Sim2Real bridge | Transfer between the ROS/Gazebo command workflow and the physical Arduino balance loop | `docs/sim2real.md`, `ros_ws/src/balance_robot_control`, `firmware/physical_balance_controller` |
 | Hardware assembly | Chassis packaging, internal electronics bay, battery and DC-DC power chain | `media/hardware`, `media/diagrams/wiring_diagram.png` |
 | Research and documentation | CAN, Orbbec Gemini 330, ORB-SLAM2, RTAB-Map, FrSky receiver noise, and ROS autorun investigation | This page, `docs/troubleshooting.md`, and `docs/results-and-limitations.md` |
 
@@ -125,5 +133,6 @@ The recovered process material shows that each major part was brought up separat
 
 - Real robot balancing and RC driving were completed and are backed by firmware plus demo media.
 - ROS/Gazebo balancing, SLAM-related launch composition, and simulation navigation were completed as software-side work.
+- The sim-to-real bridge is documented as transfer of design, command layering, and safety boundaries, not as finished physical autonomous navigation.
 - Real-world ROS SLAM/navigation integration existed as experiments, but full autonomous navigation on the physical robot is not presented as finished.
 - Raw process artifacts are treated as source material for these summaries, not as primary public deliverables.
