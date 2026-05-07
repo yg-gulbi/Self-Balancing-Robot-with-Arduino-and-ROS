@@ -57,6 +57,14 @@ Start here: [physical balance control algorithm](firmware/physical_balance_contr
   <img src="media/process/simulation_depth_navigation_views.png" alt="ROS/Gazebo depth-navigation simulation with RViz map and Gazebo robot model" width="860">
 </p>
 
+<p align="center">
+  <img src="media/process/simulation_depth_navigation_demo.gif" alt="ROS/Gazebo depth-navigation simulation GIF preview" width="860">
+</p>
+
+<p align="center">
+  Full clip: <a href="media/process/simulation_depth_navigation_demo.webm">WebM download</a>
+</p>
+
 The simulation used the same two-wheeled, 3D-printed design direction as the physical robot, but the key transfer was the command structure. A high-level command is treated as motion intent first; the balance and safety layer decides what can safely reach the robot.
 
 | Transfer point | Simulation side | Physical side |
@@ -140,11 +148,12 @@ The recovered body STL assets from the actual robot-based simulation baseline no
 - [Physical hallway balancing GIF](media/hero/physical_balance_hallway.gif)
 - [Physical obstacle-course balancing GIF](media/demos/physical_balance_obstacle_course.gif)
 - [ROS/Gazebo depth-navigation still](media/process/simulation_depth_navigation_views.png)
+- [ROS/Gazebo depth-navigation GIF preview](media/process/simulation_depth_navigation_demo.gif)
 - [ROS/Gazebo depth-navigation WebM clip](media/process/simulation_depth_navigation_demo.webm)
 - [Robot-focused hallway still](media/demos/hallway_robot_only.jpg)
 - [Open-front hardware photo](media/hardware/robot_open_front.png)
 
-I did not put the full original phone MP4 files in the repo. Instead, I kept lightweight GIFs, still images, and one compact WebM simulation clip so the repository stays easier to browse.
+I did not put the full original phone MP4 files in the repo. Instead, I kept lightweight GIFs, still images, and one compact WebM simulation clip so the repository stays easier to browse. The navigation demo now includes a GitHub-friendly GIF preview plus the original WebM clip for higher-quality playback.
 
 ## Read Next
 
