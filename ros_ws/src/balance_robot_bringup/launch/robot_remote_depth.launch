@@ -1,9 +1,10 @@
 <launch>
 
   <arg name="multi_robot_name" default=""/>
+  <arg name="use_actual_stl_assembly" default="false"/>
 
   <include file="$(find robot_bringup)/launch/includes/description_depth.launch.xml">
-    
+    <arg name="use_actual_stl_assembly" value="$(arg use_actual_stl_assembly)"/>
   </include>
 
   <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">

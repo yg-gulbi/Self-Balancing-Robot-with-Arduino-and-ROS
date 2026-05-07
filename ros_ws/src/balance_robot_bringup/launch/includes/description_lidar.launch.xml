@@ -1,5 +1,6 @@
 <launch>
   <arg name="model"/>
-  <arg name="urdf_file" default="$(find xacro)/xacro --inorder '$(find robot_description)/urdf/balance_robot_urdf.xacro'" />
+  <arg name="use_actual_stl_assembly" default="false"/>
+  <arg name="urdf_file" default="$(find xacro)/xacro --inorder '$(find robot_description)/urdf/balance_robot_urdf.xacro' use_actual_stl_assembly:=$(arg use_actual_stl_assembly)" />
   <param name="robot_description" command="$(arg urdf_file)" />
 </launch>

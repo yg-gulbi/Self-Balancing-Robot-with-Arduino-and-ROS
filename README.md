@@ -99,7 +99,7 @@ For the consolidated hardware explanation, see [docs/hardware.md](docs/hardware.
 | Path | Purpose |
 | --- | --- |
 | `firmware/` | Arduino firmware, physical controller, and tester sketches |
-| `ros_ws/` | Main ROS workspace for simulation, navigation, SLAM workflow, and tuning code |
+| `ros_ws/` | Main ROS workspace for simulation, navigation, SLAM workflow, tuning code, and recovered actual-robot STL visuals |
 | `docs/` | Focused portfolio docs: hardware, development process, Sim2Real, troubleshooting, and results |
 | `media/` | Lightweight public GIFs, photos, and diagrams |
 | `archive/` | Older experiments and recovered context that should not be the first place to read |
@@ -133,6 +133,7 @@ roslaunch balance_robot_workflows robot_navigation_lidar.launch
 ```
 
 Use [ros_ws/README.md](ros_ws/README.md) for workspace usage and [balance_robot_control/README.md](ros_ws/src/balance_robot_control/README.md) for the controller package layout.
+The recovered body STL assets from the actual robot-based simulation baseline now live under [ros_ws/src/balance_robot_description/stl](ros_ws/src/balance_robot_description/stl), with notes in [docs/simulation-assets.md](docs/simulation-assets.md).
 
 ## Demo Media
 

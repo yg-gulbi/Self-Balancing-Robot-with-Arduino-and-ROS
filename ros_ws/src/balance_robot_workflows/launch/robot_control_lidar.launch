@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
 <launch>
+  <arg name="use_actual_stl_assembly" default="false"/>
 
-  <include file="$(find robot_gazebo)/launch/balance_robot_house_lidar.launch"/>
+  <include file="$(find robot_gazebo)/launch/balance_robot_house_lidar.launch">
+    <arg name="use_actual_stl_assembly" value="$(arg use_actual_stl_assembly)"/>
+  </include>
   
 
   

@@ -3,6 +3,7 @@
   <arg name="x_pos" default="0.0"/>
   <arg name="y_pos" default="0.0"/>
   <arg name="z_pos" default="0.0"/>
+  <arg name="use_actual_stl_assembly" default="false"/>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="paused" value="false"/>
@@ -12,7 +13,7 @@
     <arg name="debug" value="false"/>
   </include>
 
-  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find robot_description)/urdf/balance_robot_urdf_depth.xacro"/>
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find robot_description)/urdf/balance_robot_urdf_depth.xacro use_actual_stl_assembly:=$(arg use_actual_stl_assembly)"/>
   <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" args="-urdf -model balance_robot -x $(arg x_pos) -y $(arg y_pos) -z $(arg z_pos) -param robot_description"/>
 
   <node pkg="balance_robot_control" type="pid_control_before_vel_depth.py" name="pid_control" output="screen"/>

@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <launch>
+  <arg name="use_actual_stl_assembly" default="false"/>
   <include file="$(find robot_gazebo)/launch/balance_robot_house_depth.launch">
+    <arg name="use_actual_stl_assembly" value="$(arg use_actual_stl_assembly)"/>
   </include> 
   
 <!--depthimage_to_laserscan -->
@@ -18,5 +20,6 @@
   </node>
   
   <include file="$(find navigation)/launch/robot_navigation_depth.launch">
+    <arg name="use_actual_stl_assembly" value="$(arg use_actual_stl_assembly)"/>
   </include>   
 </launch>

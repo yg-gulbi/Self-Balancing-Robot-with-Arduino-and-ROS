@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 
 <robot name="balance_robot" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:arg name="use_actual_stl_assembly" default="false"/>
+  <xacro:property name="stl_assembly_origin_xyz" value="-0.110383 -0.202 0.064314"/>
+  <xacro:property name="stl_assembly_origin_rpy" value="0 0 0"/>
+  <xacro:property name="stl_assembly_scale" value="0.001 0.001 0.001"/>
 
   <xacro:include filename="$(find robot_description)/urdf/color_properties.xacro"/>
   <xacro:include filename="$(find robot_description)/urdf/balance_robot_gazebo_depth.xacro"/>
@@ -15,13 +19,57 @@
   </joint>
 
   <link name="base_link">
-    <visual>
-      <origin xyz="0.0 0.0 0.31" rpy="0 0 0"/>
-      <geometry>
-        <box size="0.15 0.35 0.45"/>
-      </geometry>
-      <material name="light_black"/>
-    </visual>
+    <xacro:if value="$(arg use_actual_stl_assembly)">
+      <visual>
+        <origin xyz="${stl_assembly_origin_xyz}" rpy="${stl_assembly_origin_rpy}"/>
+        <geometry>
+          <mesh filename="package://robot_description/stl/body_side.stl" scale="${stl_assembly_scale}"/>
+        </geometry>
+        <material name="light_black"/>
+      </visual>
+
+      <visual>
+        <origin xyz="${stl_assembly_origin_xyz}" rpy="${stl_assembly_origin_rpy}"/>
+        <geometry>
+          <mesh filename="package://robot_description/stl/robot_neck.stl" scale="${stl_assembly_scale}"/>
+        </geometry>
+        <material name="dark"/>
+      </visual>
+
+      <visual>
+        <origin xyz="${stl_assembly_origin_xyz}" rpy="${stl_assembly_origin_rpy}"/>
+        <geometry>
+          <mesh filename="package://robot_description/stl/head_rear.stl" scale="${stl_assembly_scale}"/>
+        </geometry>
+        <material name="light_black"/>
+      </visual>
+
+      <visual>
+        <origin xyz="${stl_assembly_origin_xyz}" rpy="${stl_assembly_origin_rpy}"/>
+        <geometry>
+          <mesh filename="package://robot_description/stl/head_top.stl" scale="${stl_assembly_scale}"/>
+        </geometry>
+        <material name="dark"/>
+      </visual>
+
+      <visual>
+        <origin xyz="${stl_assembly_origin_xyz}" rpy="${stl_assembly_origin_rpy}"/>
+        <geometry>
+          <mesh filename="package://robot_description/stl/gemini335_case.stl" scale="${stl_assembly_scale}"/>
+        </geometry>
+        <material name="grey"/>
+      </visual>
+    </xacro:if>
+
+    <xacro:unless value="$(arg use_actual_stl_assembly)">
+      <visual>
+        <origin xyz="0.0 0.0 0.31" rpy="0 0 0"/>
+        <geometry>
+          <box size="0.15 0.35 0.45"/>
+        </geometry>
+        <material name="light_black"/>
+      </visual>
+    </xacro:unless>
 
     <collision>
       <origin xyz="0.0 0.0 0.31" rpy="0 0 0"/>

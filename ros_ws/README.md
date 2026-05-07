@@ -78,6 +78,25 @@ These are the launch files I would start with.
 | Run depth navigation simulation | `roslaunch balance_robot_workflows robot_navigation_depth.launch` | You want depth data projected into a scan-like navigation pipeline |
 | Run depth SLAM simulation | `roslaunch balance_robot_workflows robot_slam_depth.launch` | You want the RGB-D/RTAB-Map SLAM experiment |
 
+## Actual Robot Geometry Assets
+
+The default model still uses the simplified box body so the historical control
+and navigation setup stays unchanged. If you want the recovered STL visuals
+from the actual robot-based simulation archive, add
+`use_actual_stl_assembly:=true` to bringup, Gazebo, navigation, or workflow
+launch commands.
+
+Example:
+
+```bash
+roslaunch balance_robot_workflows robot_navigation_depth.launch use_actual_stl_assembly:=true
+```
+
+The STL files live in `src/balance_robot_description/stl/`. They change visual
+appearance only; collision and inertia remain simple on purpose. See
+[`src/balance_robot_description/README.md`](src/balance_robot_description/README.md)
+and [`../docs/simulation-assets.md`](../docs/simulation-assets.md).
+
 ## Recommended Execution Order
 
 For a first review, run the workspace in this order:
@@ -192,7 +211,7 @@ system.
 | Folder | ROS package name | Role |
 | --- | --- | --- |
 | `src/balance_robot_bringup/` | `robot_bringup` | Robot model bringup and description launch entrypoints |
-| `src/balance_robot_description/` | `robot_description` | URDF/Xacro definitions for LiDAR and depth variants |
+| `src/balance_robot_description/` | `robot_description` | URDF/Xacro definitions plus recovered actual-robot STL body visuals |
 | `src/balance_robot_gazebo/` | `robot_gazebo` | Gazebo worlds, robot spawn files, and controller launch files |
 | `src/balance_robot_control/` | `balance_robot_control` | Balance-aware control nodes, PID tuning, and tuning automation helpers |
 | `src/balance_robot_workflows/` | `balance_robot_workflows` | Scenario-level launch files for control, tuning, navigation, and SLAM |
@@ -205,8 +224,9 @@ I would read the ROS side in this order:
 
 1. [`src/balance_robot_workflows/README.md`](src/balance_robot_workflows/README.md)
 2. [`src/balance_robot_control/README.md`](src/balance_robot_control/README.md)
-3. [`src/navigation/README.md`](src/navigation/README.md)
-4. [`../docs/results-and-limitations.md`](../docs/results-and-limitations.md)
+3. [`src/balance_robot_description/README.md`](src/balance_robot_description/README.md)
+4. [`src/navigation/README.md`](src/navigation/README.md)
+5. [`../docs/results-and-limitations.md`](../docs/results-and-limitations.md)
 
 ## Troubleshooting
 

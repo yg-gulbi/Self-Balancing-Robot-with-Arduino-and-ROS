@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
 <launch>
+  <arg name="use_actual_stl_assembly" default="false"/>
 
-  <include file="$(find robot_gazebo)/launch/balance_robot_lidar_pid_tuning.launch"/>
+  <include file="$(find robot_gazebo)/launch/balance_robot_lidar_pid_tuning.launch">
+    <arg name="use_actual_stl_assembly" value="$(arg use_actual_stl_assembly)"/>
+  </include>
   
   
 <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="rqt_reconfigure" output="screen"/>
