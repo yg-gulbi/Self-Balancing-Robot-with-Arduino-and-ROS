@@ -4,7 +4,17 @@ English | [한국어](README.ko.md)
 
 This repository is my self-balancing robot project. The real robot was controlled on Arduino, and I used ROS/Gazebo for simulation, tuning, SLAM, and navigation experiments.
 
+This is a portfolio reconstruction of the project rather than a perfectly chronological original development repository. I recovered and organized the final Arduino firmware, ROS/Gazebo workspace, hardware notes, media, CAD-related assets, results, and limitations so the project can be reviewed from evidence instead of scattered raw files.
+
 The main result is a physical two-wheeled robot that balanced for about 1 hour and drove through a 10 m hallway and obstacle course under Arduino control. On the ROS side, I built Gazebo control, navigation, SLAM map-generation, PID tuning, and Arduino-to-ROS bridge workflows. The sim-to-real bridge is documented as a command-layer transfer: high-level motion intent is separated from the balance and safety layer instead of driving the robot directly.
+
+## Interview Quick Read
+
+- One-line summary: this is a two-wheeled self-balancing robot project where I isolated real hardware instability into sensor, communication, control-loop, and safety-logic problems, then stabilized the system step by step.
+- My role: Arduino firmware, control algorithm design, IMU/encoder/ODrive/RC receiver integration, ROS/Gazebo simulation, SLAM/navigation workflows, and hardware debugging.
+- Key debugging story: I moved away from IMU-integration-based speed estimation after finding tilt contamination, switched to wheel-encoder feedback, and added filtering/deadband/engage persistence for noisy RC PWM input. I also added current clamps and tilt cutoff so abnormal states would not become unsafe motor commands.
+- Verification style: I split the system into small test paths such as `receiver_pwm_test`, `hall_sensor_test`, `odrive_receiver_test`, and `motor_current_test`, then integrated them back into the full robot.
+- What to notice: the value of this project is not only the final demo, but the way unstable real hardware was made testable, safer, and repeatable.
 
 <p align="center">
   <img src="media/hero/physical_balance_hallway.gif" alt="Physical hallway balancing demo" width="720">
@@ -108,6 +118,7 @@ For the consolidated hardware explanation, see [docs/hardware.md](docs/hardware.
 | --- | --- |
 | `firmware/` | Arduino firmware, physical controller, and tester sketches |
 | `ros_ws/` | Main ROS workspace for simulation, navigation, SLAM workflow, tuning code, and recovered actual-robot STL visuals |
+| `mechanical/` | GitHub-ready 3D print, CAD, and sensor-head frame files copied from the original modeling archive |
 | `docs/` | Focused portfolio docs: hardware, development process, Sim2Real, troubleshooting, and results |
 | `media/` | Lightweight public GIFs, photos, and diagrams |
 | `archive/` | Older experiments and recovered context that should not be the first place to read |
@@ -141,7 +152,7 @@ roslaunch balance_robot_workflows robot_navigation_lidar.launch
 ```
 
 Use [ros_ws/README.md](ros_ws/README.md) for workspace usage and [balance_robot_control/README.md](ros_ws/src/balance_robot_control/README.md) for the controller package layout.
-The recovered body STL assets from the actual robot-based simulation baseline now live under [ros_ws/src/balance_robot_description/stl](ros_ws/src/balance_robot_description/stl), with notes in [docs/simulation-assets.md](docs/simulation-assets.md).
+The recovered body STL assets from the actual robot-based simulation baseline now live under [ros_ws/src/balance_robot_description/stl](ros_ws/src/balance_robot_description/stl), with notes in [docs/simulation-assets.md](docs/simulation-assets.md). The fabrication-oriented CAD and 3D-print files are organized separately in [mechanical](mechanical).
 
 ## Demo Media
 
@@ -160,14 +171,17 @@ I did not put the full original phone MP4 files in the repo. Instead, I kept lig
 1. [Physical controller](firmware/physical_balance_controller/README.md): main Arduino firmware for the real balancing robot.
 2. [Control algorithm](firmware/physical_balance_controller/control_algorithm.md): how RC input, IMU feedback, wheel speed, safety, and ODrive current control fit together.
 3. [Hardware](docs/hardware.md): physical components, wiring, power flow, and layout interpretation.
-4. [Development process](docs/development-process.md): build timeline, subsystem bring-up, and research decisions.
-5. [Sim2Real bridge](docs/sim2real.md): how the ROS/Gazebo workflow and physical Arduino robot were connected without overstating physical autonomy.
-6. [Troubleshooting summary](docs/troubleshooting.md): why filtering, safety gating, ODrive isolation, and staged tuning were needed.
-7. [Results and limits](docs/results-and-limitations.md): measured project results, code-defined settings, and remaining limits.
+4. [Mechanical 3D files](mechanical): printable frame parts, editable CAD exports, and sensor-head structure files.
+5. [Development process](docs/development-process.md): build timeline, subsystem bring-up, and research decisions.
+6. [Sim2Real bridge](docs/sim2real.md): how the ROS/Gazebo workflow and physical Arduino robot were connected without overstating physical autonomy.
+7. [Troubleshooting summary](docs/troubleshooting.md): why filtering, safety gating, ODrive isolation, and staged tuning were needed.
+8. [Results and limits](docs/results-and-limitations.md): measured project results, code-defined settings, and remaining limits.
 
 ## Limitations
 
+- This repository is organized for portfolio review, so the commit history is not a complete record of every original hardware experiment.
 - Full end-to-end autonomous ROS navigation on the physical balancing robot remains future work.
 - Some older code remains in `archive/` because it still helps explain how the project evolved.
 - Third-party ROS dependencies are not vendored into this repository.
 - Raw process files, chat exports, and full-length videos were summarized or replaced with lighter public assets.
+- Code is MIT-licensed. Media, photos, demo captures, CAD files, and 3D-print assets are included for portfolio documentation; see [LICENSE](LICENSE).

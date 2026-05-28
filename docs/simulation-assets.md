@@ -30,6 +30,13 @@ Recovered visual assets now live in:
 - `ros_ws/src/balance_robot_description/stl/head_top.stl`
 - `ros_ws/src/balance_robot_description/stl/gemini335_case.stl`
 
+The broader fabrication-oriented CAD and 3D-print archive is now organized in:
+
+- `mechanical/`
+
+That folder keeps editable CATPart/SLDPRT/STP material and print-oriented STL
+exports separate from the short-name ROS visual mesh set.
+
 The active LiDAR and depth Xacros now expose:
 
 - `use_actual_stl_assembly:=true`

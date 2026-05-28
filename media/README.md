@@ -22,6 +22,11 @@ This directory stores only the media that I wanted to keep in the public reposit
 - `process/simulation_depth_navigation_views.png`: public still showing RViz map/navigation state beside the Gazebo depth-camera robot model
 - `process/simulation_depth_navigation_demo.webm`: compact WebM clip of the depth-navigation simulation workflow
 
+## Featured Mechanical Assets
+
+- `process/edrawings_balancing_robot_ver4_assembly.png`: eDrawings assembly view of the mechanical robot frame
+- `process/edrawings_balancing_robot_ver4_exploded.png`: eDrawings exploded/reference view of the same assembly
+
 ## Naming Rules
 
 - Do not store raw phone or chat-export filenames here.

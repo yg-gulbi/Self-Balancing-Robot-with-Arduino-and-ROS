@@ -1,0 +1,9 @@
+*.CATPart binary
+*.CATProduct binary
+*.SLDASM binary
+*.SLDDRW binary
+*.SLDPRT binary
+*.STEP binary
+*.STL binary
+*.stl binary
+*.stp binary

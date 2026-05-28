@@ -50,6 +50,10 @@ Some exact part numbers were not retained, so these are described conservatively
 | Relay path | 5V relay or switching module | Wiring diagram shows an auxiliary relay/power-relay block |
 | Chassis | 3D-printed body, mast, and sensor-head mount on a metal base plate | CAD/process images and physical photos support a purpose-built enclosure |
 
+The GitHub-ready frame, printable STL, CATPart, STEP, and SolidWorks concept
+files are collected in [mechanical](../mechanical). The ROS package keeps a
+separate short-name STL set for simulation visuals.
+
 ## Power And Signal Flow
 
 ```text

@@ -4,7 +4,17 @@
 
 이 저장소는 Arduino와 ROS/Gazebo를 함께 사용한 셀프 밸런싱 로봇 프로젝트입니다. 실제 로봇은 Arduino에서 제어했고, ROS/Gazebo는 시뮬레이션, 튜닝, SLAM, 내비게이션 실험에 사용했습니다.
 
+이 저장소는 프로젝트 당시의 모든 개발 커밋을 시간순으로 그대로 보존한 원본 저장소라기보다, 포트폴리오 검토를 위해 프로젝트 자료를 재정리한 저장소입니다. 최종 Arduino firmware, ROS/Gazebo workspace, 하드웨어 기록, media, CAD 관련 asset, 결과와 한계를 흩어진 raw file 대신 근거 중심으로 볼 수 있게 정리했습니다.
+
 가장 중요한 결과는 실제 2륜 로봇이 Arduino 제어로 약 1시간 동안 균형을 유지했고, 10 m 복도 주행과 실내 장애물 코스 주행을 수행했다는 점입니다. ROS 쪽에서는 Gazebo 제어, 내비게이션, SLAM 지도 생성, PID 튜닝, Arduino-to-ROS 브리지 흐름을 구성했습니다. Sim-to-real bridge는 command-layer transfer로 정리했습니다. High-level motion intent가 robot을 직접 구동하지 않고 balance/safety layer를 거치도록 분리한 것이 핵심입니다.
+
+## 면접 빠른 요약
+
+- 한 줄 요약: 실제 하드웨어의 불안정 문제를 센서, 통신, 제어 루프, 안전 로직으로 분리해 검증하고 안정화한 2륜 자가균형 로봇 프로젝트입니다.
+- 담당 역할: Arduino 펌웨어 구현, 제어 알고리즘 설계, IMU/Encoder/ODrive/RC receiver 통합, ROS/Gazebo 시뮬레이션과 SLAM/Navigation workflow 구성, 하드웨어 디버깅을 맡았습니다.
+- 대표 문제 해결: IMU 적분 기반 속도 추정의 한계를 확인하고 wheel encoder 피드백으로 전환했으며, RC PWM noise에는 filtering/deadband/engage persistence를 적용했습니다. ODrive command path에는 current clamp와 tilt cutoff를 넣어 비정상 입력이 모터 명령으로 바로 이어지지 않게 했습니다.
+- 검증 관점: `receiver_pwm_test`, `hall_sensor_test`, `odrive_receiver_test`, `motor_current_test`처럼 신호 경로를 작은 단위로 나눠 확인한 뒤 전체 시스템으로 통합했습니다.
+- 면접에서 강조할 점: 완성된 기능만 말하기보다, 불안정한 실제 로봇을 안전하게 쪼개서 재현하고 검증한 과정이 이 프로젝트의 핵심입니다.
 
 <p align="center">
   <img src="media/hero/physical_balance_hallway.gif" alt="Physical hallway balancing demo" width="720">
@@ -100,6 +110,7 @@ Simulation은 실제 로봇과 같은 two-wheeled, 3D-printed design direction�
 | --- | --- |
 | `firmware/` | Arduino firmware, 실제 controller, tester sketches |
 | `ros_ws/` | 시뮬레이션, 내비게이션, SLAM workflow, tuning code를 위한 main ROS workspace |
+| `mechanical/` | 원본 모델링 archive에서 가져온 3D printing, CAD, sensor-head frame 파일 |
 | `docs/` | hardware, development process, Sim2Real, troubleshooting, results 중심의 포트폴리오 문서 |
 | `media/` | GitHub에서 보기 쉬운 GIF, 사진, diagram |
 | `archive/` | 처음 읽을 위치는 아니지만, 오래된 실험과 복구된 맥락을 보존한 공간 |
@@ -133,6 +144,7 @@ roslaunch balance_robot_workflows robot_navigation_lidar.launch
 ```
 
 Workspace 사용법은 [ros_ws/README.md](ros_ws/README.md)를, controller package 구조는 [balance_robot_control/README.md](ros_ws/src/balance_robot_control/README.md)를 보면 됩니다.
+실제 로봇 기반 simulation baseline에서 복구한 짧은 이름의 body STL은 [ros_ws/src/balance_robot_description/stl](ros_ws/src/balance_robot_description/stl)에 있고, 제작/수정용 CAD와 3D printing 파일은 [mechanical](mechanical)에 따로 정리했습니다.
 
 ## 데모 미디어
 
@@ -150,14 +162,17 @@ Workspace 사용법은 [ros_ws/README.md](ros_ws/README.md)를, controller packa
 1. [Physical controller](firmware/physical_balance_controller/README.md): 실제 balancing robot의 main Arduino firmware.
 2. [Control algorithm](firmware/physical_balance_controller/control_algorithm.md): RC input, IMU feedback, wheel speed, safety, ODrive current control이 어떻게 연결되는지 설명합니다.
 3. [Hardware](docs/ko/hardware.md): 실제 부품, wiring, power flow, layout interpretation.
-4. [Development process](docs/ko/development-process.md): build timeline, subsystem bring-up, research decisions.
-5. [Sim2Real bridge](docs/ko/sim2real.md): ROS/Gazebo workflow와 실제 Arduino robot을 어떻게 연결했고 physical autonomy를 어디까지로 말할 수 있는지 정리합니다.
-6. [Troubleshooting summary](docs/ko/troubleshooting.md): filtering, safety gating, ODrive isolation, staged tuning이 왜 필요했는지 설명합니다.
-7. [Results and limits](docs/ko/results-and-limitations.md): 측정된 결과, code-defined settings, remaining limits.
+4. [기구 3D 파일](mechanical/README.ko.md): 출력 가능한 frame part, 수정 가능한 CAD export, sensor-head 구조 파일.
+5. [Development process](docs/ko/development-process.md): build timeline, subsystem bring-up, research decisions.
+6. [Sim2Real bridge](docs/ko/sim2real.md): ROS/Gazebo workflow와 실제 Arduino robot을 어떻게 연결했고 physical autonomy를 어디까지로 말할 수 있는지 정리합니다.
+7. [Troubleshooting summary](docs/ko/troubleshooting.md): filtering, safety gating, ODrive isolation, staged tuning이 왜 필요했는지 설명합니다.
+8. [Results and limits](docs/ko/results-and-limitations.md): 측정된 결과, code-defined settings, remaining limits.
 
 ## 한계
 
+- 이 저장소는 포트폴리오 검토용으로 재정리했기 때문에 commit history가 모든 원본 하드웨어 실험 과정을 완전하게 보여주지는 않습니다.
 - 실제 balancing robot에서 end-to-end autonomous ROS navigation은 future work입니다.
 - 일부 오래된 코드는 프로젝트가 어떻게 발전했는지 설명하는 데 도움이 되어 `archive/`에 남겨두었습니다.
 - Third-party ROS dependencies는 이 저장소에 vendoring하지 않았습니다.
 - Raw process files, chat exports, full-length videos는 요약하거나 가벼운 public asset으로 대체했습니다.
+- 코드는 MIT license로 공개하고, media/photo/demo capture/CAD/3D printing asset은 포트폴리오 문서화를 위해 포함했습니다. 자세한 범위는 [LICENSE](LICENSE)를 참고하면 됩니다.

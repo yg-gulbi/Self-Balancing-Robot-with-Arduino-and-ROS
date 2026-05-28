@@ -50,6 +50,10 @@
 | Relay path | 5V relay 또는 switching module | Wiring diagram에 auxiliary relay/power-relay block이 보입니다 |
 | Chassis | Metal base plate 위의 3D-printed body, mast, sensor-head mount | CAD/process image와 실제 사진이 purpose-built enclosure를 뒷받침합니다 |
 
+GitHub에서 확인하기 쉬운 frame, printable STL, CATPart, STEP, SolidWorks
+concept file은 [mechanical](../../mechanical)에 모았습니다. ROS package에는
+simulation visual용으로 짧은 이름의 STL set을 따로 유지합니다.
+
 ## Power And Signal Flow
 
 ```text
