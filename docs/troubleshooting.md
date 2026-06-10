@@ -29,7 +29,7 @@ External references helped where it made sense, especially around ODrive hoverbo
 | --- | --- | --- | --- | --- |
 | RC receiver path | Wheel twitch and PWM spikes | Serial monitoring, wiring changes, metal proximity sensitivity, foil experiment | Better receiver placement, twisted signal-ground routing, filtering, deadband, engage persistence | Mostly confirmed, with some inference |
 | ODrive path | Intermittent uncontrolled motor behavior | Hall test, receiver test, Arduino path checks, ODrive-focused tester sketches, firmware downgrade result | Firmware downgrade plus tighter safety gating in the controller | Mostly confirmed, with some inference |
-| Physical balancing | Fall risk and extreme tuning sensitivity | Tethered practice, staged subsystem bring-up, gain iteration | LQR-style balance term, speed loop, steering loop, current clamp, tilt cutoff | Confirmed |
+| Physical balancing | Fall risk and extreme tuning sensitivity | Tethered practice, staged subsystem bring-up, gain iteration | Angle/rate balance term, speed loop, steering loop, current clamp, tilt cutoff | Confirmed |
 | IMU repeatability | Balance point drift and inconsistent upright reference | Calibration checks, saved offsets, angle offset tuning | BNO055 calibration handling and explicit `imu_angle_offset` | Confirmed |
 | Navigation command path | High-level ROS commands could not directly drive a balancing robot | Simulation controller design and `/before_vel` pipeline | Separate navigation intent from final low-level balance output | Confirmed |
 
@@ -44,7 +44,7 @@ The final controller is not just one control equation. It is a stack of counterm
 | Engage persistence | False motor enable or disable from noisy PWM | `engage_signal_persistence`, `EngageMotors()` |
 | Tilt cutoff | Cutting motor command before the robot reaches a hard fall posture | `kTiltDisengageThresholdDegrees`, `tilt_limit_exceeded` |
 | Current clamp | Limiting violent recovery or runaway commands | `kMaxAbsCurrent`, `ApplyMotorCommands()` |
-| LQR-style balance term | Keeping the unstable body upright | `balance_controller` built from `theta`, `theta_dot`, `integral_error` |
+| Body-angle balance term | Keeping the unstable body upright | `balance_controller` built from `theta`, `theta_dot`, `integral_error` |
 | PID-like speed correction | Making forward and backward motion coexist with balancing | `speed_control`, `kpspeed`, `kispeed`, `kdspeed` |
 | Steering plus yaw damping | Turning without destroying the common balance effort | `steering_controller`, `kpSteer`, `kdSteer` |
 | Separate ROS intent topic | Preventing high-level navigation from bypassing balance logic | `/before_vel` design in `ros_ws/src/balance_robot_control` and `ros_ws/src/navigation` |
@@ -225,7 +225,7 @@ Why this matters:
 - `theta_dot` is the damping problem. Without it, the robot may react in the right direction but overshoot hard.
 - `integral_error` is the bias problem. Small mounting offsets, unequal friction, or slight sensor bias can otherwise keep the robot from settling around a practical upright point.
 
-This is why the controller is reasonably described as `LQR-style` rather than just `PID`. It uses explicit state feedback on angle and angular velocity, then augments that with additional terms required by the real hardware.
+This is why the controller is better described as a layered balancing controller than as a single PID loop. It uses body angle and angular velocity feedback, then augments that with additional terms required by the real hardware.
 
 ### 4.2 Speed Loop
 
@@ -403,4 +403,4 @@ That pattern led to concrete design responses:
 
 If I had to summarize this project briefly for a reviewer or interview:
 
-> The main challenge was not deriving one balancing equation in isolation, but making the full sensing, RC, motor-control, and safety loop trustworthy on real hardware. Receiver PWM noise was reduced through placement, routing, filtering, deadband, and engage persistence. ODrive runaway behavior was isolated toward the firmware or hoverboard hall path and was empirically stabilized by downgrading firmware. The final controller used LQR-style body-angle feedback, PID-like speed bias, steering and yaw damping, current limiting, tilt cutoff, and activation gating so the robot could balance and drive without letting any one noisy subsystem take over the actuators directly.
+> The main challenge was not deriving one balancing equation in isolation, but making the full sensing, RC, motor-control, and safety loop trustworthy on real hardware. Receiver PWM noise was reduced through placement, routing, filtering, deadband, and engage persistence. ODrive runaway behavior was isolated toward the firmware or hoverboard hall path and was empirically stabilized by downgrading firmware. The final controller used body-angle and angular-rate feedback, PID-like speed bias, steering and yaw damping, current limiting, tilt cutoff, and activation gating so the robot could balance and drive without letting any one noisy subsystem take over the actuators directly.

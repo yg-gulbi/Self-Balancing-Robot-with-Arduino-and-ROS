@@ -209,7 +209,7 @@ void loop() {
     filtered_steering_pwm = kAlpha_1 * steering_pwm + (1.0 - kAlpha_1) * filtered_steering_pwm;
 
     if (motion_controller_enabled) {
-      LqrController();
+      BalanceController();
       ApplyMotorCommands();
     }
   }
@@ -357,8 +357,8 @@ void PublishRosOdomData() {
   odom_pub.publish(&odom_msg);
 }
 
-// LQR-style balance controller with speed and steering correction.
-void LqrController() {
+// Balance controller with speed and steering correction.
+void BalanceController() {
   imu::Vector<3> euler_angles = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
   imu::Vector<3> gyro_rates = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
 

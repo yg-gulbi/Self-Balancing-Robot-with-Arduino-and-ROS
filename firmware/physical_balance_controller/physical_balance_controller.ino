@@ -1,4 +1,4 @@
-// Arduino sketch for a two-wheeled self-balancing robot using LQR control
+// Arduino sketch for a two-wheeled self-balancing robot using a layered balance controller
 // with BNO055 IMU module and ODrive motor controller. Tested on Arduino Mega 2560 with ODrive 3.6.
 
 #include <Wire.h>
@@ -31,7 +31,7 @@ constexpr int kThrottlePwmOffset = 1488;
 constexpr int kEngageThresholdPwm = 1500;
 constexpr int kControlThreshold = 50; // Steering or throttle threshold to disable wheel angle correction
 
-// LQR Gain Matrix (from MATLAB)
+// Balance, speed, and steering control gains.
 float K_theta = 24;
 float Ki = 0;
 float K_theta_dot = 1.7;
@@ -69,7 +69,7 @@ float filtered_steering_pwm = 0;
 float filtered_engage_pwm = 1000;
 constexpr uint8_t kTiltDisengageThresholdDegrees = 30; // 전원이 차단되는 각도 임계값
 constexpr float kMaxAbsCurrent = 8.0;
-// LQR 연산 결과 저장 변수
+// Final motor current request variables.
 float torque_input_0 = 0.0;
 float torque_input_1 = 0.0;
 
@@ -224,7 +224,7 @@ void loop() {
   filtered_throttle_pwm = kAlpha_1 * throttle_pwm + (1.0 - kAlpha_1) * filtered_throttle_pwm;
   filtered_steering_pwm = kAlpha_1 * steering_pwm + (1.0 - kAlpha_1) * filtered_steering_pwm;
     if (motion_controller_enabled) {
-      LqrController();
+      BalanceController();
       // 루프 끝에서 시간 차이 계산 및 출력
 
       ApplyMotorCommands();  // ✅ 모터에 최종 명령 보내기
@@ -269,8 +269,8 @@ void loop() {
   cmd.parse_command();
 }
 
-// LQR Controller Implementation
-void LqrController() {
+// Balance controller implementation.
+void BalanceController() {
 
       // === 1. 버퍼 초기화 ===
 

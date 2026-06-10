@@ -1,4 +1,4 @@
-// Arduino sketch for a two-wheeled self-balancing robot using LQR control
+// Arduino sketch for a two-wheeled self-balancing robot using a layered balance controller
 // with BNO055 IMU module and ODrive motor controller. Tested on Arduino Mega 2560 with ODrive 3.6.
 
 #include <Wire.h>
@@ -38,7 +38,7 @@ constexpr int kThrottlePwmOffset = 1488;
 constexpr int kEngageThresholdPwm = 1500;
 constexpr int kControlThreshold = 50; // Steering or throttle threshold to disable wheel angle correction
 
-// LQR Gain Matrix (from MATLAB)
+// Balance and wheel-feedback control gains.
 float K_phi = 0;
 float K_theta = 22.95;
 float K_phi_dot = 0.61;
@@ -304,7 +304,7 @@ Serial.println("1 ");
 
   if (controller_metro.check()) {
     if (motion_controller_enabled) {
-      LqrController();
+      BalanceController();
     }
   }
   if (print_metro.check()) {
@@ -346,8 +346,8 @@ Serial.println("1 ");
   // Serial.println(" us");
 }
 
-// LQR Controller Implementation
-void LqrController() {
+// Balance controller implementation.
+void BalanceController() {
   imu::Vector<3> euler_angles = bno.getVector(Adafruit_BNO055::VECTOR_EULER);
   imu::Vector<3> gyro_rates = bno.getVector(Adafruit_BNO055::VECTOR_GYROSCOPE);
 
@@ -575,5 +575,4 @@ void SetTorqueConstant(float value, float foo) {
   Serial.println("Setting Torque Constant to " + String(value));
   kTorqueConstant = value;
 }
-
 

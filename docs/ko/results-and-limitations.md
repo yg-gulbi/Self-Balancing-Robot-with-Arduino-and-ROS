@@ -36,7 +36,7 @@
 | RC neutral deadband | `+/-50 us` | Neutral 주변의 작은 PWM drift가 motion으로 바뀌는 것을 방지 |
 | RC neutral offsets | throttle `1488 us`, steering `1492 us` | 정확히 `1500 us`를 가정하지 않고 calibrated center 사용 |
 | RC filter alpha | throttle/steering `0.4`, engage `0.02` | Throttle/steering은 responsive하게, engage는 더 강하게 filtering |
-| Main balance gains | `K_theta=24`, `K_theta_dot=1.7`, `Ki=0` | Body angle과 angular velocity 기반 LQR-style feedback |
+| Main balance gains | `K_theta=24`, `K_theta_dot=1.7`, `Ki=0` | Body angle과 angular velocity 기반 balance feedback |
 | Speed-loop gains | `Kp=1.2`, `Ki=0.1`, `Kd=7` | Target motion을 balance-compatible speed correction으로 변환 |
 | ROS publish interval | `50 ms`, about `20 Hz` | ROS-enabled Arduino variant가 `/imu`, `/odom`을 고정 주기로 publish |
 | ROS LiDAR controller gains | `Kp_angle=6.0`, `Kd_angle=-0.75`, `Kp_speed=0.3` | Main LiDAR simulation controller setting |

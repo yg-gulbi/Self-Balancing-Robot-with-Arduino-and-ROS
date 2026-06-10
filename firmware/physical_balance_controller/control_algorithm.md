@@ -25,7 +25,7 @@ The Arduino loop is split into small scheduled jobs using `Metro`.
 
 | Job | Code path | Purpose |
 | --- | --- | --- |
-| Controller update | `LqrController()` then `ApplyMotorCommands()` | Reads sensors, calculates correction terms, sends motor current |
+| Controller update | `BalanceController()` then `ApplyMotorCommands()` | Reads sensors, calculates correction terms, sends motor current |
 | Activation update | `EngageMotors()` | Uses the filtered engage switch and tilt safety flag to enter or leave ODrive closed-loop mode |
 | Optional serial printing | `PrintRcSignals()` | Debug output for raw and filtered RC signal inspection |
 | Serial command parsing | `cmd.parse_command()` | Allows gain tuning while the controller is running |
@@ -81,9 +81,9 @@ In the code this is named `balance_controller`. It is the term that tries to kee
 
 ## What Kind Of Controller This Actually Is
 
-The sketch comments call the controller `LQR`, and the balance term does use state-feedback-style gains on body angle and body angular velocity. In the deployed robot, the real controller is best understood as a layered controller rather than one isolated textbook regulator:
+The deployed robot controller is best understood as a layered controller rather than one isolated textbook regulator:
 
-- an `LQR-style balance term` on `theta` and `theta_dot`
+- a `body-angle and angular-rate balance term` on `theta` and `theta_dot`
 - an `integral correction` to reduce steady-state lean bias
 - a `PID-like speed loop` that turns throttle request into a forward or backward balance bias
 - a `steering and yaw-damping loop` that creates left-right current difference

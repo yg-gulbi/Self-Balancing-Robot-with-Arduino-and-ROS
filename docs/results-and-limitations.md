@@ -36,7 +36,7 @@ This page separates the finished results, the simulation-side results, the real-
 | RC neutral deadband | `+/-50 us` | Prevents small PWM drift around neutral from becoming motion |
 | RC neutral offsets | throttle `1488 us`, steering `1492 us` | The controller uses calibrated centers instead of assuming exact `1500 us` |
 | RC filter alpha | throttle/steering `0.4`, engage `0.02` | Throttle and steering stay responsive while engage is filtered more strongly |
-| Main balance gains | `K_theta=24`, `K_theta_dot=1.7`, `Ki=0` | LQR-style body angle and angular velocity feedback |
+| Main balance gains | `K_theta=24`, `K_theta_dot=1.7`, `Ki=0` | Body angle and angular velocity balance feedback |
 | Speed-loop gains | `Kp=1.2`, `Ki=0.1`, `Kd=7` | Converts target motion into a balance-compatible speed correction |
 | ROS publish interval | `50 ms`, about `20 Hz` | ROS-enabled Arduino variant publishes `/imu` and `/odom` at a fixed interval |
 | ROS LiDAR controller gains | `Kp_angle=6.0`, `Kd_angle=-0.75`, `Kp_speed=0.3` | Main LiDAR simulation controller setting |

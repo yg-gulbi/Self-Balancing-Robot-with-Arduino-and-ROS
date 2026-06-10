@@ -20,7 +20,7 @@ At a high level, the controller combines:
 - RC PWM input for throttle, steering, and motor engage
 - BNO055 tilt angle, angular velocity, and yaw-rate feedback
 - ODrive wheel-speed feedback
-- LQR-style balance correction, PID-like speed correction, and steering correction
+- body-angle balance correction, PID-like speed correction, and steering correction
 - motor safety gates, tilt cutoff, current limiting, and serial gain tuning
 
 See [`control_algorithm.md`](control_algorithm.md) for the GitHub-friendly algorithm diagram and control-flow explanation.
