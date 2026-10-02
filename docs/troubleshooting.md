@@ -1,36 +1,33 @@
-# Troubleshooting Index
+# Troubleshooting: from observations to control and architecture changes
 
 English | [한국어](ko/troubleshooting.md)
 
-This index links to individual engineering issues. Each follows **problem definition → candidate solutions → execution → reinterpretation → summary and verification**. Priority reflects safety, core behavior, and investigation scope; supporting issues still affect stability.
+Unexpected wheel motion and falls did not have one cause. Separating RC input, motor drive, attitude reference, speed feedback, and ROS commands led to changes in both control and testing.
 
-## Major troubleshooting
+Each case connects **the problem → the investigation → the response → the changed interpretation → inspectable results**. Major cases concern safety and physical behavior; supporting cases explain the sensor, feedback, and software decisions behind them.
 
-| Document | Focus |
+## Three cases to read first
+
+| Case | Work performed | Inspectable evidence |
+| --- | --- | --- |
+| [Wheels moved without an intended command](troubleshooting/major/01-rc-pwm-spikes.md) | Isolate PWM inspection, investigate placement, change input handling | Tester output fields and final filter/deadband/engage logic |
+| [Sudden motor acceleration](troubleshooting/major/02-odrive-runaway.md) | Separate RC/hall/direct-current paths, interpret firmware-change outcome | Four testers, state requests, current-request bounds |
+| [From standing to driving](troubleshooting/major/03-balance-tuning.md) | Bench/tether tests, combine balance/speed/steering | Test photos, mixing equations, driving demos |
+
+**For a short review:** read the opening outcome, inspect the observation table or photos, then follow the code excerpt and evidence links.
+
+## Supporting cases
+
+| Case | Decision demonstrated |
 | --- | --- |
-| [RC PWM spikes and unintended wheel twitch](troubleshooting/major/01-rc-pwm-spikes.md) | Noisy intent and unintended activation |
-| [ODrive runaway and uncontrolled motor behavior](troubleshooting/major/02-odrive-runaway.md) | Motor-path isolation and downgrade outcome |
-| [Physical balance tuning and fall-risk management](troubleshooting/major/03-balance-tuning.md) | Staged tests and balance/speed/steering control |
+| [IMU zero versus upright reference](troubleshooting/supporting/01-imu-upright-reference.md) | Separate calibration from mechanical posture reference |
+| [Speed-feedback handling](troubleshooting/supporting/02-wheel-speed-feedback.md) | Distinguish processing experiments from active code |
+| [Navigation through balance control](troubleshooting/supporting/03-ros-command-path.md) | Separate high-level intent from low-level attitude control |
 
-## Supporting troubleshooting
+## Evidence scope
 
-| Document | Focus |
-| --- | --- |
-| [IMU calibration and upright reference](troubleshooting/supporting/01-imu-upright-reference.md) | Calibration versus physical upright posture |
-| [Wheel-speed feedback and serial robustness](troubleshooting/supporting/02-wheel-speed-feedback.md) | Outliers, parsing, and actual filter settings |
-| [ROS navigation command path and balance authority](troubleshooting/supporting/03-ros-command-path.md) | Motion intent versus final control output |
+Tester output fields and excerpts establish implementation. Photos and short demos establish testing environments and visible behavior. Metal/foil observations and firmware-downgrade outcome come from existing project records; raw experiment logs are not published. Code-derived values are identified separately from measurements.
 
-## Evidence and reading conventions
+The repository reconstructs and organizes an earlier project. A tester's existence does not independently establish every historical test result. The cases focus on work and outcomes that can presently be inspected.
 
-- **Code-confirmed:** implementation and settings can be inspected; helper existence is distinguished from enabled behavior.
-- **Previously reported:** the old documentation records an observation, but raw logs or quantitative comparisons may be absent.
-- **Inference:** an explanation consistent with observations, not a proven cause.
-- **Further verification:** each entry provides review steps; no physical tests were rerun during this documentation rewrite.
-
-Candidate-solution lists reconstruct the options supported by existing material. They do not invent experiment order, measurements, or failure counts. Filtering and safety measures appear within the issues they address. See the [control algorithm](../firmware/physical_balance_controller/control_algorithm.md) for detailed control equations.
-
-## Related documentation
-
-- [Development process](development-process.md)
-- [Results and limitations](results-and-limitations.md)
-- [Sim2Real](sim2real.md)
+See the [control algorithm](../firmware/physical_balance_controller/control_algorithm.md) for complete equations, [results and limitations](results-and-limitations.md) for completion scope, and [Sim2Real](sim2real.md) for the simulation/hardware connection.

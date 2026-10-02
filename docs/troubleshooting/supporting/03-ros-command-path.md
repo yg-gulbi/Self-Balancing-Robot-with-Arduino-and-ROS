@@ -1,31 +1,69 @@
-# ROS navigation command path and balance authority
+# Route navigation through the balancing controller
 
-[한국어](../../ko/troubleshooting/supporting/03-ros-command-path.md) | [Troubleshooting index](../../troubleshooting.md)
+[한국어](../../ko/troubleshooting/supporting/03-ros-command-path.md) | [All troubleshooting](../../troubleshooting.md)
 
-**Priority:** Supporting · Reconstructed from existing documentation and code
+> In simulation, `move_base` output becomes motion intent. A balancing controller combines it with IMU/odometry feedback before publishing final `/cmd_vel`.
 
-## 1. Problem definition
+## Motion requests and attitude recovery share the wheels
 
-Navigation requests motion, while a two-wheeled balancing base must continuously stabilize its body. Sending navigation velocity directly to the simulated base bypasses the layer that reconciles those requirements. This entry describes an architecture problem, not a separately measured hardware failure.
+Navigation asks for velocity toward a destination. A two-wheeled balancing robot also uses wheel motion to recover its body. Sending high-level velocity straight to the base can bypass the layer that reconciles those requirements.
 
-## 2. Candidate solutions
+This case concerns command architecture, rather than a separately recorded hardware failure.
 
-Separate desired motion from the final base command. Route teleoperation and navigation into an intent topic; have the balancing controller combine intent with IMU/odometry feedback and publish the final command. Preserve that control boundary when discussing physical integration.
+## Navigation output was redirected first
 
-## 3. Execution
+[move_base.launch](../../../ros_ws/src/navigation/launch/move_base.launch) defaults its output destination to `/before_vel`:
 
-The ROS simulation package consumes `/before_vel`, `/imu`, and `/odom` and publishes `/cmd_vel`. The documented navigation route is `move_base -> /before_vel -> balance_robot_control -> /cmd_vel`. Controller and launch files are the evidence for routing. On hardware, the Arduino balance/safety loop sends ODrive current commands; a matching design principle does not establish completed autonomous physical navigation.
+```xml
+<arg name="cmd_vel_topic" default="/before_vel" />
+```
 
-## 4. Reinterpreting the experience
+```xml
+<remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+```
 
-Topic separation makes command responsibility explicit. It is useful only if launch remapping and active publishers actually preserve the path; topic names alone do not enforce the boundary.
+That topic carries target speed/turn input for the balancing controller rather than final base output.
 
-## 5. Summary and verification
+## The balancing layer adds robot state
 
-Outcome: the intent/controller/output route is documented and implemented for simulation; physical autonomous navigation remains integration work. Review the package, navigation launch files, and Sim2Real limits. In a running simulation, inspect `rostopic info /before_vel` and `rostopic info /cmd_vel`, then compare intent, pitch, and output during a commanded move and stop.
+The [LiDAR simulation controller](../../../ros_ws/src/balance_robot_control/src/controllers/pid_control_before_vel_lidar.py) separates intent, feedback, and output:
 
-### Evidence
+| Topic | Role |
+| --- | --- |
+| `/before_vel` | Set desired speed/turn input |
+| `/odom` | Update current speed |
+| `/imu` | Calculate attitude and update control output |
+| `/cmd_vel` | Publish calculated base command |
 
-- [Balance control package](../../../ros_ws/src/balance_robot_control/README.md)
-- [Navigation package](../../../ros_ws/src/navigation)
-- [Sim2Real boundaries](../../../docs/sim2real.md)
+Speed error becomes desired lean, then is compared with actual pitch:
+
+```python
+speed_error = self.setpoint_speed - self.current_speed
+self.setpoint_angle = self.Kp_speed * speed_error
+angle_error = self.setpoint_angle - current_pitch_angle
+output_angle = (self.Kp_angle * angle_error + self.Kd_angle * pitch_rate)
+```
+
+LiDAR-version control calculations execute in the IMU callback. A `rospy.Rate(200)` declaration alone does not establish a measured 200 Hz control frequency.
+
+## Publisher/subscriber relationships matter more than names
+
+The intended route is `move_base → /before_vel → balance_robot_control → /cmd_vel`. Launch remapping and controller subscriptions/publications together establish the implemented path.
+
+![Simulation navigation view](../../../media/process/simulation_depth_navigation_views.png)
+
+*Public depth-model simulation capture. The excerpts above are from the LiDAR variant; the image/video document the depth workflow.*
+
+The model settings differ, but share the intent/final-output separation. On hardware, Arduino calculates ODrive current requests. Shared architecture and completed physical autonomy are different claims.
+
+## Evidence a reviewer can inspect
+
+**Work demonstrated:** separation of planning/control responsibilities, ROS topic/launch configuration, and definition of simulation scope.
+
+- [move_base.launch](../../../ros_ws/src/navigation/launch/move_base.launch): navigation-output remapping.
+- [LiDAR controller](../../../ros_ws/src/balance_robot_control/src/controllers/pid_control_before_vel_lidar.py): intent/state/output relationship.
+- [Control package guide](../../../ros_ws/src/balance_robot_control/README.md): model variants and tuning paths.
+- [Simulation clip](../../../media/process/simulation_depth_navigation_demo.webm): depth-workflow behavior.
+- [Sim2Real scope](../../sim2real.md): physical autonomy remains integration work.
+
+Inspect live publishers/subscribers with `rostopic info /before_vel` and `rostopic info /cmd_vel`. Public demos show simulation behavior, not finished autonomous navigation on the physical robot.

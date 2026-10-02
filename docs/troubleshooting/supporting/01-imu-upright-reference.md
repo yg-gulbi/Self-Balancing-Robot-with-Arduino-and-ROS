@@ -1,29 +1,48 @@
-# IMU calibration and upright reference
+# IMU zero was not the robot's upright reference
 
-[한국어](../../ko/troubleshooting/supporting/01-imu-upright-reference.md) | [Troubleshooting index](../../troubleshooting.md)
+[한국어](../../ko/troubleshooting/supporting/01-imu-upright-reference.md) | [All troubleshooting](../../troubleshooting.md)
 
-**Priority:** Supporting · Reconstructed from existing documentation and code
+> Sensor calibration and mechanical upright reference were treated separately. The final attitude calculation applies an explicit offset.
 
-## 1. Problem definition
+## Persistent correction could involve the reference, not only gains
 
-A sensor's zero angle can differ from the robot's useful upright posture. Mounting bias and calibration state can therefore produce persistent correction or creep; the old document describes these effects but publishes no isolated drift dataset.
+If the IMU angle differs from the useful physical upright posture, the controller continually corrects toward the wrong point. This motivated calibration/reference management in the existing project notes. Sensor startup state, mounting direction, and physical equilibrium therefore needed attention before gain changes alone could explain the behavior.
 
-## 2. Candidate solutions
+## Sensor state and upright reference were separated
 
-Check sensor detection and calibration status; distinguish sensor calibration from mechanical upright-offset adjustment. Consider EEPROM persistence for repeatability, but verify whether loading is actually enabled.
+The sketch halts on BNO055 initialization failure and provides calibration-status and EEPROM save/load helpers. A separate `imu_angle_offset` adjusts the control reference.
 
-## 3. Execution
+| Code path | What it checks or changes |
+| --- | --- |
+| `bno.begin()` | Sensor initialization |
+| `checkIMUCalibration()` | System/gyro/accel/magnetometer calibration status |
+| `saveCalibration()` / `loadCalibration()` | Store/restore 22 bytes of calibration data |
+| `SetImuAngleOffset()` | Adjust the posture reference used by control |
 
-The final sketch halts when BNO055 initialization fails, provides calibration save/load helpers and status inspection, and computes body angle using `imu_angle_offset=3.5`. The startup `loadCalibration()` call is commented out. Helper availability therefore does not demonstrate automatic restoration on every boot.
+Sensor calibration data and body upright offset are different quantities. Calibrating the sensor does not remove every mounting/equilibrium difference.
 
-## 4. Reinterpreting the experience
+## What is active in the final sketch
 
-Upright is an operating reference that must agree with sensor mounting and robot mechanics. Calibration helpers, enabled startup behavior, and a suitable posture offset are separate pieces of evidence.
+```cpp
+float imu_angle_offset = 3.5;
+```
 
-## 5. Summary and verification
+The angle calculation is:
 
-Outcome: explicit angle-offset compensation is active; EEPROM helpers exist, but startup restoration is disabled in this sketch. Review `setup()`, `saveCalibration()`, `loadCalibration()`, and the angle calculation. A future restart test should log calibration status and angle at a fixed physical posture.
+```cpp
+theta = imu_enabled * (euler_angles.y() + imu_angle_offset);
+```
 
-### Evidence
+With IMU enabled, corrected zero corresponds to raw y-angle -3.5 degrees. **That is a code-derived reference, not a measured posture log.** The tilt-threshold check uses the same offset.
 
-- [Physical controller](../../../firmware/physical_balance_controller/physical_balance_controller.ino)
+The startup calls to `loadCalibration()` and `checkIMUCalibration()` are commented out. Helper availability therefore does not establish automatic restoration/status reporting on each boot.
+
+## The reference became an explicit input condition
+
+Offset adjustment is exposed separately through serial key `r`. This distinguishes insufficient recovery response from a different intended equilibrium point.
+
+## Evidence a reviewer can inspect
+
+**Work demonstrated:** distinguishing sensor initialization, calibration, and mechanical reference; explicit control-reference configuration.
+
+Inspect `setup()`, `checkIMUCalibration()`, `SetImuAngleOffset()`, and `BalanceController()` in the [physical controller](../../../firmware/physical_balance_controller/physical_balance_controller.ino). Offset implementation is inspectable; fixed-posture restart logs are not published, so a numerical repeatability improvement is not established.

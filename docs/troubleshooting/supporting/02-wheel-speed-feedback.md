@@ -1,30 +1,57 @@
-# Wheel-speed feedback and serial robustness
+# A speed spike changes motor correction: follow the feedback handling
 
-[한국어](../../ko/troubleshooting/supporting/02-wheel-speed-feedback.md) | [Troubleshooting index](../../troubleshooting.md)
+[한국어](../../ko/troubleshooting/supporting/02-wheel-speed-feedback.md) | [All troubleshooting](../../troubleshooting.md)
 
-**Priority:** Supporting · Reconstructed from existing documentation and code
+> Archived code uses recent history and a median fallback for abrupt samples. The final sketch uses receive/parsing handling and bounded speed correction. Historical experiments and active processing are distinguishable.
 
-## 1. Problem definition
+## A feedback fault can affect the common motor effort
 
-A corrupted wheel-speed sample can change the common speed-correction term applied to both motors. Older notes describe implausible jumps and parsing concerns; the final sketch alone does not measure their frequency.
+The speed loop subtracts mean wheel speed from target speed. Its correction enters both motor requests. One abnormal sample can therefore change the motor correction even without an operator-input change.
 
-## 2. Candidate solutions
+The question was **which samples should influence control**, not simply how to print wheel speed.
 
-Compare raw serial responses with parsed speed; inspect wheel-direction signs and conversion to linear speed. Evaluate history-based rejection, median-style fallback, or smoothing against added delay. Distinguish archived experiments from the active controller.
+## Earlier code compared samples with recent history
 
-## 3. Execution
+The [legacy controller](../../../archive/arduino_firmware/legacy_balance_controller.ino) computes a threshold using the mean absolute magnitude of five recent values:
 
-Older documentation describes adaptive thresholds and median-style fallback in archived firmware. The final sketch drains currently available received bytes before and after `parseFloat()` reads, converts wheel feedback using direction signs and wheel radius, and bounds speed-integral/output values. Its recurrence uses `kAlpha_3=1`, which passes each new speed sample directly through: smoothing is effectively disabled. Draining available bytes is not the same as proving complete or valid response framing.
+```cpp
+return 3.0 * (sum / N);
+```
 
-## 4. Reinterpreting the experience
+An abrupt change beyond that threshold is replaced with the median of the new sample and two previous values:
 
-A variable named 'filtered' does not establish that a filter is active. Stability depends on feedback validity and timing as well as correction limits. Historical outlier-handling work should not be presented as deployed protection without matching the active code.
+```cpp
+if (abs(phi_dot_counts_0 - prev_dot_0) > adaptive_threshold_dot_0) {
+    phi_dot_counts_0 = median_phi_dot_0;
+}
+```
 
-## 5. Summary and verification
+This experiments with history-dependent checks and a median fallback. The new sample also enters the threshold history; this is not evidence of a validated statistical outlier detector.
 
-Outcome: receive-buffer draining and bounded speed correction are present; active speed smoothing and complete sample validation are not demonstrated. Review `BalanceController()` and archived firmware. Future checks should capture raw responses, parse duration/timeouts, sample age, and wheel-speed jumps under the same test sequence.
+## Active processing differs from the archived experiment
 
-### Evidence
+| Path | Archived code | Final sketch |
+| --- | --- | --- |
+| Abrupt changes | History threshold and three-value median | Same path absent from the active loop |
+| Receive handling | Position/speed inspection paths | Drain available bytes around two `parseFloat()` reads |
+| Speed smoothing | Historical equations/settings | Recurrence retained, but `kAlpha_3=1` |
+| Correction bounds | Historical control settings | Integral +/-5; speed output +/-6 |
 
-- [Physical controller](../../../firmware/physical_balance_controller/physical_balance_controller.ino)
-- [Archived Arduino firmware](../../../archive/arduino_firmware)
+At `kAlpha_3=1`, each new speed sample passes directly through. A variable called `filtered_phi_dot` does not establish active smoothing.
+
+A `filterEncoderData()` helper also remains in the final file but is not called by active `BalanceController()`. Draining available bytes does not validate complete response framing, sample validity, or timeout outcomes.
+
+## Measurement validity and output bounds solve different problems
+
+Integral/output limits constrain correction magnitude. Outlier detection judges the sample itself. One does not establish the other.
+
+Comparing versions shows feedback-processing experiments, while preventing the claim that every archived countermeasure is deployed.
+
+## Evidence a reviewer can inspect
+
+**Work demonstrated:** tracing measurement errors into control effort, experimenting with sample handling, and checking the active code path.
+
+- [Legacy controller](../../../archive/arduino_firmware/legacy_balance_controller.ino): `updateThreshold()`, `getMedian()`, abrupt-sample replacement.
+- [Final controller](../../../firmware/physical_balance_controller/physical_balance_controller.ino): receive/parsing, `kAlpha_3`, speed bounds.
+
+The code establishes changes in processing. Synchronized raw responses, wheel speed, and current-request comparison logs are not published, so numerical vibration reduction is not claimed.
