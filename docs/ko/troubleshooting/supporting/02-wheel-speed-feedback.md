@@ -47,9 +47,7 @@ if (abs(phi_dot_counts_0 - prev_dot_0) > adaptive_threshold_dot_0) {
 
 과거·최종 코드를 나란히 비교하면 이상치 처리 실험은 확인할 수 있지만, 그 실험이 최종 코드에 전부 적용되었다는 설명은 맞지 않는다.
 
-## 면접에서 확인할 수 있는 근거
-
-**이 사례가 보여주는 작업:** 측정값과 제어 영향의 연결 분석, 샘플 처리 실험, 실제 활성 경로 확인.
+## 관련 코드와 기록
 
 - [legacy_balance_controller.ino](../../../../archive/arduino_firmware/legacy_balance_controller.ino): `updateThreshold()`, `getMedian()`, 급변 값 대체.
 - [최종 제어기](../../../../firmware/physical_balance_controller/physical_balance_controller.ino): 수신·파싱, `kAlpha_3`, 속도 보정 제한.

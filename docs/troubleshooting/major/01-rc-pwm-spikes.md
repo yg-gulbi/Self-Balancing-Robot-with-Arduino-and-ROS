@@ -62,9 +62,7 @@ A received value is not automatically a valid operator intention. Neutral drift,
 
 The investigation connected placement-dependent observations with channel-specific input processing. Hardware checks explained why the input path deserved attention; filters, deadband, and persistence reduced the influence of remaining variations.
 
-## Evidence a reviewer can inspect
-
-**Work demonstrated:** moving the observation point, interpreting an unsuccessful mitigation, and matching input handling to failure modes.
+## Related code and records
 
 - [Receiver tester](../../../firmware/testers/receiver_pwm_test/receiver_pwm_test.ino): pulse-width measurement and output fields.
 - [Physical controller](../../../firmware/physical_balance_controller/physical_balance_controller.ino): filter constants, deadband, and engage counter.

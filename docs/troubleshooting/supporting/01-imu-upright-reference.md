@@ -41,8 +41,6 @@ The startup calls to `loadCalibration()` and `checkIMUCalibration()` are comment
 
 Offset adjustment is exposed separately through serial key `r`. This distinguishes insufficient recovery response from a different intended equilibrium point.
 
-## Evidence a reviewer can inspect
-
-**Work demonstrated:** distinguishing sensor initialization, calibration, and mechanical reference; explicit control-reference configuration.
+## Related code and records
 
 Inspect `setup()`, `checkIMUCalibration()`, `SetImuAngleOffset()`, and `BalanceController()` in the [physical controller](../../../firmware/physical_balance_controller/physical_balance_controller.ino). Offset implementation is inspectable; fixed-posture restart logs are not published, so a numerical repeatability improvement is not established.

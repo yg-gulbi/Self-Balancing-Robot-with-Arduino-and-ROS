@@ -56,9 +56,7 @@ output_angle = (self.Kp_angle * angle_error + self.Kd_angle * pitch_rate)
 
 두 모델의 설정이 완전히 같다는 의미는 아니지만, 상위 이동 의도와 최종 밸런스 출력을 구분하는 구조를 공유한다. 실물 쪽에서는 Arduino가 ODrive 전류 요청을 계산한다. 구조의 공통점과 실물 자율주행 완료 여부는 별개의 사실이다.
 
-## 면접에서 확인할 수 있는 근거
-
-**이 사례가 보여주는 작업:** 상위 계획과 하위 제어의 책임 분리, ROS 토픽·launch 구성, 시뮬레이션 검증 범위 구분.
+## 관련 코드와 기록
 
 - [move_base.launch](../../../../ros_ws/src/navigation/launch/move_base.launch): Navigation 출력 remap.
 - [LiDAR 제어 코드](../../../../ros_ws/src/balance_robot_control/src/controllers/pid_control_before_vel_lidar.py): 입력·피드백·최종 출력 연결.

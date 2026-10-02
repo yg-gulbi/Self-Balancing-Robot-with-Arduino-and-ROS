@@ -14,8 +14,6 @@ Each case connects **the problem → the investigation → the response → the 
 | [Sudden motor acceleration](troubleshooting/major/02-odrive-runaway.md) | Separate RC/hall/direct-current paths, interpret firmware-change outcome | Four testers, state requests, current-request bounds |
 | [From standing to driving](troubleshooting/major/03-balance-tuning.md) | Bench/tether tests, combine balance/speed/steering | Test photos, mixing equations, driving demos |
 
-**For a short review:** read the opening outcome, inspect the observation table or photos, then follow the code excerpt and evidence links.
-
 ## Supporting cases
 
 | Case | Decision demonstrated |

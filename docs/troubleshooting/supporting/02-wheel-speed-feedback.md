@@ -47,9 +47,7 @@ Integral/output limits constrain correction magnitude. Outlier detection judges 
 
 Comparing versions shows feedback-processing experiments, while preventing the claim that every archived countermeasure is deployed.
 
-## Evidence a reviewer can inspect
-
-**Work demonstrated:** tracing measurement errors into control effort, experimenting with sample handling, and checking the active code path.
+## Related code and records
 
 - [Legacy controller](../../../archive/arduino_firmware/legacy_balance_controller.ino): `updateThreshold()`, `getMedian()`, abrupt-sample replacement.
 - [Final controller](../../../firmware/physical_balance_controller/physical_balance_controller.ino): receive/parsing, `kAlpha_3`, speed bounds.

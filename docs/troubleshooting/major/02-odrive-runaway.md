@@ -59,11 +59,7 @@ A 0 A request, an IDLE request, and power disconnection are different actions. T
 
 Firmware change affected the symptom. Subsystem tests also left a method for investigating recurrence under fewer coupled variables.
 
-The engineering story is not only “downgrade fixed it.” It is the process of distinguishing input, feedback, and command paths and defining what each check can establish.
-
-## Evidence a reviewer can inspect
-
-**Work demonstrated:** system fault isolation, focused tests, and separating symptom resolution from root-cause certainty.
+## Related code and records
 
 - [Hall tester](../../../firmware/testers/hall_sensor_test/hall_sensor_test.ino): state and counters.
 - [Receiver tester](../../../firmware/testers/receiver_pwm_test/receiver_pwm_test.ino): input pulse widths.

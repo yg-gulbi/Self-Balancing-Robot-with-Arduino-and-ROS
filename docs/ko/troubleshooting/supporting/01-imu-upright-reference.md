@@ -41,8 +41,6 @@ theta = imu_enabled * (euler_angles.y() + imu_angle_offset);
 
 여기서 남은 설계 판단은 캘리브레이션 상태와 실제 직립점을 분리한 것이다. 오프셋은 시리얼 명령 `r`에 연결되어 자세 게인과 별도로 바꿀 수 있다. 따라서 “복원력이 약한가”와 “복원하려는 기준점이 다른가”를 다른 변수로 조사할 수 있다.
 
-## 면접에서 확인할 수 있는 근거
-
-**이 사례가 보여주는 작업:** 센서 초기화·보정·기구 기준의 구분, 제어 기준점의 명시적 설정.
+## 관련 코드와 기록
 
 [최종 제어기](../../../../firmware/physical_balance_controller/physical_balance_controller.ino)의 `setup()`, `checkIMUCalibration()`, `SetImuAngleOffset()`, `BalanceController()`를 연결해 확인할 수 있다. 오프셋 구현은 코드로 검증되지만, 현재 공개 자료에는 동일 자세에서 재부팅 전후 각도를 비교한 로그가 없어 재시작 재현성 개선량까지 입증하지는 않는다.

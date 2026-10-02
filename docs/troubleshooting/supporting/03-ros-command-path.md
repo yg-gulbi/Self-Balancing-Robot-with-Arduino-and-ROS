@@ -56,9 +56,7 @@ The intended route is `move_base → /before_vel → balance_robot_control → /
 
 The model settings differ, but share the intent/final-output separation. On hardware, Arduino calculates ODrive current requests. Shared architecture and completed physical autonomy are different claims.
 
-## Evidence a reviewer can inspect
-
-**Work demonstrated:** separation of planning/control responsibilities, ROS topic/launch configuration, and definition of simulation scope.
+## Related code and records
 
 - [move_base.launch](../../../ros_ws/src/navigation/launch/move_base.launch): navigation-output remapping.
 - [LiDAR controller](../../../ros_ws/src/balance_robot_control/src/controllers/pid_control_before_vel_lidar.py): intent/state/output relationship.

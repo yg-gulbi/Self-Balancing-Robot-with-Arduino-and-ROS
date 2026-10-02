@@ -62,9 +62,7 @@ throttle과 steering에는 같은 계수를 사용하지만 engage는 더 작은
 
 이를 각각 필터·데드밴드·지속성 검사로 다룬 과정은 입력 신호를 제어기 앞단에서 정제하는 설계로 이어졌다. 금속과 포일에 따른 변화는 하드웨어 조건을 조사할 이유를 주었고, 코드 변경은 남아 있는 입력 변동의 영향을 줄이는 수단이었다.
 
-## 면접에서 확인할 수 있는 근거
-
-**이 사례가 보여주는 작업:** 관찰 지점 분리, 실패한 대응안의 해석, 신호 특성에 따른 입력 처리.
+## 관련 코드와 기록
 
 - [receiver_pwm_test.ino](../../../../firmware/testers/receiver_pwm_test/receiver_pwm_test.ino): 펄스폭 측정 방식과 출력 항목.
 - [physical_balance_controller.ino](../../../../firmware/physical_balance_controller/physical_balance_controller.ino): `kAlpha_1`, `kAlpha_2`, 데드밴드, engage 카운터.

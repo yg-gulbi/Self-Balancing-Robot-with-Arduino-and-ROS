@@ -61,11 +61,7 @@ float current_command_1 = constrain(torque_input_1, -kMaxAbsCurrent, kMaxAbsCurr
 
 이번 문제는 펌웨어 변경이 증상에 영향을 주었다는 경험적 결과를 남겼다. 동시에 RC·홀센서·직접 전류 경로를 나누면 다음 조사에서 같은 현상을 더 좁은 범위로 재현할 수 있다는 방법도 남겼다.
 
-면접에서 설명할 핵심은 “다운그레이드로 해결했다” 한 문장이 아니라, **입력·피드백·명령 경로를 구분하고 무엇을 확인할 수 있는지 정한 과정**이다.
-
-## 면접에서 확인할 수 있는 근거
-
-**이 사례가 보여주는 작업:** 시스템 원인 분리, 단독 시험 구성, 증상 해소와 원인 확정의 구분.
+## 관련 코드와 기록
 
 - [hall_sensor_test.ino](../../../../firmware/testers/hall_sensor_test/hall_sensor_test.ino): 상태·전이·illegal 카운터.
 - [receiver_pwm_test.ino](../../../../firmware/testers/receiver_pwm_test/receiver_pwm_test.ino): 입력 펄스폭 관찰.

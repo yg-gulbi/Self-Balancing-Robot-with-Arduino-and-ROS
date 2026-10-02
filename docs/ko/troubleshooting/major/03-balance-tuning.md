@@ -71,9 +71,7 @@ torque_input_1 = (balance_controller - speed_control + steering_controller);
 
 이 사례에서 보여줄 수 있는 것은 **부품 시험 → 제한된 실물 시험 → 자세·속도·조향 통합 → 최종 주행**의 연결이다. 어떤 게인 하나가 성공을 만들었는지, 전도율이 얼마나 줄었는지는 별도의 반복 시험 데이터가 있어야 판단할 수 있다.
 
-## 면접에서 확인할 수 있는 근거
-
-**이 사례가 보여주는 작업:** 단계적 실물 시험, 제어 역할 분리, 튜닝 인터페이스 구성, 구현과 결과의 연결.
+## 관련 코드와 기록
 
 - 위 벤치·지지줄 사진: 시험 단계의 실물 근거.
 - [최종 제어기](../../../../firmware/physical_balance_controller/physical_balance_controller.ino): 보정 항, 혼합식, 튜닝 함수, 출력 제한.

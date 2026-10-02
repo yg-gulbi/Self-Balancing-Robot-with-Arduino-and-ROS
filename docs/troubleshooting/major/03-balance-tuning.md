@@ -71,9 +71,7 @@ An [obstacle-course demo](../../../media/demos/physical_balance_obstacle_course.
 
 The case connects **subsystem checks → constrained physical tests → combined control terms → final driving**. Attributing success to a single gain or quantifying a reduction in falls would require repeat-test data.
 
-## Evidence a reviewer can inspect
-
-**Work demonstrated:** staged physical testing, separation of control roles, tuning interface design, and connecting implementation with results.
+## Related code and records
 
 - Bench/tether photos above: physical process evidence.
 - [Controller](../../../firmware/physical_balance_controller/physical_balance_controller.ino): terms, mixing, tuning functions, and bounds.
