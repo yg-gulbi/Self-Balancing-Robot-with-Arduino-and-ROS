@@ -1,178 +1,103 @@
-# Arduino-ROS 셀프 밸런싱 로봇
+<div align="center">
 
-[English](README.md) | 한국어
+# Self-Balancing Robot with Arduino and ROS (한국어)
 
-이 저장소는 Arduino와 ROS/Gazebo를 함께 사용한 셀프 밸런싱 로봇 프로젝트입니다. 실제 로봇은 Arduino에서 제어했고, ROS/Gazebo는 시뮬레이션, 튜닝, SLAM, 내비게이션 실험에 사용했습니다.
+**실물 2륜 밸런싱 로봇의 온보드 실시간 전류 제어(Arduino + ODrive + BNO055)와 ROS/Gazebo SLAM·자율주행 명령 계층 분리를 통합한 엔드투엔드 로봇 스택입니다.**
 
-이 저장소는 프로젝트 당시의 모든 개발 커밋을 시간순으로 그대로 보존한 원본 저장소라기보다, 포트폴리오 검토를 위해 프로젝트 자료를 재정리한 저장소입니다. 최종 Arduino firmware, ROS/Gazebo workspace, 하드웨어 기록, media, CAD 관련 asset, 결과와 한계를 흩어진 raw file 대신 근거 중심으로 볼 수 있게 정리했습니다.
+[![Hardware](https://img.shields.io/badge/MCU-Arduino_Mega_2560-00979D?logo=arduino&logoColor=white)](#quick-start)
+[![Motor Drive](https://img.shields.io/badge/Drive-ODrive_3.6_(%C2%B18A_Clamp)-FF6F00)](#capabilities)
+[![ROS](https://img.shields.io/badge/ROS-Noetic_%2F_Gazebo-22314E?logo=ros&logoColor=white)](#quick-start)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-가장 중요한 결과는 실제 2륜 로봇이 Arduino 제어로 약 1시간 동안 균형을 유지했고, 10 m 복도 주행과 실내 장애물 코스 주행을 수행했다는 점입니다. ROS 쪽에서는 Gazebo 제어, 내비게이션, SLAM 지도 생성, PID 튜닝, Arduino-to-ROS 브리지 흐름을 구성했습니다. Sim-to-real bridge는 command-layer transfer로 정리했습니다. High-level motion intent가 robot을 직접 구동하지 않고 balance/safety layer를 거치도록 분리한 것이 핵심입니다.
-
-## 면접 빠른 요약
-
-- 한 줄 요약: 실제 하드웨어의 불안정 문제를 센서, 통신, 제어 루프, 안전 로직으로 분리해 검증하고 안정화한 2륜 자가균형 로봇 프로젝트입니다.
-- 담당 역할: Arduino 펌웨어 구현, 제어 알고리즘 설계, IMU/Encoder/ODrive/RC receiver 통합, ROS/Gazebo 시뮬레이션과 SLAM/Navigation workflow 구성, 하드웨어 디버깅을 맡았습니다.
-- 대표 문제 해결: IMU 적분 기반 속도 추정의 한계를 확인하고 wheel encoder 피드백으로 전환했으며, RC PWM noise에는 filtering/deadband/engage persistence를 적용했습니다. ODrive command path에는 current clamp와 tilt cutoff를 넣어 비정상 입력이 모터 명령으로 바로 이어지지 않게 했습니다.
-- 검증 관점: `receiver_pwm_test`, `hall_sensor_test`, `odrive_receiver_test`, `motor_current_test`처럼 신호 경로를 작은 단위로 나눠 확인한 뒤 전체 시스템으로 통합했습니다.
-- 면접에서 강조할 점: 완성된 기능만 말하기보다, 불안정한 실제 로봇을 안전하게 쪼개서 재현하고 검증한 과정이 이 프로젝트의 핵심입니다.
-
-<p align="center">
-  <img src="media/hero/physical_balance_hallway.gif" alt="Physical hallway balancing demo" width="720">
-</p>
-
-## 결과 요약
-
-| 항목 | 결과 |
-| --- | --- |
-| 실제 균형 유지 시간 | 약 1시간 standing balance |
-| 실제 주행 | 10 m 복도 주행 및 장애물 코스 주행 |
-| 실제 안전 한계 | 보호 브래킷이 약 `28 deg`에서 바닥에 닿기 때문에, 모터 명령 차단 각도를 `30 deg`로 설정 |
-| ODrive 전류 제한 | 펌웨어에서 `+/-8 A`로 current command clamp |
-| RC 신호 처리 | `+/-50 us` deadband, throttle/steering filter alpha `0.4`, engage filter alpha `0.02` |
-| Arduino-to-ROS 브리지 | `/imu`, `/odom`, `cmd_vel`을 `rostopic echo`로 확인 |
-| ROS/Gazebo 내비게이션 | ROS 내비게이션 명령 경로를 통한 로봇 이동을 depth-navigation 시뮬레이션으로 확인 |
-| ROS/Gazebo SLAM | SLAM workflow에서 지도 생성 확인 |
-
-## 핵심 결과
-
-<p align="center">
-  <img src="media/diagrams/physical_balance_control_loop.png" alt="Physical balance control loop" width="860">
-</p>
-
-Arduino는 실시간 balance loop를 로컬에서 닫습니다. RC 입력, IMU tilt/yaw feedback, wheel-speed feedback, safety check, ODrive current command가 하나의 제어 경로 안에서 결합됩니다.
-
-| 제어 계층 | 역할 |
-| --- | --- |
-| Balance | Body angle과 angular velocity로 주된 안정화 current term을 만듭니다. |
-| Motion | RC throttle을 target speed로 바꾸고, 로봇이 균형을 유지한 채 움직일 수 있도록 balance point를 이동시킵니다. |
-| Safety | PWM filtering, engage persistence, tilt cutoff, current limiting으로 위험한 상태가 모터까지 전달되지 않게 합니다. |
-
-먼저 [physical balance control algorithm](firmware/physical_balance_controller/control_algorithm.md)과 [troubleshooting summary](docs/ko/troubleshooting.md)를 보면 좋습니다.
-
-## 프로젝트 범위
-
-| 영역 | 상태 | 볼 곳 |
-| --- | --- | --- |
-| 실제 self-balancing 및 RC 주행 | 완료 | [physical_balance_controller.ino](firmware/physical_balance_controller/physical_balance_controller.ino), [hallway demo](media/hero/physical_balance_hallway.gif) |
-| ROS/Gazebo balance simulation | 완료 | [balance_robot_control](ros_ws/src/balance_robot_control), [balance_robot_gazebo](ros_ws/src/balance_robot_gazebo) |
-| Simulation navigation pipeline | 완료 | [navigation](ros_ws/src/navigation), [balance_robot_workflows](ros_ws/src/balance_robot_workflows), [depth-navigation capture](media/process/simulation_depth_navigation_views.png) |
-| Simulation SLAM/navigation workflow | 시뮬레이션에서 완료 | [balance_robot_workflows](ros_ws/src/balance_robot_workflows), [결과와 한계](docs/ko/results-and-limitations.md) |
-| Sim2Real bridge | 문서화 | [sim-to-real bridge](docs/ko/sim2real.md), [결과와 한계](docs/ko/results-and-limitations.md) |
-| Arduino-to-ROS bridge tests | 완료 | [rc_to_ros_cmd_vel_bridge.ino](firmware/testers/rc_to_ros_cmd_vel_bridge.ino), [physical_balance_controller_ros.ino](firmware/physical_balance_controller_ros/physical_balance_controller_ros.ino) |
-| Real-world ROS SLAM/navigation | 통합 실험 | [real-world integration archive](archive/ros_experiments/real_world_integration), [결과와 한계](docs/ko/results-and-limitations.md) |
-
-## Sim2Real Bridge
-
-<p align="center">
-  <img src="media/process/simulation_depth_navigation_views.png" alt="ROS/Gazebo depth-navigation simulation with RViz map and Gazebo robot model" width="860">
-</p>
-
-Simulation은 실제 로봇과 같은 two-wheeled, 3D-printed design direction을 사용했습니다. 하지만 가장 중요한 transfer는 외형만이 아니라 command structure입니다. High-level command를 바로 motor command로 쓰지 않고, 먼저 motion intent로 다룬 뒤 balance/safety layer가 실제로 로봇에 전달할 수 있는 출력을 결정합니다.
-
-| Transfer point | Simulation side | Physical side |
-| --- | --- | --- |
-| Command path | `move_base -> /before_vel -> balance_robot_control -> /cmd_vel` | RC 또는 ROS-side intent -> Arduino balance/safety loop -> ODrive current commands |
-| Robot state | Gazebo `/imu`, `/odom`, scan/depth data, RViz map/navigation state | BNO055 IMU, ODrive feedback, RC PWM, Gemini 330 integration traces |
-| What was proven | Navigation command routing, depth-navigation workflow, SLAM/map-generation workflow | Real balancing, RC driving, current limiting, tilt cutoff, staged safety tuning |
-
-그래서 이 프로젝트는 finished physical autonomous navigation이 아니라 sim-to-real bridge로 설명합니다. Bridge의 핵심은 simulation work에서 정리한 robot design, command layering, safety boundary를 실제 Arduino-controlled robot으로 옮긴 점입니다. 자세한 내용은 [docs/ko/sim2real.md](docs/ko/sim2real.md)에 정리했습니다.
-
-## 시스템 한눈에 보기
-
-<table>
-  <tr>
-    <td width="50%">
-      <img src="media/diagrams/signal_control_diagram.png" alt="Signal / Control Diagram" width="100%">
-    </td>
-    <td width="50%">
-      <img src="media/diagrams/wiring_diagram.png" alt="Wiring Diagram" width="100%">
-    </td>
-  </tr>
-  <tr>
-    <td valign="top">
-      <strong>제어 책임</strong><br>
-      Arduino가 실시간 balance loop를 담당합니다. ROS 쪽 명령은 직접적인 모터 권한이 아니라 상위 수준 입력으로 다룹니다.
-    </td>
-    <td valign="top">
-      <strong>하드웨어 배선</strong><br>
-      36V power, ODrive, Arduino, BNO055, FrSky receiver, onboard PC, Gemini 330 camera, auxiliary electronics, motors를 하나의 그림으로 정리했습니다.
-    </td>
-  </tr>
-</table>
-
-주요 실제 하드웨어는 Arduino Mega 2560, BNO055 IMU, ODrive 3.6, FrSky Taranis Q X7 + X8R, Orbbec Gemini 330, dual hall-sensor BLDC hub motors, 36V battery, onboard mini PC, DC-DC converters, auxiliary Arduino, relay module입니다.
-
-하드웨어 설명은 [docs/ko/hardware.md](docs/ko/hardware.md)에, 제작 과정과 연구 배경은 [docs/ko/development-process.md](docs/ko/development-process.md)에 정리했습니다.
-
-## 저장소 구조
-
-| 경로 | 목적 |
-| --- | --- |
-| `firmware/` | Arduino firmware, 실제 controller, tester sketches |
-| `ros_ws/` | 시뮬레이션, 내비게이션, SLAM workflow, tuning code를 위한 main ROS workspace |
-| `mechanical/` | 원본 모델링 archive에서 가져온 3D printing, CAD, sensor-head frame 파일 |
-| `docs/` | hardware, development process, Sim2Real, troubleshooting, results 중심의 포트폴리오 문서 |
-| `media/` | GitHub에서 보기 쉬운 GIF, 사진, diagram |
-| `archive/` | 처음 읽을 위치는 아니지만, 오래된 실험과 복구된 맥락을 보존한 공간 |
-
-## 제목에 Arduino와 ROS가 함께 들어간 이유
-
-이 프로젝트는 실제로 Arduino와 ROS를 모두 사용했기 때문에 제목에 `Arduino-ROS`를 남겼습니다. Arduino는 실제 로봇 제어와 일부 ROS publishing test를 담당했고, ROS/Gazebo는 simulation, visualization, SLAM, navigation workflow, integration experiment를 담당했습니다.
-
-| Sketch | ROS 역할 | Published data |
-| --- | --- | --- |
-| [physical_balance_controller_ros.ino](firmware/physical_balance_controller_ros/physical_balance_controller_ros.ino) | ROS-enabled physical controller variant | `/imu`, `/odom` |
-| [rc_to_ros_cmd_vel_bridge.ino](firmware/testers/rc_to_ros_cmd_vel_bridge.ino) | RC receiver to ROS command bridge | `cmd_vel` |
-| [experimental_balance_controller_imu_ros.ino](archive/arduino_firmware/experimental_balance_controller_imu_ros.ino) | Archived IMU publisher experiment | `/imu` |
-| [legacy_balance_controller.ino](archive/arduino_firmware/legacy_balance_controller.ino) | Archived ROS publisher trace | `/imu`, `/odom` publisher logic |
-
-## ROS Workspace
-
-이 저장소는 custom ROS package를 보존하지만, 모든 third-party dependency snapshot을 vendoring하지는 않습니다. 과거 workflow를 재현하려면 `rtabmap_ros`, `OrbbecSDK_ROS1`, `depthimage_to_laserscan`, `rosserial`, TurtleBot3/Realsense simulation assets 같은 외부 package를 `ros_ws/src/third_party/` 아래에 배치해야 합니다.
-
-```bash
-cd ros_ws
-catkin_make
-source devel/setup.bash
-roslaunch robot_bringup robot_remote_lidar.launch
-```
-
-Navigation-oriented simulation workflow:
+[**Quick Start**](#quick-start) · [**How It Works**](#how-it-works) · [**Capabilities**](#capabilities) · [**Showcases**](#showcases) · [**Hardware & Firmware**](#hardware--firmware) · [**FAQ**](#faq)
 
 ```bash
 roslaunch balance_robot_workflows robot_navigation_lidar.launch
 ```
 
-Workspace 사용법은 [ros_ws/README.md](ros_ws/README.md)를, controller package 구조는 [balance_robot_control/README.md](ros_ws/src/balance_robot_control/README.md)를 보면 됩니다.
-실제 로봇 기반 simulation baseline에서 복구한 짧은 이름의 body STL은 [ros_ws/src/balance_robot_description/stl](ros_ws/src/balance_robot_description/stl)에 있고, 제작/수정용 CAD와 3D printing 파일은 [mechanical](mechanical)에 따로 정리했습니다.
+<img src="media/hero/physical_balance_hallway.gif" alt="실물 복도 밸런싱 주행 데모" width="720">
 
-## 데모 미디어
+</div>
 
-- [Physical hallway balancing GIF](media/hero/physical_balance_hallway.gif)
-- [Physical obstacle-course balancing GIF](media/demos/physical_balance_obstacle_course.gif)
-- [ROS/Gazebo depth-navigation still](media/process/simulation_depth_navigation_views.png)
-- [ROS/Gazebo depth-navigation WebM clip](media/process/simulation_depth_navigation_demo.webm)
-- [Robot-focused hallway still](media/demos/hallway_robot_only.jpg)
-- [Open-front hardware photo](media/hardware/robot_open_front.png)
+---
 
-원본 전체 phone MP4는 저장소에 넣지 않았습니다. 대신 GitHub에서 가볍게 볼 수 있도록 GIF, still image, compact WebM simulation clip 중심으로 정리했습니다.
+## Quick Start
 
-## 다음으로 읽기
+### 1) 환경 구성 및 빌드 (Setup)
 
-1. [Physical controller](firmware/physical_balance_controller/README.md): 실제 balancing robot의 main Arduino firmware.
-2. [Control algorithm](firmware/physical_balance_controller/control_algorithm.md): RC input, IMU feedback, wheel speed, safety, ODrive current control이 어떻게 연결되는지 설명합니다.
-3. [Hardware](docs/ko/hardware.md): 실제 부품, wiring, power flow, layout interpretation.
-4. [기구 3D 파일](mechanical/README.ko.md): 출력 가능한 frame part, 수정 가능한 CAD export, sensor-head 구조 파일.
-5. [Development process](docs/ko/development-process.md): build timeline, subsystem bring-up, research decisions.
-6. [Sim2Real bridge](docs/ko/sim2real.md): ROS/Gazebo workflow와 실제 Arduino robot을 어떻게 연결했고 physical autonomy를 어디까지로 말할 수 있는지 정리합니다.
-7. [Troubleshooting summary](docs/ko/troubleshooting.md): filtering, safety gating, ODrive isolation, staged tuning이 왜 필요했는지 설명합니다.
-8. [Results and limits](docs/ko/results-and-limitations.md): 측정된 결과, code-defined settings, remaining limits.
+```bash
+git clone https://github.com/yg-gulbi/Self-Balancing-Robot-with-Arduino-and-ROS.git
+cd Self-Balancing-Robot-with-Arduino-and-ROS/ros_ws
+catkin_make
+source devel/setup.bash
+```
 
-## 한계
+### 2) 핵심 실행 (Run)
 
-- 이 저장소는 포트폴리오 검토용으로 재정리했기 때문에 commit history가 모든 원본 하드웨어 실험 과정을 완전하게 보여주지는 않습니다.
-- 실제 balancing robot에서 end-to-end autonomous ROS navigation은 future work입니다.
-- 일부 오래된 코드는 프로젝트가 어떻게 발전했는지 설명하는 데 도움이 되어 `archive/`에 남겨두었습니다.
-- Third-party ROS dependencies는 이 저장소에 vendoring하지 않았습니다.
-- Raw process files, chat exports, full-length videos는 요약하거나 가벼운 public asset으로 대체했습니다.
-- 코드는 MIT license로 공개하고, media/photo/demo capture/CAD/3D printing asset은 포트폴리오 문서화를 위해 포함했습니다. 자세한 범위는 [LICENSE](LICENSE)를 참고하면 됩니다.
+```bash
+# Gazebo 자율주행 및 SLAM 통합 시뮬레이션 실행
+roslaunch balance_robot_workflows robot_navigation_lidar.launch
+
+# 원격 LiDAR 브링업 실행
+roslaunch robot_bringup robot_remote_lidar.launch
+```
+
+### 3) 실물 하드웨어 단계별 검증 및 플래싱 (Control)
+
+```text
+1. firmware/testers/receiver_pwm_test.ino       # RC 수신기 신호 검증
+2. firmware/testers/hall_sensor_test.ino        # 홀 센서 엔코더 검증
+3. firmware/testers/odrive_receiver_test.ino    # ODrive 통신 검증
+4. firmware/testers/motor_current_test.ino      # 모터 ±8A 전류 제한 검증
+5. firmware/physical_balance_controller/physical_balance_controller.ino # 본체 제어기 업로드
+```
+
+---
+
+## How It Works
+
+```mermaid
+flowchart LR
+    A["1. 모션 의도 및 센서 입력\nRC PWM (±50us 데드밴드) · cmd_vel\nBNO055 피치/요 · ODrive 휠 속도"] --> B["2. 신호 필터링 및 안전 게이트\n스로틀/조향 LPF (α=0.4) · 인게이지(α=0.02)\n30° 전복 컷오프 및 ±8A 전류 클램프"]
+    B --> C["3. 캐스케이드 균형 제어 루프\n목표 속도 ➔ 동적 평형 피치각 보정\n자세 제어 + 차동 조향 전류 산출"]
+    C --> D["4. 구동 출력 및 ROS 브릿지\nODrive 좌/우 BLDC 실시간 전류 인가\n/imu · /odom · cmd_vel 양방향 연동"]
+```
+
+---
+
+## Capabilities
+
+| 대상 / 기능 (Target / Feature) | 반환 결과 및 동작 (What It Returns) | 요구사항 및 트리거 (Requirements & Guide) |
+| :--- | :--- | :--- |
+| **실물 자립 밸런싱 & 주행** | BNO055 피치/각속도 + ODrive 홀 엔코더 속도 피드백 기반 실시간 전류 제어 | [physical_balance_controller.ino](firmware/physical_balance_controller/physical_balance_controller.ino) |
+| **다중 안전 보호 계층** | `30°` 전복 컷오프, `±8 A` 전류 클램프, `±50 us` 데드밴드 및 지수이동평균(EMA) 필터 | [control_algorithm.md](firmware/physical_balance_controller/control_algorithm.md) |
+| **ROS/Gazebo SLAM & Nav** | `move_base` 상위 속도 의도를 균형 제어 계층(`/before_vel` ➔ `/cmd_vel`)과 결합해 주행 | [balance_robot_workflows](ros_ws/src/balance_robot_workflows) |
+| **Arduino ↔ ROS 브릿지** | `/imu`, `/odom`, `cmd_vel` 토픽 발행 및 수신 실험 | [physical_balance_controller_ros.ino](firmware/physical_balance_controller_ros/physical_balance_controller_ros.ino) |
+
+---
+
+## Showcases
+
+| 검증 항목 | 측정 결과 및 엔지니어링 스펙 |
+| :--- | :--- |
+| **연속 직립 유지 시간** | **약 1시간** 제자리 직립 유지 |
+| **실내 주행 검증** | **10 m 복도 주행** 및 장애물 코스 주행 성공 |
+| **안전 컷오프 각도** | **`30.0°`** (보호 브래킷 `28.0°` 접지 기준) |
+| **ODrive 전류 클램프** | **`±8.0 A`** 하드웨어/펌웨어 제한 |
+| **RC 노이즈 억제** | 데드밴드 **`±50 us`**, 스로틀/조향 필터 `α = 0.4`, 인게이지 필터 `α = 0.02` |
+
+---
+
+## Hardware & Firmware
+
+상세 문서는 [메인 README.md](README.md) 및 [docs/](docs) 디렉토리를 참조하세요.
+
+---
+
+## FAQ
+
+<details>
+<summary><b>전체 트러블슈팅 이력과 한계점은 어디서 볼 수 있나요?</b></summary>
+
+[docs/troubleshooting.md](docs/troubleshooting.md) 및 [docs/results-and-limitations.md](docs/results-and-limitations.md)에 센서 노이즈, ODrive 전류 폭주 방지, Sim-to-Real 한계가 상세히 기록되어 있습니다.
+</details>
